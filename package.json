@@ -21,22 +21,32 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"lucia": "^3.2.0",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"prettier-plugin-tailwindcss": "^0.6.5",
 		"prisma": "^5.19.1",
 		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^4.0.0",
+		"sveltekit-superforms": "^2.17.0",
 		"tailwindcss": "^3.4.9",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0",
 		"vite": "^5.0.3",
-		"vite-plugin-kit-routes": "^0.6.10"
+		"vite-plugin-kit-routes": "^0.6.10",
+		"zod": "^3.23.8"
 	},
 	"type": "module",
 	"dependencies": {
+		"@lucia-auth/adapter-prisma": "^4.0.1",
+		"@node-rs/argon2": "^1.8.3",
 		"@prisma/client": "^5.19.1",
+		"bits-ui": "^0.21.13",
 		"clsx": "^2.1.1",
+		"formsnap": "^1.0.1",
+		"mode-watcher": "^0.4.1",
+		"nanoid": "^5.0.7",
+		"svelte-sonner": "^0.3.27",
 		"tailwind-merge": "^2.5.2",
 		"tailwind-variants": "^0.2.1"
 	}
