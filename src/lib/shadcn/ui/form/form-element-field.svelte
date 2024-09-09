@@ -9,7 +9,7 @@
 	import * as FormPrimitive from "formsnap";
 	import { cn } from "$lib/shadcn/utils.js";
 
-	type $$Props = FormPrimitive.ElementFieldProps<T, U> & HTMLAttributes<HTMLDivElement>;
+	type $$Props = FormPrimitive.ElementFieldProps<T, U> & HTMLAttributes<HTMLElement>;
 
 	export let form: SuperForm<T>;
 	export let name: U;

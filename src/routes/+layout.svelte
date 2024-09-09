@@ -2,7 +2,16 @@
 	import { route } from '$lib/ROUTES';
 	import * as Tooltip from '&/tooltip';
 	import AuthContext from '@/auth/auth-context.svelte';
-	import { BarChart, Box, Dashboard, Enter, Exit, Gear, Person } from 'radix-icons-svelte';
+	import {
+		Home,
+		LineChart,
+		LogIn,
+		LogOut,
+		Package,
+		Package2,
+		Settings,
+		UsersRound
+	} from 'lucide-svelte';
 	import { Toaster } from 'svelte-sonner';
 	import '../app.css';
 
@@ -19,7 +28,7 @@
 					href={route('/')}
 					class="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
 				>
-					<Box class="h-4 w-4 transition-all group-hover:scale-110" />
+					<Package2 class="h-4 w-4 transition-all group-hover:scale-110" />
 					<span class="sr-only">Home</span>
 				</a>
 				<Tooltip.Root>
@@ -30,7 +39,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<Dashboard class="h-5 w-5" />
+							<Home class="h-5 w-5" />
 							<span class="sr-only">Dashboard</span>
 						</a>
 					</Tooltip.Trigger>
@@ -45,7 +54,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<Box class="h-5 w-5" />
+							<Package class="h-5 w-5" />
 							<span class="sr-only">Products</span>
 						</a>
 					</Tooltip.Trigger>
@@ -59,7 +68,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<Person class="h-5 w-5" />
+							<UsersRound class="h-5 w-5" />
 							<span class="sr-only">Customers</span>
 						</a>
 					</Tooltip.Trigger>
@@ -73,7 +82,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<BarChart class="h-5 w-5" />
+							<LineChart class="h-5 w-5" />
 							<span class="sr-only">Analytics</span>
 						</a>
 					</Tooltip.Trigger>
@@ -91,7 +100,7 @@
 									{...builder}
 									type="submit"
 								>
-									<Exit class="h-5 w-5" />
+									<LogOut class="h-5 w-5" />
 									<span class="sr-only">Sign Out</span>
 								</button>
 							</form>
@@ -107,7 +116,7 @@
 								use:builder.action
 								{...builder}
 							>
-								<Gear class="h-5 w-5" />
+								<Settings class="h-5 w-5" />
 								<span class="sr-only">Settings</span>
 							</a>
 						</Tooltip.Trigger>
@@ -122,7 +131,7 @@
 								use:builder.action
 								{...builder}
 							>
-								<Enter class="h-5 w-5" />
+								<LogIn class="h-5 w-5" />
 								<span class="sr-only">Sign In</span>
 							</a>
 						</Tooltip.Trigger>
