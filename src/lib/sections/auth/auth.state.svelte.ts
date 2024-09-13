@@ -10,14 +10,20 @@ export class AuthState {
 	user: User | null = $state(null);
 	session: Session | null = $state(null);
 
+	openSignOutDialog: boolean = $state(false);
+
 	constructor({ user, session }: SetAuthState) {
 		this.user = user;
 		this.session = session;
 	}
 }
 
-const AUTH_KEY = Symbol('auth_ctx');
+const CTX = Symbol('auth_ctx');
 
-export const getAuthState = (): AuthState => getContext<AuthState>(AUTH_KEY);
+export const setAuthState = (init: SetAuthState): AuthState => {
+	const authState = new AuthState(init);
+	setContext<SetAuthState>(CTX, init);
+	return authState;
+};
 
-export const setAuthState = (init: SetAuthState) => setContext<AuthState>(AUTH_KEY, init);
+export const getAuthState = (): AuthState => getContext<AuthState>(CTX);
