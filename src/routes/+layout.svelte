@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script>
 	import AuthContext from '@/auth/auth-context.svelte';
 	import SideNav from '@/nav/side-nav.svelte';

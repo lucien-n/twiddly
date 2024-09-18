@@ -2,7 +2,7 @@
 	import { route } from '$lib/ROUTES';
 	import { Button } from '&/button';
 	import * as Dialog from '&/dialog';
-	import { getAuthState } from '../auth.state.svelte';
+	import { getAuthState } from '../auth-state.svelte';
 
 	const authState = getAuthState();
 </script>

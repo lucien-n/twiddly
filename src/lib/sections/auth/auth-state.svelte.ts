@@ -26,7 +26,7 @@ const CTX = Symbol('auth_ctx');
 
 export const setAuthState = (init: SetAuthState): AuthState => {
 	const authState = new AuthState(init);
-	setContext<SetAuthState>(CTX, init);
+	setContext<AuthState>(CTX, authState);
 	return authState;
 };
 
