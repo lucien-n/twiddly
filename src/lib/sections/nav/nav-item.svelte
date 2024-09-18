@@ -2,13 +2,13 @@
 	import * as Tooltip from '&/tooltip';
 	import type { NavItemProps } from './nav.types';
 
-	const { label, icon, hidden, action }: NavItemProps = $props();
+	const { label, icon: Icon, hidden, action }: NavItemProps = $props();
 	const className =
 		'flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8';
 </script>
 
 {#snippet item()}
-	<svelte:component this={icon} />
+	<Icon />
 	<span class="sr-only">{label}</span>
 {/snippet}
 
