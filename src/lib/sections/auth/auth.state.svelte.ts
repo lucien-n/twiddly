@@ -16,6 +16,10 @@ export class AuthState {
 		this.user = user;
 		this.session = session;
 	}
+
+	toggleOpenSignOutDialog() {
+		this.openSignOutDialog = !this.openSignOutDialog;
+	}
 }
 
 const CTX = Symbol('auth_ctx');

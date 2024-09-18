@@ -51,7 +51,7 @@
 			},
 			{
 				label: 'Sign Out',
-				action: () => (authState.openSignOutDialog = true),
+				action: () => authState.toggleOpenSignOutDialog(),
 				icon: LogOut,
 				hidden: !!authState.session
 			},
@@ -65,8 +65,7 @@
 	});
 </script>
 
-<button onclick={() => (authState.openSignOutDialog = true)}>Open SignOut Dialog</button>
-<button onclick={() => (authState.openSignOutDialog = false)}>Close SignOut Dialog</button>
+<button onclick={() => authState.toggleOpenSignOutDialog()}>Toggle Sign Out Dialog</button>
 
 <aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 	<nav class="flex flex-col items-center gap-4 px-2 py-4">
