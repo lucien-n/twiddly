@@ -31,10 +31,10 @@ export const actions = {
 			});
 		}
 
-		const { email, password, displayName } = form.data;
+		const { email, password, displayName, handle } = form.data;
 
 		try {
-			await signUpWithEmailAndPassword(event, email, password, displayName);
+			await signUpWithEmailAndPassword(event, email, password, { displayName, handle });
 		} catch (e) {
 			if (dev) console.error(e);
 
@@ -43,6 +43,10 @@ export const actions = {
 			switch (e.code) {
 				case AuthErrorCode.EmailAlreadyInUse:
 					return setError(form, 'email', 'Already in use');
+				case AuthErrorCode.HandleAlreadyInUse:
+					return setError(form, 'handle', 'Already in use');
+				case AuthErrorCode.InvalidHandle:
+					return setError(form, 'handle', 'Invalid');
 				default:
 					return error(500, { message: 'An error occured' });
 			}

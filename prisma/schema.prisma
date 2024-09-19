@@ -36,6 +36,7 @@ model Session {
 model Profile {
   id String @id
 
+  handle      String @unique
   displayName String @unique
 
   user  User   @relation(references: [id], fields: [id], onDelete: Cascade)

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
+	import { generateHandle } from '$lib/utils/helpers';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
 	import { toast } from 'svelte-sonner';
@@ -22,8 +23,25 @@
 <form method="post" use:enhance class={className}>
 	<Form.Field {form} name="displayName">
 		<Form.Control let:attrs>
-			<Form.Label>Display Name</Form.Label>
-			<Input {...attrs} bind:value={$formData.displayName} />
+			<Form.Label>Name</Form.Label>
+			<Input
+				{...attrs}
+				bind:value={$formData.displayName}
+				oninput={() => {
+					$formData.handle = generateHandle($formData.displayName);
+				}}
+			/>
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field {form} name="handle">
+		<Form.Control let:attrs>
+			<Form.Label>Handle</Form.Label>
+			<div class="relative">
+				<span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
+				<Input {...attrs} bind:value={$formData.handle} class="pl-7" />
+			</div>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

@@ -1,10 +1,11 @@
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma, Profile, User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import { prisma } from './prisma';
 import { hash, verify } from '@node-rs/argon2';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { nanoid } from 'nanoid';
 import { lucia } from './lucia';
+import { generateHandle } from '$lib/utils/helpers';
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -14,11 +15,11 @@ export const hashOptions = {
 };
 
 export const getUser = async (
-	{ displayName, email }: { displayName?: string; email?: string },
+	{ handle, email }: { handle?: string; email?: string },
 	select?: Prisma.UserSelect
 ) => {
 	return prisma.user.findFirst({
-		where: { OR: [{ profile: { some: { displayName } } }, { email }] },
+		where: { OR: [{ profile: { some: { handle } } }, { email }] },
 		select
 	});
 };
@@ -32,15 +33,21 @@ export const signUpWithEmailAndPassword = async (
 	event: RequestEvent,
 	email: string,
 	password: string,
-	displayName: string
+	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
-	const existingUser = await getUser({ email });
-	if (existingUser) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
+	const generatedHandle = generateHandle(meta.displayName);
+	if (meta.handle !== generatedHandle) throw new AuthError(AuthErrorCode.InvalidHandle);
+
+	const existingUserHandle = await getUser({ handle: meta.handle });
+	if (existingUserHandle) throw new AuthError(AuthErrorCode.HandleAlreadyInUse);
+
+	const existingUserEmail = await getUser({ email });
+	if (existingUserEmail) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
 	const id = nanoid();
 	const user = await prisma.user.create({
-		data: { id, email, passwordHash: hashedPassword, profile: { create: { displayName } } }
+		data: { id, email, passwordHash: hashedPassword, profile: { create: meta } }
 	});
 
 	await createSession(id, event);
