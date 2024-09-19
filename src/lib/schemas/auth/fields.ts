@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const usernameField = z.string().min(2).max(22).regex(new RegExp(`^[a-zA-Z0-9]+$`));
+export const displayNameField = z.string().min(2).max(22).regex(new RegExp(`^[a-zA-Z0-9]+$`));
 
 export const passwordField = z
 	.string()

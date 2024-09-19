@@ -14,10 +14,13 @@ export const hashOptions = {
 };
 
 export const getUser = async (
-	{ username, email }: { username?: string; email?: string },
+	{ displayName, email }: { displayName?: string; email?: string },
 	select?: Prisma.UserSelect
 ) => {
-	return prisma.user.findFirst({ where: { OR: [{ username }, { email }] }, select });
+	return prisma.user.findFirst({
+		where: { OR: [{ profile: { some: { displayName } } }, { email }] },
+		select
+	});
 };
 
 export const hashPassword = async (password: string) => hash(password, hashOptions);
@@ -29,7 +32,7 @@ export const signUpWithEmailAndPassword = async (
 	event: RequestEvent,
 	email: string,
 	password: string,
-	username: string
+	displayName: string
 ): Promise<User> => {
 	const existingUser = await getUser({ email });
 	if (existingUser) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
@@ -37,7 +40,7 @@ export const signUpWithEmailAndPassword = async (
 	const hashedPassword = await hashPassword(password);
 	const id = nanoid();
 	const user = await prisma.user.create({
-		data: { id, email, password_hash: hashedPassword, username }
+		data: { id, email, passwordHash: hashedPassword, profile: { create: { displayName } } }
 	});
 
 	await createSession(id, event);
@@ -50,12 +53,12 @@ export const signInWithEmailAndPassword = async (
 	email: string,
 	password: string
 ): Promise<void> => {
-	const existingUser = await getUser({ email }, { id: true, password_hash: true });
+	const existingUser = await getUser({ email }, { id: true, passwordHash: true });
 	if (!existingUser) {
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}
 
-	const validPassword = await verifyPassword(password, existingUser.password_hash);
+	const validPassword = await verifyPassword(password, existingUser.passwordHash);
 	if (!validPassword) {
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}

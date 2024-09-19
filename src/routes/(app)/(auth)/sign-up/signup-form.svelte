@@ -20,10 +20,10 @@
 </script>
 
 <form method="post" use:enhance class={className}>
-	<Form.Field {form} name="username">
+	<Form.Field {form} name="displayName">
 		<Form.Control let:attrs>
-			<Form.Label>Username</Form.Label>
-			<Input {...attrs} bind:value={$formData.username} />
+			<Form.Label>Display Name</Form.Label>
+			<Input {...attrs} bind:value={$formData.displayName} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

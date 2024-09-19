@@ -31,10 +31,10 @@ export const actions = {
 			});
 		}
 
-		const { email, password, username } = form.data;
+		const { email, password, displayName } = form.data;
 
 		try {
-			await signUpWithEmailAndPassword(event, email, password, username);
+			await signUpWithEmailAndPassword(event, email, password, displayName);
 		} catch (e) {
 			if (dev) console.error(e);
 
