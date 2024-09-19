@@ -10,7 +10,7 @@ const getProfile = async (id: string) => {
 };
 
 export const load: PageServerLoad = async (event) => {
-	const profilePromise = getProfile(event.params.id);
+	const profilePromise = getProfile(event.params.profileId);
 
 	return {
 		profilePromise

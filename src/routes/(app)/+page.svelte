@@ -19,7 +19,15 @@
 				<p>
 					{post.content}
 				</p>
-				<Button variant="link" href={route('/p/[id]', { id: post.id })}>{post.id}</Button>
+				<Button
+					variant="link"
+					href={route('/[profileId]/[postId]', {
+						profileId: data.session!.userId,
+						postId: post.id
+					})}
+				>
+					{post.id}
+				</Button>
 			</li>
 		{/each}
 	</ul>

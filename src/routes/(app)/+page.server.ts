@@ -32,6 +32,9 @@ export const actions: Actions = {
 			data: { id, content, authorId: event.locals.session.userId }
 		});
 
-		redirect(303, route('/p/[id]', { id }));
+		redirect(
+			303,
+			route('/[profileId]/[postId]', { profileId: event.locals.session.userId, postId: id })
+		);
 	}
 };

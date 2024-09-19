@@ -12,7 +12,7 @@ const getPost = async (id: string) => {
 };
 
 export const load: PageServerLoad = async (event) => {
-	const postPromise = getPost(event.params.id);
+	const postPromise = getPost(event.params.postId);
 
 	return {
 		postPromise
