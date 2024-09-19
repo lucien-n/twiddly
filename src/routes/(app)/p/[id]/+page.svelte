@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { route } from '$lib/ROUTES';
+	import { Button } from '&/button';
 	import type { PageData } from './$types';
 
 	const { data } = $props();
@@ -13,7 +15,13 @@
 			<li class="grid grid-cols-2 gap-3">
 				<strong class="text-end">{k}</strong>
 				<p>
-					{v}
+					{#if k === 'authorId' && typeof v === 'string'}
+						<Button variant="link" href={route('/u/[id]', { id: v })}>
+							{v}
+						</Button>
+					{:else}
+						{v}
+					{/if}
 				</p>
 			</li>
 		{/each}
