@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { route } from '$lib/ROUTES';
 	import * as Avatar from '&/avatar';
 	import { Button } from '&/button';
 	import * as Card from '&/card';
@@ -10,7 +11,7 @@
 		createdAt,
 		author
 	}: Pick<Post, 'id' | 'content' | 'createdAt'> & {
-		author: Pick<Profile, 'id' | 'displayName'>;
+		author: Pick<Profile, 'displayName' | 'handle'>;
 	} = $props();
 
 	const formatDate = (date: Date) =>
@@ -41,16 +42,24 @@
 <Card.Root class="mx-auto max-w-md transition-shadow duration-300 hover:shadow-lg">
 	<Card.Header>
 		<div class="flex items-center space-x-4">
-			<Avatar.Root>
-				<Avatar.Image
-					src="https://api.dicebear.com/9.x/notionists-neutral/svg?seed={author.displayName}"
-					alt={author.displayName}
-				/>
-				<Avatar.Fallback>{author.displayName.charAt(0)}</Avatar.Fallback>
-			</Avatar.Root>
+			<a href={route('/[handle]', { handle: author.handle })}>
+				<Avatar.Root>
+					<Avatar.Image
+						src="https://api.dicebear.com/9.x/notionists-neutral/svg?seed={author.displayName}"
+						alt={author.displayName}
+					/>
+					<Avatar.Fallback>{author.displayName.charAt(0)}</Avatar.Fallback>
+				</Avatar.Root>
+			</a>
 			<div>
 				<p class="font-semibold">{author.displayName}</p>
-				<p class="text-sm text-gray-500">@username</p>
+				<Button
+					variant="link"
+					href={route('/[handle]', { handle: author.handle })}
+					class="h-0 p-0 text-sm text-gray-500"
+				>
+					@{author.handle}
+				</Button>
 			</div>
 		</div>
 	</Card.Header>

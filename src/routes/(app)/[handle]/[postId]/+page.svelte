@@ -15,15 +15,10 @@
 			<li class="grid grid-cols-2 gap-3">
 				<strong class="text-end">{k}</strong>
 				<p>
-					{#if k === 'authorId' && typeof v === 'string'}
-						<Button variant="link" href={route('/[profileId]', { profileId: v })}>
-							{v}
-						</Button>
-					{:else}
-						{v}
-					{/if}
+					{v}
 				</p>
 			</li>
 		{/each}
+		<Button href={route('/[handle]', { handle: post.author.handle })}>Author</Button>
 	</ul>
 {/await}

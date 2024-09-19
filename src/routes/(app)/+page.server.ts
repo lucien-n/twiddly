@@ -1,21 +1,17 @@
+import { route } from '$lib/ROUTES';
 import { createPostSchema } from '$lib/schemas/post/create-post';
+import { prisma } from '$lib/server/prisma';
+import { postSelect } from '$lib/utils/post';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { nanoid } from 'nanoid';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/prisma';
-import { nanoid } from 'nanoid';
-import { route } from '$lib/ROUTES';
 
 export const load: PageServerLoad = async () => {
 	const postsPromise = prisma.post.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: {
-			id: true,
-			content: true,
-			createdAt: true,
-			author: { select: { id: true, displayName: true } }
-		}
+		select: postSelect
 	});
 
 	return {
@@ -36,13 +32,11 @@ export const actions: Actions = {
 		const { content } = form.data;
 
 		const id = nanoid();
-		await prisma.post.create({
-			data: { id, content, authorId: event.locals.session.userId }
+		const post = await prisma.post.create({
+			data: { id, content, authorId: event.locals.session.userId },
+			select: postSelect
 		});
 
-		redirect(
-			303,
-			route('/[profileId]/[postId]', { profileId: event.locals.session.userId, postId: id })
-		);
+		redirect(303, route('/[handle]/[postId]', { handle: post.author.handle, postId: id }));
 	}
 };
