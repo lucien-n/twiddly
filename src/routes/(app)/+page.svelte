@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { route } from '$lib/ROUTES';
-	import { Button } from '&/button';
+	import PostCard from '@/post/post-card.svelte';
 	import type { PageData } from './$types';
 	import CreatePostForm from './create-post-form.svelte';
 
@@ -13,22 +12,9 @@
 {#await postsPromise}
 	<p>loading posts</p>
 {:then posts}
-	<ul>
+	<div class="space-y-4 p-4">
 		{#each posts as post (post.id)}
-			<li class="flex justify-between">
-				<p>
-					{post.content}
-				</p>
-				<Button
-					variant="link"
-					href={route('/[profileId]/[postId]', {
-						profileId: data.session!.userId,
-						postId: post.id
-					})}
-				>
-					{post.id}
-				</Button>
-			</li>
+			<PostCard {...post} />
 		{/each}
-	</ul>
+	</div>
 {/await}

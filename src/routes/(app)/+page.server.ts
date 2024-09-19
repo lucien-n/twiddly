@@ -8,7 +8,15 @@ import { nanoid } from 'nanoid';
 import { route } from '$lib/ROUTES';
 
 export const load: PageServerLoad = async () => {
-	const postsPromise = prisma.post.findMany({ orderBy: { createdAt: 'desc' } });
+	const postsPromise = prisma.post.findMany({
+		orderBy: { createdAt: 'desc' },
+		select: {
+			id: true,
+			content: true,
+			createdAt: true,
+			author: { select: { id: true, displayName: true } }
+		}
+	});
 
 	return {
 		createPostForm: await superValidate(zod(createPostSchema)),

@@ -23,7 +23,6 @@ model User {
 
   sessions Session[]
   profile  Profile[]
-  Post     Post[]
 }
 
 model Session {
@@ -39,7 +38,8 @@ model Profile {
 
   displayName String @unique
 
-  user User @relation(references: [id], fields: [id], onDelete: Cascade)
+  user  User   @relation(references: [id], fields: [id], onDelete: Cascade)
+  posts Post[]
 }
 
 model Post {
@@ -50,5 +50,5 @@ model Post {
   updatedAt DateTime @updatedAt()
 
   authorId String
-  author   User   @relation(references: [id], fields: [authorId], onDelete: Cascade)
+  author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
 }
