@@ -1,2 +1,26 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { route } from '$lib/ROUTES';
+	import { Button } from '&/button';
+	import type { PageData } from './$types';
+	import CreatePostForm from './create-post-form.svelte';
+
+	const { data } = $props();
+	const { postsPromise, createPostForm }: PageData = data;
+</script>
+
+<CreatePostForm data={createPostForm} />
+
+{#await postsPromise}
+	<p>loading posts</p>
+{:then posts}
+	<ul>
+		{#each posts as post (post.id)}
+			<li class="flex justify-between">
+				<p>
+					{post.content}
+				</p>
+				<Button variant="link" href={route('/p/[id]', { id: post.id })}>{post.id}</Button>
+			</li>
+		{/each}
+	</ul>
+{/await}

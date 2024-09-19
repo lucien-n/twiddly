@@ -11,7 +11,10 @@
 const PAGES = {
   "/": `/`,
   "/sign-in": `/sign-in`,
-  "/sign-up": `/sign-up`
+  "/sign-up": `/sign-up`,
+  "/p/[id]": (params: { id: (string | number) }) => {
+    return `/p/${params.id}`
+  }
 }
 
 /**
@@ -25,6 +28,7 @@ const SERVERS = {
  * ACTIONS
  */
 const ACTIONS = {
+  "createPost /": `/?/createPost`,
   "default /sign-in": `/sign-in`,
   "default /sign-up": `/sign-up`
 }
@@ -133,9 +137,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/sign-in': never, '/sign-up': never }
+  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/p/[id]': 'id' }
   SERVERS: { 'POST /sign-out': never }
-  ACTIONS: { 'default /sign-in': never, 'default /sign-up': never }
+  ACTIONS: { 'createPost /': never, 'default /sign-in': never, 'default /sign-up': never }
   LINKS: Record<string, never>
-  Params: Record<string, never>
+  Params: { id: never }
 }
