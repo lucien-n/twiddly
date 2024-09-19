@@ -15,6 +15,7 @@
 	} from 'lucide-svelte';
 
 	const authState = getAuthState();
+	const isAuthenticated = $derived(!!authState.session);
 
 	let items: [NavItemProps[], NavItemProps[]] = $state([[], []]);
 	$effect(() => {
@@ -46,19 +47,19 @@
 					label: 'Sign In',
 					action: route('/sign-in'),
 					icon: LogIn,
-					hidden: !authState.session
+					hidden: isAuthenticated
 				},
 				{
 					label: 'Sign Out',
 					action: () => authState.toggleOpenSignOutDialog(),
 					icon: LogOut,
-					hidden: !!authState.session
+					hidden: !isAuthenticated
 				},
 				{
 					label: 'Settings',
 					action: route('/'),
 					icon: Settings,
-					hidden: !!authState.session
+					hidden: !isAuthenticated
 				}
 			]
 		];

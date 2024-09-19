@@ -1,22 +1,10 @@
-<svelte:options runes={true} />
-
 <script>
-	import AuthContext from '@/auth/auth-context.svelte';
-	import SideNav from '@/nav/side-nav.svelte';
 	import { Toaster } from 'svelte-sonner';
 	import '../app.css';
 
-	const { children, data } = $props();
+	const { children } = $props();
 </script>
 
 <Toaster richColors />
 
-<AuthContext init={{ user: data.user, session: data.session }}>
-	<div class="flex min-h-screen w-full flex-col bg-muted/40">
-		<SideNav />
-
-		<div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-			{@render children()}
-		</div>
-	</div>
-</AuthContext>
+{@render children()}
