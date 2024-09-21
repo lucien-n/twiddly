@@ -2,7 +2,9 @@
 	import { route } from '$lib/ROUTES';
 	import { createPostSchema, type CreatePostSchema } from '$lib/schemas/post/create-post';
 	import * as Form from '&/form';
-	import { Input } from '&/input';
+	import { Textarea } from '&/textarea';
+	import { getAuthState } from '@/auth/auth-state.svelte';
+	import { Send } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -17,17 +19,44 @@
 		validators: zodClient(createPostSchema),
 		onError: ({ result }) => toast.error(result.error.message)
 	});
-	const { form: formData, enhance, submitting } = form;
+	const { form: formData, enhance, submitting, errors, constraints } = form;
+
+	const authState = getAuthState();
+
+	let rows: number = $state(3);
+	$effect(() => {
+		const lines = $formData.content.split('\n').length;
+		rows = lines < 5 ? 5 : lines;
+	});
 </script>
 
 <form method="post" action={route('createPost /')} use:enhance>
 	<Form.Field {form} name="content">
 		<Form.Control let:attrs>
-			<Form.Label>Content</Form.Label>
-			<Input {...attrs} bind:value={$formData.content} />
+			<Textarea
+				{...attrs}
+				bind:value={$formData.content as string}
+				{rows}
+				class="resize-none text-lg"
+				minlength={$constraints.content?.minlength}
+				maxlength={$constraints.content?.maxlength}
+				placeholder="What's up {authState.user?.id ?? 'Stranger'}?"
+				required
+			/>
 		</Form.Control>
+		<Form.Description />
 		<Form.FieldErrors />
 	</Form.Field>
-
-	<Form.Button class="w-full" disabled={$submitting}>Post</Form.Button>
+	<Form.Errors errors={$errors._errors} />
+	<div class="flex w-full">
+		<div class="ml-auto flex gap-3">
+			<p class="select-none self-center text-muted-foreground">
+				{$formData.content.length}/{$constraints.content?.maxlength}
+			</p>
+			<Form.Button disabled={$submitting}>
+				<Send />
+				<p class="ml-2">Post</p>
+			</Form.Button>
+		</div>
+	</div>
 </form>

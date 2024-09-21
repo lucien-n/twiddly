@@ -28,7 +28,7 @@
 
 		<Separator class="my-12" />
 
-		<div class="w-full">
+		<div class="w-full space-y-4 py-4">
 			{#each posts as post}
 				<PostCard {...post} />
 			{/each}
