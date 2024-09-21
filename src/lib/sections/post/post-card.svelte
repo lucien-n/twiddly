@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import * as Avatar from '&/avatar';
 	import { Button } from '&/button';
 	import * as Card from '&/card';
+	import { ProfileAvatar } from '@/profile/avatar';
 	import type { Post, Profile } from '@prisma/client';
 	import { Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
 
@@ -11,7 +11,7 @@
 		createdAt,
 		author
 	}: Pick<Post, 'id' | 'content' | 'createdAt'> & {
-		author: Pick<Profile, 'displayName' | 'handle'>;
+		author: Pick<Profile, 'id' | 'displayName' | 'handle'>;
 	} = $props();
 
 	const formatDate = (date: Date) =>
@@ -39,17 +39,11 @@
 	};
 </script>
 
-<Card.Root class="mx-auto max-w-md transition-shadow duration-300 hover:shadow-lg">
+<Card.Root class="mx-auto transition-shadow duration-300 hover:shadow-lg">
 	<Card.Header>
 		<div class="flex items-center space-x-4">
 			<a href={route('/[handle]', { handle: author.handle })}>
-				<Avatar.Root>
-					<Avatar.Image
-						src="https://api.dicebear.com/9.x/notionists-neutral/svg?seed={author.displayName}"
-						alt={author.displayName}
-					/>
-					<Avatar.Fallback>{author.displayName.charAt(0)}</Avatar.Fallback>
-				</Avatar.Root>
+				<ProfileAvatar profile={author} />
 			</a>
 			<div>
 				<p class="font-semibold">{author.displayName}</p>

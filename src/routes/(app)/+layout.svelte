@@ -10,8 +10,10 @@
 	<div class="flex min-h-screen w-full flex-col bg-muted/40">
 		<SideNav />
 
-		<div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+		<section
+			class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4 sm:py-4"
+		>
 			{@render children()}
-		</div>
+		</section>
 	</div>
 </AuthContext>
