@@ -17,7 +17,8 @@ const PAGES = {
   },
   "/[handle]/[postId]": (params: { handle: (string | number), postId: (string | number) }) => {
     return `/${params.handle}/${params.postId}`
-  }
+  },
+  "/settings": `/settings`
 }
 
 /**
@@ -33,7 +34,8 @@ const SERVERS = {
 const ACTIONS = {
   "createPost /": `/?/createPost`,
   "default /sign-in": `/sign-in`,
-  "default /sign-up": `/sign-up`
+  "default /sign-up": `/sign-up`,
+  "default /settings": `/settings`
 }
 
 /**
@@ -140,9 +142,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId' }
+  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId', '/settings': never }
   SERVERS: { 'POST /sign-out': never }
-  ACTIONS: { 'createPost /': never, 'default /sign-in': never, 'default /sign-up': never }
+  ACTIONS: { 'createPost /': never, 'default /sign-in': never, 'default /sign-up': never, 'default /settings': never }
   LINKS: Record<string, never>
   Params: { handle: never, postId: never }
 }

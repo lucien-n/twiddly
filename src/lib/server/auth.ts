@@ -47,7 +47,13 @@ export const signUpWithEmailAndPassword = async (
 	const hashedPassword = await hashPassword(password);
 	const id = nanoid();
 	const user = await prisma.user.create({
-		data: { id, email, passwordHash: hashedPassword, profile: { create: meta } }
+		data: {
+			id,
+			email,
+			passwordHash: hashedPassword,
+			profile: { create: meta },
+			settings: { create: {} }
+		}
 	});
 
 	await createSession(id, event);

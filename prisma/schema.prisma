@@ -23,6 +23,7 @@ model User {
 
   sessions Session[]
   profile  Profile[]
+  settings Settings?
 }
 
 model Session {
@@ -52,4 +53,17 @@ model Post {
 
   authorId String
   author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
+}
+
+model Settings {
+  userId String @unique
+  theme  Theme  @default(LIGHT)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
 }

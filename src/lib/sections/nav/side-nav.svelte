@@ -57,7 +57,7 @@
 				},
 				{
 					label: 'Settings',
-					action: route('/'),
+					action: route('/settings'),
 					icon: Settings,
 					hidden: !isAuthenticated
 				}
