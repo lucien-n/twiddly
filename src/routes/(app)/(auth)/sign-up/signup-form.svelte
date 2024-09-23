@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
 	import { generateHandle } from '$lib/utils/helpers';
+	import { Button } from '&/button';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
+	import { Eye, EyeOff } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms/client';
@@ -18,6 +20,8 @@
 		onError: ({ result }) => toast.error(result.error.message)
 	});
 	const { form: formData, enhance, errors, submitting } = form;
+
+	let showPassword = $state(false);
 </script>
 
 <form method="post" use:enhance class={className}>
@@ -57,7 +61,28 @@
 	<Form.Field {form} name="password">
 		<Form.Control let:attrs>
 			<Form.Label>Password</Form.Label>
-			<Input {...attrs} type="password" bind:value={$formData.password} />
+			<div
+				class=" flex rounded-md has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-background"
+			>
+				<Input
+					{...attrs}
+					type={showPassword ? 'text' : 'password'}
+					bind:value={$formData.password}
+					class="rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+				/>
+				<Button
+					onclick={() => (showPassword = !showPassword)}
+					size="icon"
+					variant="outline"
+					class="rounded-l-none border-l-0"
+				>
+					{#if showPassword}
+						<EyeOff />
+					{:else}
+						<Eye />
+					{/if}
+				</Button>
+			</div>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
