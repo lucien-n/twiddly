@@ -5,7 +5,7 @@ import { hash, verify } from '@node-rs/argon2';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { nanoid } from 'nanoid';
 import { lucia } from './lucia';
-import { generateHandle } from '$lib/utils/helpers';
+import { generateHandle } from '$lib/utils/handle';
 
 export const hashOptions = {
 	memoryCost: 19456,
