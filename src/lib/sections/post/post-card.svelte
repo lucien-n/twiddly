@@ -58,8 +58,8 @@
 		</div>
 	</Card.Header>
 	<Card.Content>
-		<p class="mb-2 text-gray-700">{content}</p>
-		<p class="text-sm text-gray-500">{formatDate(createdAt)}</p>
+		<p class="mb-2 text-foreground">{content}</p>
+		<p class="text-sm text-muted-foreground">{formatDate(createdAt)}</p>
 	</Card.Content>
 	<Card.Footer class="flex justify-between">
 		<Button
