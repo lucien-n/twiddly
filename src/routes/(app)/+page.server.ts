@@ -11,7 +11,13 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
 	const postsPromise = prisma.post.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getPostSelect(event.locals.session?.userId)
+		select: getPostSelect(event.locals.session?.userId),
+		where: {
+			OR: [
+				{ author: { privacySettings: { private: false } } },
+				{ authorId: event.locals.session?.userId }
+			]
+		}
 	});
 
 	return {
