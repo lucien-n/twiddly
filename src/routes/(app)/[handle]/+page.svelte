@@ -19,8 +19,8 @@
 		<div class="flex">
 			<ProfileAvatarSkeleton size="lg" />
 			<div class="flex flex-col gap-1 py-6 pl-5">
-				<div class="placeholder h-10 w-40"></div>
-				<p class="placeholder h-6 w-24"></p>
+				<Skeleton class="placeholder h-10 w-40" />
+				<Skeleton class="placeholder h-6 w-24" />
 			</div>
 		</div>
 	{:then { profile, posts }} -->

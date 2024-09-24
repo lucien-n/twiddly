@@ -4,7 +4,7 @@ import ProfileAvatar from './profile-avatar.svelte';
 import ProfileAvatarSkeleton from './profile-avatar-skeleton.svelte';
 
 export const avatarVariants = tv({
-	base: 'border',
+	base: 'border rounded-full',
 	variants: {
 		size: {
 			default: 'w-12 h-12',
