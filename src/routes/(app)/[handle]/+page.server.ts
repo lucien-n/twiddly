@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
 		error(401, `@${handle}'s profile is private`);
 
-	const posts = prisma.post
+	const postsPromise = prisma.post
 		.findMany({
 			where: { authorId: profile.id },
 			take: 10
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async (event) => {
 		.then((posts) => posts.map((post) => ({ ...post, author: profile })));
 
 	return {
-		promise: posts.then((posts) => ({ profile, posts }))
+		profile,
+		postsPromise
 	};
 };
