@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { PasswordInput } from '$lib/components/input';
 	import { signInSchema, type SignInSchema } from '$lib/schemas/auth/sign-in';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
@@ -31,7 +32,7 @@
 	<Form.Field {form} name="password">
 		<Form.Control let:attrs>
 			<Form.Label>Password</Form.Label>
-			<Input {...attrs} type="password" bind:value={$formData.password} />
+			<PasswordInput bind:value={$formData.password} {attrs} />
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
