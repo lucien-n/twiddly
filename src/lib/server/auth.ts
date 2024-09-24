@@ -1,27 +1,17 @@
-import type { Prisma, Profile, User } from '@prisma/client';
-import type { RequestEvent } from '@sveltejs/kit';
-import { prisma } from './prisma';
-import { hash, verify } from '@node-rs/argon2';
+import { handleField } from '$lib/schemas/auth/fields';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
+import { hash, verify } from '@node-rs/argon2';
+import type { Profile, User } from '@prisma/client';
+import type { RequestEvent } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { lucia } from './lucia';
-import { generateHandle } from '$lib/utils/handle';
+import { prisma } from './prisma';
 
 export const hashOptions = {
 	memoryCost: 19456,
 	timeCost: 2,
 	outputLen: 32,
 	parallelism: 1
-};
-
-export const getUser = async (
-	{ handle, email }: { handle?: string; email?: string },
-	select?: Prisma.UserSelect
-) => {
-	return prisma.user.findFirst({
-		where: { OR: [{ profile: { some: { handle } } }, { email }] },
-		select
-	});
 };
 
 export const hashPassword = async (password: string) => hash(password, hashOptions);
@@ -35,13 +25,17 @@ export const signUpWithEmailAndPassword = async (
 	password: string,
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
-	const generatedHandle = generateHandle(meta.displayName);
-	if (meta.handle !== generatedHandle) throw new AuthError(AuthErrorCode.InvalidHandle);
+	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
 
-	const existingUserHandle = await getUser({ handle: meta.handle });
-	if (existingUserHandle) throw new AuthError(AuthErrorCode.HandleAlreadyInUse);
+	const existingHandle = await prisma.profile.findFirst({
+		where: { handle: meta.handle }
+	});
+	if (existingHandle) throw new AuthError(AuthErrorCode.HandleAlreadyInUse);
 
-	const existingUserEmail = await getUser({ email });
+	const existingUserEmail = await prisma.user.findFirst({
+		where: { email }
+	});
+	console.log(existingUserEmail);
 	if (existingUserEmail) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
@@ -67,7 +61,10 @@ export const signInWithEmailAndPassword = async (
 	email: string,
 	password: string
 ): Promise<void> => {
-	const existingUser = await getUser({ email }, { id: true, passwordHash: true });
+	const existingUser = await prisma.user.findFirst({
+		where: { email },
+		select: { id: true, passwordHash: true }
+	});
 	if (!existingUser) {
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}
