@@ -8,13 +8,14 @@
 		LineChart,
 		LogIn,
 		LogOut,
-		Package,
+		UserRound,
 		Package2,
 		Settings,
 		UsersRound
 	} from 'lucide-svelte';
 
 	const authState = getAuthState();
+
 	const isAuthenticated = $derived(!!authState.session);
 
 	let items: [NavItemProps[], NavItemProps[]] = $state([[], []]);
@@ -27,9 +28,12 @@
 					icon: Home
 				},
 				{
-					label: 'Products',
-					action: route('/'),
-					icon: Package
+					label: 'Profile',
+					action: isAuthenticated
+						? route('/[handle]', { handle: authState.profile!.handle })
+						: route('/'),
+					icon: UserRound,
+					hidden: !isAuthenticated
 				},
 				{
 					label: 'Customers',

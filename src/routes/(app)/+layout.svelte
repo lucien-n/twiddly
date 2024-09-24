@@ -6,7 +6,7 @@
 	const { children, data } = $props();
 </script>
 
-<AuthContext init={{ user: data.user, session: data.session }}>
+<AuthContext init={{ user: data.user, session: data.session, profile: data.profile }}>
 	<div class="flex min-h-screen w-full flex-col bg-muted/40">
 		<SideNav />
 

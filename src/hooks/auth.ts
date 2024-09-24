@@ -1,4 +1,6 @@
 import { lucia } from '$lib/server/lucia';
+import { prisma } from '$lib/server/prisma';
+import type { Profile } from '@prisma/client';
 import type { Handle } from '@sveltejs/kit';
 
 export const handleAuth: Handle = async ({ resolve, event }) => {
@@ -26,8 +28,17 @@ export const handleAuth: Handle = async ({ resolve, event }) => {
 		});
 	}
 
+	let profile: Profile | null = null;
+	if (session) {
+		profile = await prisma.profile.findFirst({
+			where: { id: session.userId },
+			include: { interfaceSettings: true, privacySettings: true }
+		});
+	}
+
 	event.locals.user = user;
 	event.locals.session = session;
+	event.locals.profile = profile;
 
 	return resolve(event);
 };

@@ -40,7 +40,7 @@
 				class="resize-none text-lg"
 				minlength={$constraints.content?.minlength}
 				maxlength={$constraints.content?.maxlength}
-				placeholder="What's up {authState.user?.id ?? 'Stranger'}?"
+				placeholder="What's up {authState.profile?.displayName ?? 'Stranger'} ?"
 				required
 			/>
 		</Form.Control>
