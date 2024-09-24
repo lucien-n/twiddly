@@ -2,7 +2,8 @@ export enum AuthErrorCode {
 	EmailAlreadyInUse = 'auth/email-already-in-use',
 	InvalidCredentials = 'auth/invalid-credentials',
 	InvalidHandle = 'auth/invalid-handle',
-	HandleAlreadyInUse = 'auth/handle-already-in-use'
+	HandleAlreadyInUse = 'auth/handle-already-in-use',
+	AuthRequired = 'auth/auth-required'
 }
 
 export class AuthError extends Error {

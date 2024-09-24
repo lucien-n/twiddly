@@ -14,7 +14,7 @@
 {:then posts}
 	<div class="w-full space-y-4 py-4">
 		{#each posts as post (post.id)}
-			<PostCard {...post} />
+			<PostCard {post} />
 		{/each}
 	</div>
 {/await}

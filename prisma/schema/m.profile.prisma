@@ -9,4 +9,5 @@ model Profile {
 
     interfaceSettings InterfaceSettings?
     privacySettings   PrivacySettings?
+    likes             Like[]
 }

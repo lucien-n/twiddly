@@ -54,7 +54,7 @@
 			{/each}
 		{:then posts}
 			{#each posts as post}
-				<PostCard {...post} />
+				<PostCard {post} />
 			{/each}
 		{/await}
 	</div>

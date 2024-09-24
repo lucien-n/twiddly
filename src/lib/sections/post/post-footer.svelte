@@ -1,16 +1,22 @@
 <script lang="ts">
+	import { route } from '$lib/ROUTES';
+	import { isLiked } from '$lib/utils/post';
 	import { Button } from '&/button';
-	import type { Post, Profile } from '@prisma/client';
+	import { getAuthState } from '@/auth/auth-state.svelte';
+	import type { Post, Profile, Like } from '@prisma/client';
 	import { Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	interface Props {
-		post: Pick<Post, 'id'> & {
+		post: Pick<Post, 'id' | 'likeCount'> & {
 			author: Pick<Profile, 'handle'>;
+		} & {
+			likes: Pick<Like, 'profileId'>[];
 		};
-		onRepost: () => Promise<boolean>;
-		onLike: () => Promise<boolean>;
 	}
-	const { post, onRepost, onLike }: Props = $props();
+	let { post }: Props = $props();
+
+	const authState = getAuthState();
 
 	let comments = $state(0);
 	const handleComment = async (event: Event) => {
@@ -26,28 +32,34 @@
 
 		reposted = !reposted;
 		reposts += reposted ? 1 : -1;
-
-		const success = await onRepost();
-		if (!success) {
-			reposted = !reposted;
-			reposts += reposted ? 1 : -1;
-			return;
-		}
 	};
 
-	let likes = $state(0);
-	let liked = $state(false);
+	let likes: number = $state(post.likeCount);
+	let liked: boolean = $state(isLiked(authState.user?.id, post.likes));
 	const handleLike = async (event: Event) => {
 		event.stopPropagation();
 
-		liked = !liked;
-		likes += liked ? 1 : -1;
+		const url = liked
+			? route('POST /api/v1/post/[id]/unlike', { id: post.id })
+			: route('POST /api/v1/post/[id]/like', { id: post.id });
 
-		const success = await onLike();
-		if (!success) {
+		const res = await fetch(url, {
+			method: 'POST'
+		});
+		if (!res.ok) {
 			liked = !liked;
-			likes += liked ? 1 : -1;
 			return;
+		}
+
+		try {
+			const { data } = await res.json();
+			const newLikeCount = parseInt(data);
+			if (isNaN(newLikeCount)) return;
+
+			likes = newLikeCount;
+			liked = !liked;
+		} catch {
+			toast.error('An error occured');
 		}
 	};
 
@@ -56,37 +68,40 @@
 	};
 </script>
 
-<Button
-	variant="ghost"
-	size="sm"
-	class="flex items-center space-x-2 transition-colors duration-200 hover:text-blue-500"
-	onclick={handleComment}
->
-	<MessageCircle class="h-4 w-4" />
-	<span>{comments}</span>
-</Button>
-<Button
-	variant="ghost"
-	size="sm"
-	class={`flex items-center space-x-2 transition-colors duration-200 ${
-		reposted ? 'text-green-500' : 'hover:text-green-500'
-	}`}
-	onclick={handleRepost}
->
-	<Repeat2 class="h-4 w-4" />
-	<span>{reposts}</span>
-</Button>
-<Button
-	variant="ghost"
-	size="sm"
-	class={`flex items-center space-x-2 transition-colors duration-200 ${
-		liked ? 'text-red-500' : 'hover:text-red-500'
-	}`}
-	onclick={handleLike}
->
-	<Heart class={`h-4 w-4 ${liked ? 'fill-current' : ''}`} />
-	<span>{likes}</span>
-</Button>
+<div class="flex sm:space-x-5">
+	<Button
+		variant="ghost"
+		size="sm"
+		class="flex items-center space-x-2 transition-colors duration-200 hover:text-blue-500"
+		onclick={handleComment}
+	>
+		<MessageCircle class="h-4 w-4" />
+		<span>{comments}</span>
+	</Button>
+	<Button
+		variant="ghost"
+		size="sm"
+		class={`flex items-center space-x-2 transition-colors duration-200 ${
+			reposted ? 'text-green-500' : 'hover:text-green-500'
+		}`}
+		onclick={handleRepost}
+	>
+		<Repeat2 class="h-4 w-4" />
+		<span>{reposts}</span>
+	</Button>
+	<Button
+		variant="ghost"
+		size="sm"
+		class={`flex items-center space-x-2 transition-colors duration-200 ${
+			liked ? 'text-red-500' : 'hover:text-red-500'
+		}`}
+		onclick={handleLike}
+	>
+		<Heart class={`h-4 w-4 ${liked ? 'fill-current' : ''}`} />
+		<span>{likes}</span>
+	</Button>
+</div>
+
 <Button
 	variant="ghost"
 	size="sm"

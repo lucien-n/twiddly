@@ -5,14 +5,17 @@
 	import { Button } from '&/button';
 	import * as Card from '&/card';
 	import { ProfileAvatar } from '@/profile/avatar';
-	import type { Post, Profile } from '@prisma/client';
+	import type { Like, Post, Profile } from '@prisma/client';
 	import PostFooter from './post-footer.svelte';
 
-	const {
-		...post
-	}: Pick<Post, 'id' | 'content' | 'createdAt'> & {
-		author: Pick<Profile, 'id' | 'displayName' | 'handle'>;
-	} = $props();
+	interface Props {
+		post: Pick<Post, 'id' | 'content' | 'createdAt' | 'likeCount'> & {
+			author: Pick<Profile, 'id' | 'displayName' | 'handle'>;
+		} & {
+			likes: Pick<Like, 'profileId'>[];
+		};
+	}
+	const { post }: Props = $props();
 
 	const redirectToPost = () => {
 		goto(route('/[handle]/[postId]', { handle: post.author.handle, postId: post.id }));
@@ -45,10 +48,6 @@
 		<p class="text-sm text-muted-foreground">{formatDate(post.createdAt)}</p>
 	</Card.Content>
 	<Card.Footer class="justify-between py-3">
-		<PostFooter
-			{post}
-			onRepost={() => new Promise((r) => setTimeout(r, 1_500))}
-			onLike={() => new Promise((r) => setTimeout(r, 1_500))}
-		/>
+		<PostFooter {post} />
 	</Card.Footer>
 </Card.Root>

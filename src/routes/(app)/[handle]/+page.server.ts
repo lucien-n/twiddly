@@ -1,6 +1,7 @@
 import { prisma } from '$lib/server/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { getPostSelect } from '$lib/utils/post';
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
@@ -16,6 +17,7 @@ export const load: PageServerLoad = async (event) => {
 	const postsPromise = prisma.post
 		.findMany({
 			where: { authorId: profile.id },
+			select: getPostSelect(event.locals.session?.userId),
 			take: 10
 		})
 		.then((posts) => posts.map((post) => ({ ...post, author: profile })));
