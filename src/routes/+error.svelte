@@ -9,7 +9,7 @@
 	$page;
 </script>
 
-<div class="flex h-full w-full items-center justify-center">
+<div class="flex h-screen w-full items-center justify-center">
 	<div class="flex justify-center gap-8">
 		<h1 class="text-9xl font-bold tracking-tight">
 			{$page.status}

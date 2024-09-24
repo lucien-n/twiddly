@@ -21,10 +21,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
-  sessions          Session[]
-  profile           Profile[]
-  interfaceSettings InterfaceSettings?
-  privacySettings   PrivacySettings?
+  sessions Session[]
+  profile  Profile[]
 }
 
 model Session {
@@ -43,6 +41,9 @@ model Profile {
 
   user  User   @relation(references: [id], fields: [id], onDelete: Cascade)
   posts Post[]
+
+  interfaceSettings InterfaceSettings?
+  privacySettings   PrivacySettings?
 }
 
 model Post {
@@ -59,15 +60,15 @@ model Post {
 model InterfaceSettings {
   theme Theme @default(SYSTEM)
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String  @unique
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PrivacySettings {
   private Boolean @default(false)
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String  @unique
+  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Theme {

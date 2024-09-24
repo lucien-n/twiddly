@@ -10,7 +10,9 @@ export const load: PageServerLoad = async (event) => {
 	if (!event.locals.session) redirect(303, route('/'));
 
 	const { userId } = event.locals.session;
-	const interfaceSettings = await prisma.interfaceSettings.findFirst({ where: { userId } });
+	const interfaceSettings = await prisma.interfaceSettings.findFirst({
+		where: { userId }
+	});
 	if (!interfaceSettings) {
 		throw new Error(`Interface settings not found for user "${userId}"`);
 	}
