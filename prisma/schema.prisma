@@ -5,74 +5,11 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model User {
-  id           String @id
-  email        String @unique
-  passwordHash String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-
-  sessions Session[]
-  profile  Profile[]
-}
-
-model Session {
-  id        String   @id
-  expiresAt DateTime
-
-  userId String
-  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
-}
-
-model Profile {
-  id String @id
-
-  handle      String @unique
-  displayName String @unique
-
-  user  User   @relation(references: [id], fields: [id], onDelete: Cascade)
-  posts Post[]
-
-  interfaceSettings InterfaceSettings?
-  privacySettings   PrivacySettings?
-}
-
-model Post {
-  id      String @id
-  content String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-
-  authorId String
-  author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
-}
-
-model InterfaceSettings {
-  theme Theme @default(SYSTEM)
-
-  userId  String  @unique
-  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model PrivacySettings {
-  private Boolean @default(false)
-
-  userId  String  @unique
-  profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-enum Theme {
-  LIGHT
-  DARK
-  SYSTEM
 }
