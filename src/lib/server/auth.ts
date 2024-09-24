@@ -52,7 +52,8 @@ export const signUpWithEmailAndPassword = async (
 			email,
 			passwordHash: hashedPassword,
 			profile: { create: meta },
-			settings: { create: {} }
+			interfaceSettings: { create: {} },
+			privacySettings: { create: {} }
 		}
 	});
 

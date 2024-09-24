@@ -1,8 +1,14 @@
+import { Theme } from '@prisma/client';
 import { z } from 'zod';
-import { themeField } from './fields';
 
-export const setSettingsSchema = z.object({
-	theme: themeField
+export const setInterfaceSettingsSchema = z.object({
+	theme: z.nativeEnum(Theme).default(Theme.SYSTEM)
 });
 
-export type SetSettingsSchema = typeof setSettingsSchema;
+export type SetInterfaceSettingsSchema = typeof setInterfaceSettingsSchema;
+
+export const setPrivacySettingsSchema = z.object({
+	private: z.boolean().default(false)
+});
+
+export type SetPrivacySettingsSchema = typeof setPrivacySettingsSchema;
