@@ -1,17 +1,16 @@
-import type { Profile } from '@prisma/client';
 import type { Session, User } from 'lucia';
 import { getContext, setContext } from 'svelte';
 
 export interface SetAuthState {
 	user: User | null;
 	session: Session | null;
-	profile: Profile | null;
+	profile: ProfileWithSettings | null;
 }
 
 export class AuthState {
 	user: User | null = $state(null);
 	session: Session | null = $state(null);
-	profile: Profile | null = $state(null);
+	profile: ProfileWithSettings | null = $state(null);
 
 	openSignOutDialog: boolean = $state(false);
 

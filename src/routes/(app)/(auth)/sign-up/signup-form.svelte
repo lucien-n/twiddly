@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PasswordInput } from '$lib/components/input';
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
-	import { generateHandle } from '$lib/utils/helpers';
+	import { generateHandle } from '$lib/utils/handle';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
 	import { toast } from 'svelte-sonner';
