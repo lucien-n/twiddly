@@ -8,7 +8,12 @@ export const load: PageServerLoad = async (event) => {
 
 	const profile = await prisma.profile.findFirst({
 		where: { handle },
-		include: { privacySettings: true }
+		select: {
+			id: true,
+			handle: true,
+			displayName: true,
+			privacySettings: { select: { private: true } }
+		}
 	});
 	if (!profile) error(404, `Profile @${handle} not found`);
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
