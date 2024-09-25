@@ -44,7 +44,9 @@ export const actions: Actions = {
 			where: {
 				userId: event.locals.session.userId
 			},
-			select: {}
+			select: {
+				userId: true // EMPTY SELECT
+			}
 		});
 	}
 };
