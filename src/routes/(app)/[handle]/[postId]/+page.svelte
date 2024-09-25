@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
-	import { Button } from '&/button';
+	import { Button, buttonVariants } from '&/button';
 	import ProfileAvatar from '@/profile/avatar/profile-avatar.svelte';
 	import type { PageData } from './$types';
 	import PostFooter from '@/post/post-footer.svelte';
+	import { ChevronLeft } from 'lucide-svelte';
+	import { goto } from '$app/navigation';
 
 	const { data } = $props();
 	const { postPromise }: PageData = data;
@@ -36,15 +38,16 @@
 				<p class="mb-4 text-sm text-muted-foreground">{formatDate(post.createdAt)}</p>
 			</div>
 			<div class="flex items-center justify-between p-6 py-3 pt-0">
-				<PostFooter
-					{post}
-					onRepost={() => new Promise((r) => setTimeout(r, 1_500))}
-					onLike={() => new Promise((r) => setTimeout(r, 1_500))}
-				/>
+				<PostFooter {post} />
 			</div>
 		</div>
 	{:else}
-		<!-- todo -->
-		<p>post not found</p>
+		<div class="flex h-full flex-col items-center justify-center gap-3">
+			<h1 class="text-3xl font-bold">Uh oh, we couldn't find this post</h1>
+			<Button variant="link" href={route('/')}>
+				<ChevronLeft />
+				<h1 class="ml-2 text-xl">Go back home</h1>
+			</Button>
+		</div>
 	{/if}
 {/await}

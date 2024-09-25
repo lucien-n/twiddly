@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
 	return {
 		postPromise: prisma.post.findFirst({
-			where: { id: event.params.postId },
+			where: { id: event.params.postId, deleted: null },
 			select: getPostSelect(event.locals.session?.userId)
 		})
 	};

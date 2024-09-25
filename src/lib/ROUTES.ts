@@ -28,6 +28,9 @@ const PAGES = {
  */
 const SERVERS = {
   "POST /sign-out": `/sign-out`,
+  "POST /api/v1/post/[id]/delete": (params: { id: (string | number) }) => {
+    return `/api/v1/post/${params.id}/delete`
+  },
   "POST /api/v1/post/[id]/like": (params: { id: (string | number) }) => {
     return `/api/v1/post/${params.id}/like`
   },
@@ -152,7 +155,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId', '/settings': never, '/settings/interface': never, '/settings/privacy': never }
-  SERVERS: { 'POST /sign-out': never, 'POST /api/v1/post/[id]/like': 'id', 'POST /api/v1/post/[id]/unlike': 'id' }
+  SERVERS: { 'POST /sign-out': never, 'POST /api/v1/post/[id]/delete': 'id', 'POST /api/v1/post/[id]/like': 'id', 'POST /api/v1/post/[id]/unlike': 'id' }
   ACTIONS: { 'createPost /': never, 'default /sign-in': never, 'default /sign-up': never, 'default /settings/interface': never, 'default /settings/privacy': never }
   LINKS: Record<string, never>
   Params: { handle: never, postId: never, id: never }

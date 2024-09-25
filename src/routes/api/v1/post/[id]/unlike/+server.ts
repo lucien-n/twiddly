@@ -9,6 +9,7 @@ export const POST: RequestHandler = async (event) => {
 	const { id: postId } = event.params;
 	try {
 		// should we block unlikes if the author's profile is private
+		// should we block unlikes if the post is marked as deleted
 		const result = await prisma.$transaction([
 			prisma.like.delete({
 				where: {
@@ -20,7 +21,8 @@ export const POST: RequestHandler = async (event) => {
 			}),
 			prisma.post.update({
 				where: { id: postId },
-				data: { likeCount: { decrement: 1 } }
+				data: { likeCount: { decrement: 1 } },
+				select: { likeCount: true }
 			})
 		]);
 

@@ -1,8 +1,8 @@
 model Post {
-    id      String @id
-    content String
-
-    likeCount Int @default(0)
+    id        String   @id
+    content   String
+    likeCount Int      @default(0)
+    deleted   Boolean?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()

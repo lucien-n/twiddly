@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const postsPromise = prisma.post
 		.findMany({
-			where: { authorId: profile.id },
+			where: { authorId: profile.id, deleted: { not: true } },
 			select: getPostSelect(event.locals.session?.userId),
 			take: 10
 		})

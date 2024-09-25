@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { isLiked } from '$lib/utils/post';
-	import { Button } from '&/button';
+	import { Button, buttonVariants } from '&/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import type { Post, Profile, Like } from '@prisma/client';
-	import { Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
+	import { Loader, Heart, MessageCircle, Repeat2, Share2, EllipsisVertical } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import * as Dropdown from '&/dropdown-menu';
+	import * as AlertDialog from '&/alert-dialog';
 
 	interface Props {
 		post: Pick<Post, 'id' | 'likeCount'> & {
-			author: Pick<Profile, 'handle'>;
+			author: Pick<Profile, 'id' | 'handle'>;
 		} & {
 			likes: Pick<Like, 'profileId'>[];
 		};
@@ -42,7 +44,6 @@
 		const url = liked
 			? route('POST /api/v1/post/[id]/unlike', { id: post.id })
 			: route('POST /api/v1/post/[id]/like', { id: post.id });
-
 		const res = await fetch(url, {
 			method: 'POST'
 		});
@@ -65,6 +66,35 @@
 
 	const handleShare = async (event: Event) => {
 		event.stopPropagation();
+	};
+
+	let deleted: boolean = $state(false);
+	let deleting: boolean = $state(false);
+	let openDeleteDialog = $state(false);
+	const handleDelete = async (event: Event) => {
+		event.stopPropagation();
+		deleting = true;
+
+		await new Promise((r) => setTimeout(r, 3000));
+
+		const url = route('POST /api/v1/post/[id]/delete', { id: post.id });
+		const res = await fetch(url, { method: 'POST' });
+		if (!res.ok) {
+			toast.error('An error occured');
+			return;
+		}
+
+		try {
+			const { data } = await res.json();
+			deleted = Boolean(data);
+
+			if (deleted) toast.success('Success !');
+		} catch {
+			toast.error('An error occured');
+		}
+
+		deleting = false;
+		openDeleteDialog = false;
 	};
 </script>
 
@@ -102,11 +132,46 @@
 	</Button>
 </div>
 
-<Button
-	variant="ghost"
-	size="sm"
-	class="flex items-center space-x-2 transition-colors duration-200 hover:text-blue-500"
-	onclick={handleShare}
->
-	<Share2 class="h-4 w-4" />
-</Button>
+<div class="flex sm:space-x-5">
+	<Button
+		variant="ghost"
+		size="sm"
+		class="flex items-center space-x-2 transition-colors duration-200 hover:text-blue-500"
+		onclick={handleShare}
+	>
+		<Share2 class="h-4 w-4" />
+	</Button>
+	{#if authState.session?.userId === post.author.id}
+		<Dropdown.Root>
+			<Dropdown.Trigger>
+				<EllipsisVertical />
+			</Dropdown.Trigger>
+			<Dropdown.Content>
+				<Dropdown.Item onclick={() => (openDeleteDialog = true)}>Delete</Dropdown.Item>
+			</Dropdown.Content>
+		</Dropdown.Root>
+	{/if}
+</div>
+
+<AlertDialog.Root open={openDeleteDialog}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+			<AlertDialog.Description>
+				This action cannot be undone. This will permanently delete your account and remove your data
+				from our servers.
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<AlertDialog.Action class={buttonVariants({ variant: 'destructive' })} onclick={handleDelete}>
+				{#if deleting}
+					<Loader class="animate-spin" />
+					Deleting
+				{:else}
+					Delete
+				{/if}
+			</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
