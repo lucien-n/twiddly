@@ -4,10 +4,18 @@
 	import { Button, buttonVariants } from '&/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import type { Post, Profile, Like } from '@prisma/client';
-	import { Loader, Heart, MessageCircle, Repeat2, Share2, EllipsisVertical } from 'lucide-svelte';
+	import {
+		LoaderCircle,
+		Heart,
+		MessageCircle,
+		Repeat2,
+		Share2,
+		EllipsisVertical
+	} from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import * as Dropdown from '&/dropdown-menu';
 	import * as AlertDialog from '&/alert-dialog';
+	import { goto } from '$app/navigation';
 
 	interface Props {
 		post: Pick<Post, 'id' | 'likeCount'> & {
@@ -74,8 +82,7 @@
 	const handleDelete = async (event: Event) => {
 		event.stopPropagation();
 		deleting = true;
-
-		await new Promise((r) => setTimeout(r, 3000));
+		openDeleteDialog = true;
 
 		const url = route('POST /api/v1/post/[id]/delete', { id: post.id });
 		const res = await fetch(url, { method: 'POST' });
@@ -88,7 +95,10 @@
 			const { data } = await res.json();
 			deleted = Boolean(data);
 
-			if (deleted) toast.success('Success !');
+			if (deleted) {
+				goto(route('/[handle]', { handle: post.author.handle }));
+				toast.success('Success !');
+			}
 		} catch {
 			toast.error('An error occured');
 		}
@@ -153,7 +163,7 @@
 	{/if}
 </div>
 
-<AlertDialog.Root open={openDeleteDialog}>
+<AlertDialog.Root bind:open={openDeleteDialog}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
@@ -164,10 +174,14 @@
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<AlertDialog.Action class={buttonVariants({ variant: 'destructive' })} onclick={handleDelete}>
+			<AlertDialog.Action
+				class={buttonVariants({ variant: 'destructive' })}
+				onclick={handleDelete}
+				disabled={deleting}
+			>
 				{#if deleting}
-					<Loader class="animate-spin" />
-					Deleting
+					<LoaderCircle class="animate-spin" />
+					<span class="ml-2">Deleting</span>
 				{:else}
 					Delete
 				{/if}
