@@ -16,6 +16,7 @@
 	import * as Dropdown from '&/dropdown-menu';
 	import * as AlertDialog from '&/alert-dialog';
 	import { goto } from '$app/navigation';
+	import DeletePostDialog from './dialog/delete-post-dialog.svelte';
 
 	interface Props {
 		post: Pick<Post, 'id' | 'likeCount'> & {
@@ -27,6 +28,8 @@
 	let { post }: Props = $props();
 
 	const authState = getAuthState();
+
+	let openDeleteDialog: boolean = $state(false);
 
 	let comments = $state(0);
 	const handleComment = async (event: Event) => {
@@ -75,37 +78,6 @@
 	const handleShare = async (event: Event) => {
 		event.stopPropagation();
 	};
-
-	let deleted: boolean = $state(false);
-	let deleting: boolean = $state(false);
-	let openDeleteDialog = $state(false);
-	const handleDelete = async (event: Event) => {
-		event.stopPropagation();
-		deleting = true;
-		openDeleteDialog = true;
-
-		const url = route('POST /api/v1/post/[id]/delete', { id: post.id });
-		const res = await fetch(url, { method: 'POST' });
-		if (!res.ok) {
-			toast.error('An error occured');
-			return;
-		}
-
-		try {
-			const { data } = await res.json();
-			deleted = Boolean(data);
-
-			if (deleted) {
-				goto(route('/[handle]', { handle: post.author.handle }));
-				toast.success('Success !');
-			}
-		} catch {
-			toast.error('An error occured');
-		}
-
-		deleting = false;
-		openDeleteDialog = false;
-	};
 </script>
 
 <div class="flex sm:space-x-5">
@@ -141,7 +113,6 @@
 		<span>{likes}</span>
 	</Button>
 </div>
-
 <div class="flex sm:space-x-5">
 	<Button
 		variant="ghost"
@@ -163,29 +134,4 @@
 	{/if}
 </div>
 
-<AlertDialog.Root bind:open={openDeleteDialog}>
-	<AlertDialog.Content>
-		<AlertDialog.Header>
-			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-			<AlertDialog.Description>
-				This action cannot be undone. This will permanently delete your account and remove your data
-				from our servers.
-			</AlertDialog.Description>
-		</AlertDialog.Header>
-		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<AlertDialog.Action
-				class={buttonVariants({ variant: 'destructive' })}
-				onclick={handleDelete}
-				disabled={deleting}
-			>
-				{#if deleting}
-					<LoaderCircle class="animate-spin" />
-					<span class="ml-2">Deleting</span>
-				{:else}
-					Delete
-				{/if}
-			</AlertDialog.Action>
-		</AlertDialog.Footer>
-	</AlertDialog.Content>
-</AlertDialog.Root>
+<DeletePostDialog bind:open={openDeleteDialog} {post} />
