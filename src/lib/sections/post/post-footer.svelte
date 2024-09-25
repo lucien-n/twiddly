@@ -1,22 +1,13 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { isLiked } from '$lib/utils/post';
-	import { Button, buttonVariants } from '&/button';
+	import { Button } from '&/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
-	import type { Post, Profile, Like } from '@prisma/client';
-	import {
-		LoaderCircle,
-		Heart,
-		MessageCircle,
-		Repeat2,
-		Share2,
-		EllipsisVertical
-	} from 'lucide-svelte';
+	import type { Like, Post, Profile } from '@prisma/client';
+	import { EllipsisVertical, Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import * as Dropdown from '&/dropdown-menu';
-	import * as AlertDialog from '&/alert-dialog';
-	import { goto } from '$app/navigation';
 	import DeletePostDialog from './dialog/delete-post-dialog.svelte';
+	import { Dropdown } from '$lib/components/dropdown';
 
 	interface Props {
 		post: Pick<Post, 'id' | 'likeCount'> & {
@@ -123,14 +114,9 @@
 		<Share2 class="h-4 w-4" />
 	</Button>
 	{#if authState.session?.userId === post.author.id}
-		<Dropdown.Root>
-			<Dropdown.Trigger>
-				<EllipsisVertical />
-			</Dropdown.Trigger>
-			<Dropdown.Content>
-				<Dropdown.Item onclick={() => (openDeleteDialog = true)}>Delete</Dropdown.Item>
-			</Dropdown.Content>
-		</Dropdown.Root>
+		<Dropdown items={[{ item: 'Delete', onclick: () => (openDeleteDialog = true) }]}>
+			<EllipsisVertical />
+		</Dropdown>
 	{/if}
 </div>
 
