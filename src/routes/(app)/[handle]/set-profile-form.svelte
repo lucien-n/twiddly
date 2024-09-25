@@ -40,6 +40,7 @@
 	<Form.Field {form} name="displayName">
 		<Form.Control let:attrs>
 			<Form.Label>Name</Form.Label>
+			<Form.Description>Your handle will be left unchanged</Form.Description>
 			<Input {...attrs} bind:value={$formData.displayName} />
 		</Form.Control>
 		<Form.FieldErrors />
