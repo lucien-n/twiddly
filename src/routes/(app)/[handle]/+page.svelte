@@ -18,6 +18,7 @@
 	import { toast } from 'svelte-sonner';
 	import { browser } from '$app/environment';
 	import { Input } from '&/input';
+	import SetProfileDialog from './set-profile-dialog.svelte';
 
 	const { data } = $props();
 	const { profile, postsPromise }: PageData = data;
@@ -26,15 +27,6 @@
 	const isSelf = $derived(authState.session?.userId === profile.id);
 
 	let openEditProfileDialog: boolean = $state(true);
-
-	const form = superForm(data.setProfileForm, {
-		validators: zodClient(setProfileSchema),
-		onError: ({ result }) => {
-			console.log(result);
-			toast.error(result.error.message);
-		}
-	});
-	const { form: formData, enhance, errors, submitting, tainted } = form;
 </script>
 
 <div class="flex flex-col">
@@ -81,32 +73,6 @@
 			{/each}
 		{/await}
 	</div>
-	<!-- {/await} -->
 </div>
 
-<Dialog.Root bind:open={openEditProfileDialog}>
-	<Dialog.Content>
-		<form
-			action={route('setProfile /[handle]', { handle: profile.handle })}
-			method="post"
-			class="mt-5"
-			use:enhance
-		>
-			<Form.Field {form} name="displayName">
-				<Form.Control let:attrs>
-					<Form.Label>Name</Form.Label>
-					<Input {...attrs} bind:value={$formData.displayName} />
-				</Form.Control>
-				<Form.FieldErrors />
-			</Form.Field>
-
-			<Form.Errors errors={$errors._errors} />
-
-			<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
-
-			{#if browser}
-				<SuperDebug data={$formData} />
-			{/if}
-		</form>
-	</Dialog.Content>
-</Dialog.Root>
+<SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} {profile} />
