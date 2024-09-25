@@ -1,9 +1,11 @@
 import type { ControlAttrs } from 'formsnap';
 import Select from './select.svelte';
+import type { Snippet } from 'svelte';
 
 type SelectOption<T extends string> = {
 	label: string;
 	value: T;
+	color?: string;
 };
 
 interface Props<T extends string> {

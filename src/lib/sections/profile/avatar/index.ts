@@ -18,7 +18,7 @@ export const avatarVariants = tv({
 });
 
 export interface Props {
-	profile: Pick<Profile, 'id' | 'handle'>;
+	profile: Pick<Profile, 'id' | 'handle' | 'avatarBackgroundColor'>;
 	size?: VariantProps<typeof avatarVariants>['size'];
 	class?: string;
 }

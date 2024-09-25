@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { Select } from '$lib/components/select';
+	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
 	import * as Form from '&/form';
@@ -13,6 +14,7 @@
 	interface Props {
 		profile: Pick<Profile, 'handle'>;
 		data: SuperValidated<Infer<SetProfileSchema>>;
+		onSuccess?: () => void;
 	}
 	let { profile, data }: Props = $props();
 
@@ -35,30 +37,35 @@
 
 	<Form.Field {form} name="avatarBackgroundColor">
 		<Form.Control let:attrs>
-			<Form.Label>Name</Form.Label>
-			<Form.Description>Your handle will be left unchanged</Form.Description>
+			<Form.Label>Avatar Color</Form.Label>
+			<Form.Description>Your avatar's background color</Form.Description>
 			<Select
 				{attrs}
 				options={[
 					{
 						label: 'Thistle',
-						value: AvatarBackgroundColor.THISTLE
+						value: AvatarBackgroundColor.THISTLE,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.THISTLE]
 					},
 					{
 						label: 'Ligth Blue',
-						value: AvatarBackgroundColor.LIGTH_BLUE
+						value: AvatarBackgroundColor.LIGTH_BLUE,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.LIGTH_BLUE]
 					},
 					{
 						label: 'Lavender',
-						value: AvatarBackgroundColor.LAVENDER
+						value: AvatarBackgroundColor.LAVENDER,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.LAVENDER]
 					},
 					{
 						label: 'Mistyrose',
-						value: AvatarBackgroundColor.MISTYROSE
+						value: AvatarBackgroundColor.MISTYROSE,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.MISTYROSE]
 					},
 					{
 						label: 'Peach',
-						value: AvatarBackgroundColor.PEACH
+						value: AvatarBackgroundColor.PEACH,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.PEACH]
 					}
 				]}
 				bind:selectedOption={$formData.avatarBackgroundColor as AvatarBackgroundColor}

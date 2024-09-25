@@ -51,7 +51,9 @@ export const actions: Actions = {
 					avatarBackgroundColor
 				},
 				where: { id: event.locals.session.userId },
-				select: { id: true }
+				select: {
+					id: true // EMPTY QUERY
+				}
 			});
 		} catch (e) {
 			if (dev) console.error(e);
