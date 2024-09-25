@@ -1,7 +1,11 @@
 import { prisma } from '$lib/server/prisma';
-import { error } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { getPostSelect } from '$lib/utils/post';
+import { fail, superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { setProfileSchema } from '$lib/schemas/profile/set-profile';
+import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
@@ -29,6 +33,33 @@ export const load: PageServerLoad = async (event) => {
 
 	return {
 		profile,
-		postsPromise
+		postsPromise,
+		setProfileForm: await superValidate(profile, zod(setProfileSchema))
 	};
+};
+
+export const actions: Actions = {
+	setProfile: async (event) => {
+		if (!event.locals.session) return fail(401);
+
+		const form = await superValidate(event, zod(setProfileSchema));
+		if (!form.valid) {
+			return fail(400, { setProfileForm: form });
+		}
+
+		const { displayName } = form.data;
+		try {
+			await prisma.profile.update({
+				data: {
+					displayName
+				},
+				where: { id: event.locals.session.userId },
+				select: { displayName: true }
+			});
+		} catch (e) {
+			if (dev) console.error(e);
+
+			error(500, { message: 'An error occured' });
+		}
+	}
 };

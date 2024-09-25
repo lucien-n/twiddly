@@ -9,6 +9,7 @@ type DropdownItem = {
 interface Props {
 	children: Snippet;
 	items: DropdownItem[];
+	class?: string;
 }
 
 export { Dropdown, type DropdownItem, type Props as DropdownProps };

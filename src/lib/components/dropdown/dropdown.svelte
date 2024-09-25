@@ -2,11 +2,11 @@
 	import * as Dropdown from '&/dropdown-menu';
 	import type { DropdownProps } from '.';
 
-	let { children, items }: DropdownProps = $props();
+	let { children, items, class: className }: DropdownProps = $props();
 </script>
 
 <Dropdown.Root>
-	<Dropdown.Trigger>
+	<Dropdown.Trigger class={className}>
 		{@render children()}
 	</Dropdown.Trigger>
 	<Dropdown.Content>

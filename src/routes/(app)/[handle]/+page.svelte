@@ -7,23 +7,37 @@
 	import { Lock } from 'lucide-svelte';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth/auth-state.svelte';
+	import { Dropdown } from '$lib/components/dropdown';
+	import { EllipsisVertical } from 'lucide-svelte';
+	import * as Dialog from '&/dialog';
+	import * as Form from '&/form';
+	import { route } from '$lib/ROUTES';
+	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { setProfileSchema } from '$lib/schemas/profile/set-profile';
+	import { toast } from 'svelte-sonner';
+	import { browser } from '$app/environment';
+	import { Input } from '&/input';
 
 	const { data } = $props();
 	const { profile, postsPromise }: PageData = data;
 
 	const authState = getAuthState();
+	const isSelf = $derived(authState.session?.userId === profile.id);
+
+	let openEditProfileDialog: boolean = $state(true);
+
+	const form = superForm(data.setProfileForm, {
+		validators: zodClient(setProfileSchema),
+		onError: ({ result }) => {
+			console.log(result);
+			toast.error(result.error.message);
+		}
+	});
+	const { form: formData, enhance, errors, submitting, tainted } = form;
 </script>
 
 <div class="flex flex-col">
-	<!-- {#await promise}
-		<div class="flex">
-			<ProfileAvatarSkeleton size="lg" />
-			<div class="flex flex-col gap-1 py-6 pl-5">
-				<Skeleton class="placeholder h-10 w-40" />
-				<Skeleton class="placeholder h-6 w-24" />
-			</div>
-		</div>
-	{:then { profile, posts }} -->
 	<div class="flex">
 		<div class="relative">
 			<ProfileAvatar {profile} size="lg" />
@@ -42,6 +56,15 @@
 			<h1 class="text-4xl">{profile.displayName}</h1>
 			<p class="text-muted-foreground">@{profile.handle}</p>
 		</div>
+
+		{#if isSelf}
+			<Dropdown
+				items={[{ item: 'Edit', onclick: () => (openEditProfileDialog = true) }]}
+				class="ml-auto h-fit p-5"
+			>
+				<EllipsisVertical />
+			</Dropdown>
+		{/if}
 	</div>
 
 	<Separator class="my-12" />
@@ -60,3 +83,30 @@
 	</div>
 	<!-- {/await} -->
 </div>
+
+<Dialog.Root bind:open={openEditProfileDialog}>
+	<Dialog.Content>
+		<form
+			action={route('setProfile /[handle]', { handle: profile.handle })}
+			method="post"
+			class="mt-5"
+			use:enhance
+		>
+			<Form.Field {form} name="displayName">
+				<Form.Control let:attrs>
+					<Form.Label>Name</Form.Label>
+					<Input {...attrs} bind:value={$formData.displayName} />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Errors errors={$errors._errors} />
+
+			<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
+
+			{#if browser}
+				<SuperDebug data={$formData} />
+			{/if}
+		</form>
+	</Dialog.Content>
+</Dialog.Root>
