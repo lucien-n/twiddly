@@ -22,21 +22,6 @@
 		onError: ({ result }) => toast.error(result.error.message)
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
-
-	const getThemeOptions = (): { label: string; value: Theme }[] => [
-		{
-			label: 'Light',
-			value: Theme.LIGHT
-		},
-		{
-			label: 'Dark',
-			value: Theme.DARK
-		},
-		{
-			label: 'System',
-			value: Theme.SYSTEM
-		}
-	];
 </script>
 
 <form method="post" action={route('default /settings/interface')} use:enhance>
@@ -46,7 +31,24 @@
 		<Form.Control let:attrs>
 			<Form.Label>Theme</Form.Label>
 			<Form.Description>Your preferred appearance for the app interface</Form.Description>
-			<Select {attrs} options={getThemeOptions()} bind:selectedOption={$formData.theme as Theme} />
+			<Select
+				{attrs}
+				options={[
+					{
+						label: 'Light',
+						value: Theme.LIGHT
+					},
+					{
+						label: 'Dark',
+						value: Theme.DARK
+					},
+					{
+						label: 'System',
+						value: Theme.SYSTEM
+					}
+				]}
+				bind:selectedOption={$formData.theme as Theme}
+			/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
