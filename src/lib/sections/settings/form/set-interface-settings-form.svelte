@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { Select } from '$lib/components/select';
 	import { route } from '$lib/ROUTES';
 	import {
@@ -8,9 +7,7 @@
 	} from '$lib/schemas/settings/set-settings';
 	import * as Form from '&/form';
 	import { Theme } from '@prisma/client';
-	import { toast } from 'svelte-sonner';
-	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import SetSettingsForm from './set-settings-form.svelte';
 	import { superSettingsForm } from './super-settings-form';
 

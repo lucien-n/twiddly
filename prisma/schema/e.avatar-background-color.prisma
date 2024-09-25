@@ -1,0 +1,7 @@
+enum AvatarBackgroundColor {
+  LIGTH_BLUE
+  THISTLE
+  LAVENDER
+  MISTYROSE
+  PEACH
+}

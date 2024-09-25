@@ -1,24 +1,14 @@
 <script lang="ts">
-	import { Separator } from '&/separator';
-	import PostCard from '@/post/post-card.svelte';
-	import { ProfileAvatar } from '@/profile/avatar';
-	import type { PageData } from './$types';
-	import PostCardSkeleton from '@/post/post-card-skeleton.svelte';
-	import { Lock } from 'lucide-svelte';
-	import * as Tooltip from '&/tooltip';
-	import { getAuthState } from '@/auth/auth-state.svelte';
-	import { Dropdown } from '$lib/components/dropdown';
-	import { EllipsisVertical } from 'lucide-svelte';
-	import * as Dialog from '&/dialog';
-	import * as Form from '&/form';
+	import { browser } from '$app/environment';
+	import { Select } from '$lib/components/select';
 	import { route } from '$lib/ROUTES';
+	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
+	import * as Form from '&/form';
+	import { Input } from '&/input';
+	import { AvatarBackgroundColor, type Profile } from '@prisma/client';
+	import { toast } from 'svelte-sonner';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
-	import { toast } from 'svelte-sonner';
-	import { browser } from '$app/environment';
-	import { Input } from '&/input';
-	import type { Profile } from '@prisma/client';
 
 	interface Props {
 		profile: Pick<Profile, 'handle'>;
@@ -28,10 +18,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(setProfileSchema),
-		onError: ({ result }) => {
-			console.log(result);
-			toast.error(result.error.message);
-		}
+		onError: ({ result }) => toast.error(result.error.message)
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
 </script>
@@ -42,6 +29,40 @@
 			<Form.Label>Name</Form.Label>
 			<Form.Description>Your handle will be left unchanged</Form.Description>
 			<Input {...attrs} bind:value={$formData.displayName} />
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field {form} name="avatarBackgroundColor">
+		<Form.Control let:attrs>
+			<Form.Label>Name</Form.Label>
+			<Form.Description>Your handle will be left unchanged</Form.Description>
+			<Select
+				{attrs}
+				options={[
+					{
+						label: 'Thistle',
+						value: AvatarBackgroundColor.THISTLE
+					},
+					{
+						label: 'Ligth Blue',
+						value: AvatarBackgroundColor.LIGTH_BLUE
+					},
+					{
+						label: 'Lavender',
+						value: AvatarBackgroundColor.LAVENDER
+					},
+					{
+						label: 'Mistyrose',
+						value: AvatarBackgroundColor.MISTYROSE
+					},
+					{
+						label: 'Peach',
+						value: AvatarBackgroundColor.PEACH
+					}
+				]}
+				bind:selectedOption={$formData.avatarBackgroundColor as AvatarBackgroundColor}
+			/>
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

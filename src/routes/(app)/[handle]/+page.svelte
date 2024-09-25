@@ -1,23 +1,13 @@
 <script lang="ts">
+	import { Dropdown } from '$lib/components/dropdown';
 	import { Separator } from '&/separator';
-	import PostCard from '@/post/post-card.svelte';
-	import { ProfileAvatar } from '@/profile/avatar';
-	import type { PageData } from './$types';
-	import PostCardSkeleton from '@/post/post-card-skeleton.svelte';
-	import { Lock } from 'lucide-svelte';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth/auth-state.svelte';
-	import { Dropdown } from '$lib/components/dropdown';
-	import { EllipsisVertical } from 'lucide-svelte';
-	import * as Dialog from '&/dialog';
-	import * as Form from '&/form';
-	import { route } from '$lib/ROUTES';
-	import SuperDebug, { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { setProfileSchema } from '$lib/schemas/profile/set-profile';
-	import { toast } from 'svelte-sonner';
-	import { browser } from '$app/environment';
-	import { Input } from '&/input';
+	import PostCardSkeleton from '@/post/post-card-skeleton.svelte';
+	import PostCard from '@/post/post-card.svelte';
+	import { ProfileAvatar } from '@/profile/avatar';
+	import { EllipsisVertical, Lock } from 'lucide-svelte';
+	import type { PageData } from './$types';
 	import SetProfileDialog from './set-profile-dialog.svelte';
 
 	const { data } = $props();

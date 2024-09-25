@@ -6,18 +6,14 @@ import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { dev } from '$app/environment';
+import { getProfileSelect } from '$lib/utils/profile';
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
 
 	const profile = await prisma.profile.findFirst({
 		where: { handle },
-		select: {
-			id: true,
-			handle: true,
-			displayName: true,
-			privacySettings: { select: { private: true } }
-		}
+		select: getProfileSelect()
 	});
 	if (!profile) error(404, `Profile @${handle} not found`);
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
@@ -47,14 +43,15 @@ export const actions: Actions = {
 			return fail(400, { setProfileForm: form });
 		}
 
-		const { displayName } = form.data;
+		const { displayName, avatarBackgroundColor } = form.data;
 		try {
 			await prisma.profile.update({
 				data: {
-					displayName
+					displayName,
+					avatarBackgroundColor
 				},
 				where: { id: event.locals.session.userId },
-				select: { displayName: true }
+				select: { id: true }
 			});
 		} catch (e) {
 			if (dev) console.error(e);

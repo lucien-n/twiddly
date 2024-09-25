@@ -1,11 +1,12 @@
 import type { Like, Prisma } from '@prisma/client';
+import { getProfileSelect } from './profile';
 
 export const getPostSelect = (currentUserId?: string): Prisma.PostSelect => ({
 	id: true,
 	content: true,
 	createdAt: true,
 	likeCount: true,
-	author: { select: { id: true, displayName: true, handle: true } },
+	author: { select: getProfileSelect() },
 	likes: { where: { profileId: currentUserId } }
 });
 
