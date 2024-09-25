@@ -11,22 +11,19 @@
 	import { toast } from 'svelte-sonner';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import SetSettingsForm from './set-settings-form.svelte';
+	import { superSettingsForm } from './super-settings-form';
 
 	interface Props {
 		data: SuperValidated<Infer<SetInterfaceSettingsSchema>>;
 	}
 	const { data }: Props = $props();
 
-	const form = superForm(data, {
-		validators: zodClient(setInterfaceSettingsSchema),
-		onError: ({ result }) => toast.error(result.error.message)
-	});
-	const { form: formData, enhance, errors, submitting, tainted } = form;
+	const form = superSettingsForm(data, setInterfaceSettingsSchema);
+	const { form: formData } = form;
 </script>
 
-<form method="post" action={route('default /settings/interface')} use:enhance>
-	<h1 class="text-3xl font-bold">Interface</h1>
-
+<SetSettingsForm label="Interface" action={route('default /settings/interface')} {form}>
 	<Form.Field {form} name="theme">
 		<Form.Control let:attrs>
 			<Form.Label>Theme</Form.Label>
@@ -52,12 +49,4 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-
-	<Form.Errors errors={$errors._errors} />
-
-	<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
-
-	{#if browser}
-		<SuperDebug data={$formData} />
-	{/if}
-</form>
+</SetSettingsForm>
