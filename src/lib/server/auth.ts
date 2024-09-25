@@ -35,7 +35,6 @@ export const signUpWithEmailAndPassword = async (
 	const existingUserEmail = await prisma.user.findFirst({
 		where: { email }
 	});
-	console.log(existingUserEmail);
 	if (existingUserEmail) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
