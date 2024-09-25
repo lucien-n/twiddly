@@ -11,7 +11,10 @@ export const load: PageServerLoad = async (event) => {
 
 	const { userId } = event.locals.session;
 	const interfaceSettings = await prisma.interfaceSettings.findFirst({
-		where: { userId }
+		where: { userId },
+		select: {
+			theme: true
+		}
 	});
 	if (!interfaceSettings) {
 		throw new Error(`Interface settings not found for user "${userId}"`);
@@ -40,7 +43,8 @@ export const actions: Actions = {
 			},
 			where: {
 				userId: event.locals.session.userId
-			}
+			},
+			select: {}
 		});
 	}
 };

@@ -10,7 +10,12 @@ export const load: PageServerLoad = async (event) => {
 	if (!event.locals.session) redirect(303, route('/'));
 
 	const { userId } = event.locals.session;
-	const privacySettings = await prisma.privacySettings.findFirst({ where: { userId } });
+	const privacySettings = await prisma.privacySettings.findFirst({
+		where: { userId },
+		select: {
+			private: true
+		}
+	});
 	if (!privacySettings) {
 		throw new Error(`Interface settings not found for user "${userId}"`);
 	}
@@ -38,7 +43,8 @@ export const actions: Actions = {
 			},
 			where: {
 				userId: event.locals.session.userId
-			}
+			},
+			select: {}
 		});
 	}
 };
