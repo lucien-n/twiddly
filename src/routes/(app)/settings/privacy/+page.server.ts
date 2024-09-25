@@ -1,10 +1,11 @@
 import { route } from '$lib/ROUTES';
 import { setPrivacySettingsSchema } from '$lib/schemas/settings/set-settings';
 import { prisma } from '$lib/server/prisma';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
+import { dev } from '$app/environment';
 
 export const load: PageServerLoad = async (event) => {
 	if (!event.locals.session) redirect(303, route('/'));
@@ -37,16 +38,22 @@ export const actions: Actions = {
 		}
 
 		const { private: privateProfile } = form.data;
-		await prisma.privacySettings.update({
-			data: {
-				private: privateProfile
-			},
-			where: {
-				userId: event.locals.session.userId
-			},
-			select: {
-				userId: true // EMPTY SELECT
-			}
-		});
+		try {
+			await prisma.privacySettings.update({
+				data: {
+					private: privateProfile
+				},
+				where: {
+					userId: event.locals.session.userId
+				},
+				select: {
+					userId: true // EMPTY SELECT
+				}
+			});
+		} catch (e) {
+			if (dev) console.error(e);
+
+			error(500, { message: 'An error occured' });
+		}
 	}
 };
