@@ -17,13 +17,13 @@ export const load: PageServerLoad = async (event) => {
 				{
 					AND: [
 						{ author: { privacySettings: { private: false } } },
-						{ OR: [{ deleted: { not: true } }, { deleted: null }] }
+						{ OR: [{ deleted: false }, { deleted: null }] }
 					]
 				},
 				{
 					AND: [
 						{ authorId: event.locals.session?.userId },
-						{ OR: [{ deleted: { not: true } }, { deleted: null }] }
+						{ OR: [{ deleted: false }, { deleted: null }] }
 					]
 				}
 			]
