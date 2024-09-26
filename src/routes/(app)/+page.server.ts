@@ -14,8 +14,18 @@ export const load: PageServerLoad = async (event) => {
 		select: getPostSelect(event.locals.session?.userId),
 		where: {
 			OR: [
-				{ author: { privacySettings: { private: false } }, deleted: { not: true } },
-				{ authorId: event.locals.session?.userId, deleted: { not: true } }
+				{
+					AND: [
+						{ author: { privacySettings: { private: false } } },
+						{ OR: [{ deleted: { not: true } }, { deleted: null }] }
+					]
+				},
+				{
+					AND: [
+						{ authorId: event.locals.session?.userId },
+						{ OR: [{ deleted: { not: true } }, { deleted: null }] }
+					]
+				}
 			]
 		}
 	});
