@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { Select } from '$lib/components/select';
+	import { ColorSelect } from '$lib/components/select';
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
@@ -39,7 +39,7 @@
 		<Form.Control let:attrs>
 			<Form.Label>Avatar Color</Form.Label>
 			<Form.Description>Your avatar's background color</Form.Description>
-			<Select
+			<ColorSelect
 				{attrs}
 				options={[
 					{
@@ -66,6 +66,11 @@
 						label: 'Peach',
 						value: AvatarBackgroundColor.PEACH,
 						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.PEACH]
+					},
+					{
+						label: 'Lime',
+						value: AvatarBackgroundColor.LIME,
+						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.LIME]
 					}
 				]}
 				bind:selectedOption={$formData.avatarBackgroundColor as AvatarBackgroundColor}
