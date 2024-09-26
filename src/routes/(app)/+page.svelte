@@ -12,6 +12,7 @@
 
 <div class="w-full space-y-4 py-4">
 	{#await postsPromise}
+		<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 		{#each { length: 5 } as _}
 			<PostCardSkeleton />
 		{/each}
