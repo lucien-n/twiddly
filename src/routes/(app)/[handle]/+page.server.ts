@@ -47,7 +47,7 @@ export const actions: Actions = {
 		try {
 			await prisma.profile.update({
 				data: {
-					displayName,
+					...(displayName && { displayName }),
 					avatarBackgroundColor
 				},
 				where: { id: event.locals.session.userId },

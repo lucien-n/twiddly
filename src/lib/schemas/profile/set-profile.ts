@@ -3,8 +3,8 @@ import { displayNameField } from '../auth/fields';
 import { avatarBackgroundColorField } from './fields';
 
 export const setProfileSchema = z.object({
-	displayName: displayNameField,
-	avatarBackgroundColor: avatarBackgroundColorField
+	displayName: displayNameField.nullable(),
+	avatarBackgroundColor: avatarBackgroundColorField.nullable()
 });
 
 export type SetProfileSchema = typeof setProfileSchema;

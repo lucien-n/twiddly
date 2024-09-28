@@ -1,9 +1,9 @@
 model Profile {
     id String @id
 
-    handle                String                @unique
-    displayName           String                @unique
-    avatarBackgroundColor AvatarBackgroundColor @default(LAVENDER)
+    handle                String                 @unique
+    displayName           String                 @unique
+    avatarBackgroundColor AvatarBackgroundColor?
 
     user  User   @relation(references: [id], fields: [id], onDelete: Cascade)
     posts Post[]

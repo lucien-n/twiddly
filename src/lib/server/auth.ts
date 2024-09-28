@@ -1,12 +1,11 @@
 import { handleField } from '$lib/schemas/auth/fields';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
-import { AvatarBackgroundColor, type Profile, type User } from '@prisma/client';
+import { type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
-import { getRandomInEnum } from '$lib/utils/helpers';
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -48,7 +47,6 @@ export const signUpWithEmailAndPassword = async (
 			profile: {
 				create: {
 					...meta,
-					avatarBackgroundColor: getRandomInEnum(AvatarBackgroundColor),
 					interfaceSettings: { create: {} },
 					privacySettings: { create: {} }
 				}
