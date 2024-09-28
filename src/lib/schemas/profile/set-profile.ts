@@ -8,3 +8,4 @@ export const setProfileSchema = z.object({
 });
 
 export type SetProfileSchema = typeof setProfileSchema;
+export type SetProfileInput = z.infer<SetProfileSchema>;

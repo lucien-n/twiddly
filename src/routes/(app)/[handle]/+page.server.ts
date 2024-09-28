@@ -1,12 +1,12 @@
+import { dev } from '$app/environment';
+import { setProfileSchema, type SetProfileInput } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
-import { error, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import { getPostSelect } from '$lib/utils/post';
+import { getProfileSelect } from '$lib/utils/profile';
+import { error, type Actions } from '@sveltejs/kit';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { setProfileSchema } from '$lib/schemas/profile/set-profile';
-import { dev } from '$app/environment';
-import { getProfileSelect } from '$lib/utils/profile';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
@@ -43,13 +43,29 @@ export const actions: Actions = {
 			return fail(400, { setProfileForm: form });
 		}
 
-		const { displayName, avatarBackgroundColor } = form.data;
+		const currentProfile = await prisma.profile.findUnique({
+			where: { id: event.locals.session.userId },
+			select: {
+				displayName: true,
+				avatarBackgroundColor: true
+			}
+		});
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const updatedData: any = Object.fromEntries(
+			Object.entries(form.data).filter(
+				([field, value]) => value !== currentProfile?.[field as keyof SetProfileInput]
+			)
+		);
+		if (Object.keys(updatedData).length === 0) {
+			return { setProfileForm: form };
+		}
+
+		console.log('updating', updatedData);
+
 		try {
 			await prisma.profile.update({
-				data: {
-					...(displayName && { displayName }),
-					avatarBackgroundColor
-				},
+				data: updatedData,
 				where: { id: event.locals.session.userId },
 				select: {
 					id: true // EMPTY QUERY
