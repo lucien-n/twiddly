@@ -1,8 +1,7 @@
 <script lang="ts">
-	import PostCard from '@/post/post-card.svelte';
 	import type { PageData } from './$types';
 	import CreatePostForm from './create-post-form.svelte';
-	import PostCardSkeleton from '@/post/post-card-skeleton.svelte';
+	import { PostCard, PostCardSkeleton } from '@/post';
 	import { Button } from '&/button';
 	import { ArrowUp } from 'lucide-svelte';
 

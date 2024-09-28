@@ -4,13 +4,13 @@
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/button';
 	import * as Card from '&/card';
-	import { ProfileAvatar } from '@/profile/avatar';
+	import { ProfileAvatar } from '@/profile';
 	import type { Like, Post, Profile } from '@prisma/client';
 	import PostFooter from './post-footer.svelte';
 
 	interface Props {
 		post: Pick<Post, 'id' | 'content' | 'createdAt' | 'likeCount'> & {
-			author: Pick<Profile, 'id' | 'displayName' | 'handle'>;
+			author: Pick<Profile, 'id' | 'displayName' | 'handle' | 'avatarBackgroundColor'>;
 		} & {
 			likes: Pick<Like, 'profileId'>[];
 		};

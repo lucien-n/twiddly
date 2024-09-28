@@ -4,7 +4,7 @@
 	import { onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Textarea } from '&/textarea';
-	import { getAuthState } from '@/auth/auth-state.svelte';
+	import { getAuthState } from '@/auth';
 	import { Send } from 'lucide-svelte';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';

@@ -2,10 +2,9 @@
 	import { Dropdown } from '$lib/components/dropdown';
 	import { Separator } from '&/separator';
 	import * as Tooltip from '&/tooltip';
-	import { getAuthState } from '@/auth/auth-state.svelte';
-	import PostCardSkeleton from '@/post/post-card-skeleton.svelte';
-	import PostCard from '@/post/post-card.svelte';
-	import { ProfileAvatar } from '@/profile/avatar';
+	import { getAuthState } from '@/auth';
+	import { PostCard, PostCardSkeleton } from '@/post';
+	import { ProfileAvatar } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 	import SetProfileDialog from './set-profile-dialog.svelte';
 

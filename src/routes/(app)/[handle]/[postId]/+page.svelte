@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
-	import { Button, buttonVariants } from '&/button';
-	import ProfileAvatar from '@/profile/avatar/profile-avatar.svelte';
-	import type { PageData } from './$types';
-	import PostFooter from '@/post/post-footer.svelte';
+	import { Button } from '&/button';
+	import { PostFooter } from '@/post';
+	import { ProfileAvatar } from '@/profile';
 	import { ChevronLeft } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
+	import type { PageData } from './$types';
 
 	const { data } = $props();
 	const { postPromise }: PageData = data;

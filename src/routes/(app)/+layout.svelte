@@ -1,6 +1,6 @@
 <script>
-	import AuthContext from '@/auth/auth-context.svelte';
-	import SideNav from '@/nav/side-nav.svelte';
+	import { AuthContext } from '@/auth';
+	import { SideNav } from '@/nav';
 	import '../../app.css';
 
 	const { children, data } = $props();

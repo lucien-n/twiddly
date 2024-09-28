@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SetInterfaceSettingsForm from '@/settings/form/set-interface-settings-form.svelte';
+	import { SetInterfaceSettingsForm } from '@/settings';
 
 	const { data } = $props();
 </script>
