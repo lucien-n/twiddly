@@ -61,8 +61,6 @@ export const actions: Actions = {
 			return { setProfileForm: form };
 		}
 
-		console.log('updating', updatedData);
-
 		try {
 			await prisma.profile.update({
 				data: updatedData,
