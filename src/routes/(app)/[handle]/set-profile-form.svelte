@@ -4,23 +4,25 @@
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
+	import { handleResult, onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
 	import { AvatarBackgroundColor, type Profile } from '@prisma/client';
-	import { toast } from 'svelte-sonner';
+	import type { ActionResult } from '@sveltejs/kit';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	interface Props {
 		profile: Pick<Profile, 'handle'>;
 		data: SuperValidated<Infer<SetProfileSchema>>;
-		onSuccess?: () => void;
+		onSuccess?: (result: ActionResult) => void;
 	}
-	let { profile, data }: Props = $props();
+	let { profile, data, onSuccess }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(setProfileSchema),
-		onError: ({ result }) => toast.error(result.error.message)
+		onError: onSuperFormError,
+		onResult: (event) => handleResult(event, { onSuccess })
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
 </script>

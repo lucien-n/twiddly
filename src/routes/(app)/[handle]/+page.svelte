@@ -7,11 +7,11 @@
 	import PostCard from '@/post/post-card.svelte';
 	import { ProfileAvatar } from '@/profile/avatar';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
-	import type { PageData } from './$types';
 	import SetProfileDialog from './set-profile-dialog.svelte';
 
 	const { data } = $props();
-	const { profile, postsPromise }: PageData = data;
+	const profile = $derived(data.profile);
+	const postsPromise = $derived(data.postsPromise);
 
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
