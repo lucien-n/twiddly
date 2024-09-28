@@ -4,7 +4,7 @@ import PasswordInput from './password-input.svelte';
 interface PasswordInputProps {
 	value?: string;
 	showPassword?: boolean;
-	attrs?: ControlAttrs
+	attrs?: ControlAttrs;
 }
 
 export { PasswordInput, type PasswordInputProps };
