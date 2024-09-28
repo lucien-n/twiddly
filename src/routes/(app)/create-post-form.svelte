@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { createPostSchema, type CreatePostSchema } from '$lib/schemas/post/create-post';
+	import { onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Textarea } from '&/textarea';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import { Send } from 'lucide-svelte';
-	import { toast } from 'svelte-sonner';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -17,7 +17,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(createPostSchema),
-		onError: ({ result }) => toast.error(result.error.message)
+		onError: onSuperFormError
 	});
 	const { form: formData, enhance, submitting, errors, constraints } = form;
 

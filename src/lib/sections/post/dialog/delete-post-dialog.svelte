@@ -3,7 +3,7 @@
 	import { route } from '$lib/ROUTES';
 	import * as AlertDialog from '&/alert-dialog';
 	import { buttonVariants } from '&/button';
-	import type { Like, Post, Profile } from '@prisma/client';
+	import type { Post, Profile } from '@prisma/client';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 

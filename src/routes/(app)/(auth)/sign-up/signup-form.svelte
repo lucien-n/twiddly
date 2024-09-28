@@ -2,9 +2,9 @@
 	import { PasswordInput } from '$lib/components/input';
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
 	import { generateHandle } from '$lib/utils/handle';
+	import { onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
-	import { toast } from 'svelte-sonner';
 	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms/client';
 
@@ -16,7 +16,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(signUpSchema),
-		onError: ({ result }) => toast.error(result.error.message)
+		onError: onSuperFormError
 	});
 	const { form: formData, enhance, errors, submitting } = form;
 </script>
