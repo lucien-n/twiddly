@@ -3,7 +3,7 @@ import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
 import { type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
-import { nanoid } from 'nanoid';
+import { generateIdFromEntropySize } from 'lucia';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 
@@ -38,7 +38,7 @@ export const signUpWithEmailAndPassword = async (
 	if (existingUserEmail) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
-	const id = nanoid();
+	const id = generateIdFromEntropySize(10);
 	const user = await prisma.user.create({
 		data: {
 			id,
