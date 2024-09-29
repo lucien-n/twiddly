@@ -22,7 +22,7 @@
 </script>
 
 <div
-	class="realtive w-full space-y-4 overflow-y-scroll py-4"
+	class="relative h-screen w-full space-y-4 overflow-y-scroll px-1 py-4"
 	bind:this={el}
 	onscroll={handleScroll}
 >
