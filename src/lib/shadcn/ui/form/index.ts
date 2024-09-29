@@ -8,6 +8,7 @@ import Legend from './form-legend.svelte';
 import ElementField from './form-element-field.svelte';
 import Button from './form-button.svelte';
 import Errors from './form-errors.svelte';
+import LoadingButton from './form-loading-button.svelte';
 
 const Control = FormPrimitive.Control;
 
@@ -22,6 +23,7 @@ export {
 	Legend,
 	ElementField,
 	Errors,
+	LoadingButton,
 	//
 	Field as FormField,
 	Control as FormControl,
@@ -32,5 +34,6 @@ export {
 	Legend as FormLegend,
 	ElementField as FormElementField,
 	Button as FormButton,
-	Errors as FormErrors
+	Errors as FormErrors,
+	LoadingButton as FormLoadingButton
 };

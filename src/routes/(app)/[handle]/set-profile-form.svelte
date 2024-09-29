@@ -25,6 +25,8 @@
 		onResult: (event) => handleResult(event, { onSuccess })
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
+
+	const loading = $derived($submitting);
 </script>
 
 <form action={route('setProfile /[handle]', { handle: profile.handle })} method="post" use:enhance>
@@ -83,7 +85,9 @@
 
 	<Form.Errors errors={$errors._errors} />
 
-	<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
+	<Form.LoadingButton class="w-full" {loading} disabled={!$tainted}>
+		{loading ? 'Saving' : 'Save'}
+	</Form.LoadingButton>
 
 	{#if browser}
 		<SuperDebug data={$formData} />

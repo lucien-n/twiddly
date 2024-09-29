@@ -17,7 +17,9 @@
 		validators: zodClient(signInSchema),
 		onError: onSuperFormError
 	});
-	const { form: formData, enhance, errors, submitting } = form;
+	const { form: formData, enhance, errors, submitting, tainted } = form;
+
+	const loading = $derived($submitting);
 </script>
 
 <form method="post" use:enhance class={className}>
@@ -39,5 +41,7 @@
 
 	<Form.Errors errors={$errors._errors} />
 
-	<Form.Button class="w-full" disabled={$submitting}>Sign In</Form.Button>
+	<Form.LoadingButton class="w-full" {loading} disabled={!$tainted}>
+		{loading ? 'Signing In' : 'Sign In'}
+	</Form.LoadingButton>
 </form>

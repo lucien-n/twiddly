@@ -4,7 +4,7 @@ import { redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async (event) => {
 	if (!event.locals.session) {
-		redirect(302, route('/'));
+		return redirect(302, route('/'));
 	}
 
 	await lucia.invalidateSession(event.locals.session.id);
@@ -15,5 +15,5 @@ export const POST: RequestHandler = async (event) => {
 		...sessionCookie.attributes
 	});
 
-	redirect(302, route('/'));
+	return redirect(302, route('/'));
 };
