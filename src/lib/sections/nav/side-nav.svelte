@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { getAuthState } from '@/auth/auth-state.svelte';
-	import NavItem from './nav-item.svelte';
-	import type { NavItemProps } from './nav.types';
 	import {
 		Home,
-		LineChart,
+		LayoutDashboard,
 		LogIn,
 		LogOut,
-		UserRound,
 		Package2,
 		Settings,
-		UsersRound
+		UserRound
 	} from 'lucide-svelte';
+	import NavItem from './nav-item.svelte';
+	import type { NavItemProps } from './nav.types';
+	import { Role } from '@prisma/client';
 
 	const authState = getAuthState();
 
@@ -36,14 +36,10 @@
 					hidden: !isAuthenticated
 				},
 				{
-					label: 'Customers',
-					action: route('/'),
-					icon: UsersRound
-				},
-				{
-					label: 'Analytics',
-					action: route('/'),
-					icon: LineChart
+					label: 'Admin Dashboard',
+					action: route('/'), // todo: admin page
+					icon: LayoutDashboard,
+					hidden: authState.profile?.role !== Role.ADMIN
 				}
 			],
 			[

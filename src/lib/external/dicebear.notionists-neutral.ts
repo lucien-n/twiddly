@@ -1,7 +1,5 @@
 import { AvatarBackgroundColor } from '@prisma/client';
 
-export const AVATAR_BACKGROUND_COLOR_REGEX = /^(transparent|[a-fA-F0-9]{6})$/;
-
 export const AVATAR_BACKGROUND_COLORS = {
 	[AvatarBackgroundColor.LIGTH_BLUE]: '#86c9e1',
 	[AvatarBackgroundColor.THISTLE]: '#9d87c2',
@@ -13,5 +11,7 @@ export const AVATAR_BACKGROUND_COLORS = {
 
 export interface AvatarParams {
 	seed?: string;
-	backgroundColor?: AvatarBackgroundColor;
+	backgroundColor?: 'transparent' | string;
+	backgroundType?: 'gradientLinear' | 'solid';
+	backgroundRotation?: '0' | '45' | '90' | '135' | '180' | '225' | '270' | '315' | '360';
 }

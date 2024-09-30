@@ -1,4 +1,4 @@
-import { AvatarBackgroundColor, Post, PrismaClient, User } from '@prisma/client';
+import { AvatarBackgroundColor, Post, PrismaClient, Role, User } from '@prisma/client';
 import { generateIdFromEntropySize } from 'lucia';
 import mock from './mock.json';
 import { nanoid } from 'nanoid';
@@ -45,6 +45,26 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 		}
 	});
 	users.push(demoUser);
+
+	const adminUser = await db.user.create({
+		data: {
+			id: generateIdFromEntropySize(10),
+			email: 'admin@mail.com',
+			passwordHash:
+				'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
+			profile: {
+				create: {
+					displayName: 'Admin',
+					handle: 'admin',
+					avatarBackgroundColor: AvatarBackgroundColor.LIME,
+					role: Role.ADMIN,
+					interfaceSettings: { create: {} },
+					privacySettings: { create: {} }
+				}
+			}
+		}
+	});
+	users.push(adminUser);
 
 	for (let i = 0; i < 5; i++) {
 		const firstName = getRandomInArray(mock['firstNames']);

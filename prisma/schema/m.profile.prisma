@@ -4,6 +4,7 @@ model Profile {
     handle                String                 @unique
     displayName           String                 @unique
     avatarBackgroundColor AvatarBackgroundColor?
+    role                  Role                   @default(USER)
 
     user  User   @relation(references: [id], fields: [id], onDelete: Cascade)
     posts Post[]
