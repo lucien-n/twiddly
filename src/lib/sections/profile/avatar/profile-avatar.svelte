@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {
 		AVATAR_BACKGROUND_COLORS,
-		type AvatarParams
+		getAvatarURLParams
 	} from '$lib/external/dicebear.notionists-neutral';
 	import * as Avatar from '&/avatar';
 	import { AvatarBackgroundColor } from '@prisma/client';
@@ -13,13 +13,12 @@
 	const getAvatarBgColor = (bg: AvatarBackgroundColor | null) =>
 		AVATAR_BACKGROUND_COLORS[bg ?? AvatarBackgroundColor.LAVENDER].replace('#', '');
 
-	const getSearchParams = (): URLSearchParams =>
-		new URLSearchParams({
+	const searchParams = $derived(
+		getAvatarURLParams({
 			seed: profile.id,
 			backgroundColor: getAvatarBgColor(profile.avatarBackgroundColor)
-		} satisfies AvatarParams);
-
-	const searchParams = $derived(getSearchParams());
+		})
+	);
 </script>
 
 <Avatar.Root
