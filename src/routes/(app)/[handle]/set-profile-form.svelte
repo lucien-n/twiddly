@@ -4,7 +4,7 @@
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
-	import { handleResult, onSuperFormError } from '$lib/utils/super-form';
+	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
 	import { AvatarBackgroundColor, type Profile } from '@prisma/client';
@@ -22,7 +22,7 @@
 	const form = superForm(data, {
 		validators: zodClient(setProfileSchema),
 		onError: onSuperFormError,
-		onResult: (event) => handleResult(event, { onSuccess })
+		onResult: (event) => handleSuperResult(event, { onSuccess })
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
 

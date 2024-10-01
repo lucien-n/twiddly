@@ -43,11 +43,17 @@ const SERVERS = {
  * ACTIONS
  */
 const ACTIONS = {
-  "createPost /": `/?/createPost`,
+  "setPost /": `/?/setPost`,
   "default /sign-in": `/sign-in`,
   "default /sign-up": `/sign-up`,
   "setProfile /[handle]": (params: { handle: (string | number) }) => {
     return `/${params.handle}?/setProfile`
+  },
+  "setPost /[handle]": (params: { handle: (string | number) }) => {
+    return `/${params.handle}?/setPost`
+  },
+  "setPost /[handle]/[postId]": (params: { handle: (string | number), postId: (string | number) }) => {
+    return `/${params.handle}/${params.postId}?/setPost`
   },
   "default /settings/interface": `/settings/interface`,
   "default /settings/privacy": `/settings/privacy`
@@ -159,7 +165,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId', '/settings': never, '/settings/interface': never, '/settings/privacy': never }
   SERVERS: { 'POST /sign-out': never, 'POST /api/v1/post/[id]/delete': 'id', 'POST /api/v1/post/[id]/like': 'id', 'POST /api/v1/post/[id]/unlike': 'id' }
-  ACTIONS: { 'createPost /': never, 'default /sign-in': never, 'default /sign-up': never, 'setProfile /[handle]': 'handle', 'default /settings/interface': never, 'default /settings/privacy': never }
+  ACTIONS: { 'setPost /': never, 'default /sign-in': never, 'default /sign-up': never, 'setProfile /[handle]': 'handle', 'setPost /[handle]': 'handle', 'setPost /[handle]/[postId]': 'handle' | 'postId', 'default /settings/interface': never, 'default /settings/privacy': never }
   LINKS: Record<string, never>
   Params: { handle: never, postId: never, id: never }
 }

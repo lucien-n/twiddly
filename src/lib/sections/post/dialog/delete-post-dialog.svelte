@@ -3,17 +3,15 @@
 	import { route } from '$lib/ROUTES';
 	import * as AlertDialog from '&/alert-dialog';
 	import { buttonVariants } from '&/button';
-	import type { Post, Profile } from '@prisma/client';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import { getPostState } from '../state/post-state.svelte';
 
 	interface Props {
-		open: boolean;
-		post: Pick<Post, 'id'> & {
-			author: Pick<Profile, 'handle'>;
-		};
+		open?: boolean;
 	}
-	let { post, open = $bindable() }: Props = $props();
+	let { open = $bindable() }: Props = $props();
+	const postState = getPostState();
 
 	let deleted: boolean = $state(false);
 	let deleting: boolean = $state(false);
@@ -22,7 +20,7 @@
 		deleting = true;
 		open = true;
 
-		const url = route('POST /api/v1/post/[id]/delete', { id: post.id });
+		const url = route('POST /api/v1/post/[id]/delete', { id: postState.post.id });
 		const res = await fetch(url, { method: 'POST' });
 		if (!res.ok) {
 			toast.error('An error occured');
@@ -34,7 +32,7 @@
 			deleted = Boolean(data);
 
 			if (deleted) {
-				goto(route('/[handle]', { handle: post.author.handle }));
+				goto(route('/[handle]', { handle: postState.post.author.handle }));
 				toast.success('Success !');
 			}
 		} catch {

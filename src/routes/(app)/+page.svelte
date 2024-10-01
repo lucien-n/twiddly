@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import CreatePostForm from './create-post-form.svelte';
-	import { PostCard, PostCardSkeleton } from '@/post';
+	import { PostCard, PostCardSkeleton, PostContext, SetPostForm } from '@/post';
 	import { Button } from '&/button';
 	import { ArrowUp } from 'lucide-svelte';
+	import { route } from '$lib/ROUTES';
 
 	const { data } = $props();
-	const { postsPromise, createPostForm }: PageData = data;
+	const { postsPromise, setPostForm }: PageData = data;
 
 	let el: HTMLElement | undefined = $state();
 	let scroll: number = $state(0);
@@ -26,7 +26,7 @@
 	bind:this={el}
 	onscroll={handleScroll}
 >
-	<CreatePostForm data={createPostForm} />
+	<SetPostForm {setPostForm} action={route('setPost /')} />
 
 	{#if scroll > 200}
 		<Button class="absolute left-0 right-0 top-3 z-10 mx-auto w-fit" onclick={resetScroll}>
@@ -42,7 +42,9 @@
 		{/each}
 	{:then posts}
 		{#each posts as post (post.id)}
-			<PostCard {post} />
+			<PostContext init={{ post, setPostForm }}>
+				<PostCard />
+			</PostContext>
 		{/each}
 	{/await}
 </div>

@@ -1,7 +1,22 @@
 import type { ActionResult } from '@sveltejs/kit';
 import { toast } from 'svelte-sonner';
 
-export const handleResult = (
+type Data = Record<string, unknown> | undefined;
+type ResultSuccess = Data;
+type ResultFailure = Data;
+
+export type ActionResultSuccess<Success extends ResultSuccess> = Extract<
+	ActionResult<Success>,
+	{ type: 'success' }
+>;
+export type ActionResultFailure<Failure extends ResultFailure> = Extract<
+	ActionResult<Failure>,
+	{ type: 'failure' }
+>;
+export type ActionResultRedirect = Extract<ActionResult, { type: 'redirect' }>;
+export type ActionResultError = Extract<ActionResult, { type: 'error' }>;
+
+export const handleSuperResult = (
 	event: {
 		result: ActionResult;
 		formElement: HTMLFormElement;
@@ -13,10 +28,10 @@ export const handleResult = (
 		onError,
 		onRedirect
 	}: {
-		onSuccess?: (result: ActionResult) => void;
-		onFailure?: (result: ActionResult) => void;
-		onRedirect?: (result: ActionResult) => void;
-		onError?: (result: ActionResult) => void;
+		onSuccess?: <Success extends ResultSuccess>(result: ActionResultSuccess<Success>) => void;
+		onFailure?: <Failure extends ResultFailure>(result: ActionResultFailure<Failure>) => void;
+		onRedirect?: (result: ActionResultRedirect) => void;
+		onError?: (result: ActionResultError) => void;
 	}
 ) => {
 	const result = event.result;

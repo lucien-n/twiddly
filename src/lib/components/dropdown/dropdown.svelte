@@ -2,11 +2,15 @@
 	import * as Dropdown from '&/dropdown-menu';
 	import type { DropdownProps } from '.';
 
-	let { children, items, class: className }: DropdownProps = $props();
+	let { children, items, class: className, stopPropagation }: DropdownProps = $props();
+
+	const handleClick = (event: MouseEvent) => {
+		if (stopPropagation) event.stopPropagation();
+	};
 </script>
 
 <Dropdown.Root>
-	<Dropdown.Trigger class={className}>
+	<Dropdown.Trigger class={className} onclick={handleClick}>
 		{@render children()}
 	</Dropdown.Trigger>
 	<Dropdown.Content>

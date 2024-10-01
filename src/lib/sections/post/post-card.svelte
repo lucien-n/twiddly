@@ -5,20 +5,18 @@
 	import { Button } from '&/button';
 	import * as Card from '&/card';
 	import { ProfileAvatar } from '@/profile';
-	import type { Like, Post, Profile } from '@prisma/client';
 	import PostFooter from './post-footer.svelte';
+	import { getPostState } from './state/post-state.svelte';
 
-	interface Props {
-		post: Pick<Post, 'id' | 'content' | 'createdAt' | 'likeCount'> & {
-			author: Pick<Profile, 'id' | 'displayName' | 'handle' | 'avatarBackgroundColor'>;
-		} & {
-			likes: Pick<Like, 'profileId'>[];
-		};
-	}
-	const { post }: Props = $props();
+	const postState = getPostState();
 
 	const redirectToPost = () => {
-		goto(route('/[handle]/[postId]', { handle: post.author.handle, postId: post.id }));
+		goto(
+			route('/[handle]/[postId]', {
+				handle: postState.post.author.handle,
+				postId: postState.post.id
+			})
+		);
 	};
 </script>
 
@@ -28,26 +26,26 @@
 >
 	<Card.Header>
 		<div class="flex items-center space-x-4">
-			<a href={route('/[handle]', { handle: post.author.handle })}>
-				<ProfileAvatar profile={post.author} />
+			<a href={route('/[handle]', { handle: postState.post.author.handle })}>
+				<ProfileAvatar profile={postState.post.author} />
 			</a>
 			<div>
-				<p class="font-semibold">{post.author.displayName}</p>
+				<p class="font-semibold">{postState.post.author.displayName}</p>
 				<Button
 					variant="link"
-					href={route('/[handle]', { handle: post.author.handle })}
+					href={route('/[handle]', { handle: postState.post.author.handle })}
 					class="h-0 p-0 text-sm text-gray-500"
 				>
-					@{post.author.handle}
+					@{postState.post.author.handle}
 				</Button>
 			</div>
 		</div>
 	</Card.Header>
 	<Card.Content>
-		<p class="mb-2 text-foreground">{post.content}</p>
-		<p class="text-sm text-muted-foreground">{formatDate(post.createdAt)}</p>
+		<p class="mb-2 text-foreground">{postState.post.content}</p>
+		<p class="text-sm text-muted-foreground">{formatDate(postState.post.createdAt)}</p>
 	</Card.Content>
 	<Card.Footer class="justify-between py-3">
-		<PostFooter {post} />
+		<PostFooter />
 	</Card.Footer>
 </Card.Root>

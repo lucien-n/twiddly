@@ -3,7 +3,7 @@
 	import { Separator } from '&/separator';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth';
-	import { PostCard, PostCardSkeleton } from '@/post';
+	import { PostCard, PostCardSkeleton, PostContext } from '@/post';
 	import { ProfileAvatar } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 	import SetProfileDialog from './set-profile-dialog.svelte';
@@ -58,7 +58,9 @@
 			{/each}
 		{:then posts}
 			{#each posts as post}
-				<PostCard {post} />
+				<PostContext init={{ post, setPostForm: data.setPostForm }}>
+					<PostCard />
+				</PostContext>
 			{/each}
 		{/await}
 	</div>

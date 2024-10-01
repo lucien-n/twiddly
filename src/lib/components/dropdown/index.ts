@@ -10,6 +10,7 @@ interface Props {
 	children: Snippet;
 	items: DropdownItem[];
 	class?: string;
+	stopPropagation?: boolean;
 }
 
 export { Dropdown, type DropdownItem, type Props as DropdownProps };
