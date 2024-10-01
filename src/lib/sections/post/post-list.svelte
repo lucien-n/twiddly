@@ -13,7 +13,11 @@
 {#snippet postsList(data: PublicPost[])}
 	{#each data as post (post.id)}
 		<PostContext init={{ post, setPostForm }}>
-			<PostCard />
+			{#snippet children(postState)}
+				{#if !postState.deleted}
+					<PostCard />
+				{/if}
+			{/snippet}
 		</PostContext>
 	{/each}
 {/snippet}

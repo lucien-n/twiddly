@@ -13,7 +13,6 @@
 	let { open = $bindable() }: Props = $props();
 	const postState = getPostState();
 
-	let deleted: boolean = $state(false);
 	let deleting: boolean = $state(false);
 	const handleDelete = async (event: Event) => {
 		event.stopPropagation();
@@ -29,9 +28,9 @@
 
 		try {
 			const { data } = await res.json();
-			deleted = Boolean(data);
+			postState.deleted = Boolean(data);
 
-			if (deleted) {
+			if (postState.deleted) {
 				goto(route('/[handle]', { handle: postState.post.author.handle }));
 				toast.success('Success !');
 			}

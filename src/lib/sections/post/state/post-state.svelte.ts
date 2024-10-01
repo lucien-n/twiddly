@@ -23,6 +23,8 @@ export class PostState {
 	openSetDialog: boolean = $state(false);
 	openDeleteDialog: boolean = $state(false);
 
+	deleted: boolean = $state(false);
+
 	constructor({ post, setPostForm }: PostStateInit) {
 		this.post = post;
 		this.setPostForm = setPostForm;
