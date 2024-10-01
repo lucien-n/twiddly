@@ -7,6 +7,7 @@
 	import { EllipsisVertical, Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { getPostState } from './state/post-state.svelte';
+	import { Pencil, Trash } from 'lucide-svelte';
 
 	const authState = getAuthState();
 	const postState = getPostState();
@@ -106,8 +107,8 @@
 		<Dropdown
 			class={buttonVariants({ variant: 'ghost', size: 'icon' })}
 			items={[
-				{ item: 'Edit', onclick: () => (postState.openSetDialog = true) },
-				{ item: 'Delete', onclick: () => (postState.openDeleteDialog = true) }
+				{ item: dropdownEditItem, onclick: () => (postState.openSetDialog = true) },
+				{ item: dropdownDeleteItem, onclick: () => (postState.openDeleteDialog = true) }
 			]}
 			stopPropagation
 		>
@@ -115,3 +116,15 @@
 		</Dropdown>
 	{/if}
 </div>
+
+{#snippet dropdownEditItem()}
+	<Pencil size={16} />
+	<span class="ml-2">Edit</span>
+{/snippet}
+
+{#snippet dropdownDeleteItem()}
+	<div class="flex items-center gap-2 text-destructive">
+		<Trash size={16} />
+		<span>Delete</span>
+	</div>
+{/snippet}

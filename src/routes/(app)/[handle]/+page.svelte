@@ -3,7 +3,7 @@
 	import { Separator } from '&/separator';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth';
-	import { PostCard, PostCardSkeleton, PostContext } from '@/post';
+	import { PostList } from '@/post';
 	import { ProfileAvatar } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 	import SetProfileDialog from './set-profile-dialog.svelte';
@@ -51,18 +51,7 @@
 	<Separator class="my-12" />
 
 	<div class="w-full space-y-4 py-4">
-		{#await postsPromise}
-			<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-			{#each { length: 5 } as _}
-				<PostCardSkeleton />
-			{/each}
-		{:then posts}
-			{#each posts as post}
-				<PostContext init={{ post, setPostForm: data.setPostForm }}>
-					<PostCard />
-				</PostContext>
-			{/each}
-		{/await}
+		<PostList posts={postsPromise} setPostForm={data.setPostForm} />
 	</div>
 </div>
 

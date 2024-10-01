@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { PostCard, PostCardSkeleton, PostContext, SetPostForm } from '@/post';
-	import { Button } from '&/button';
-	import { ArrowUp } from 'lucide-svelte';
 	import { route } from '$lib/ROUTES';
+	import { Button } from '&/button';
+	import { SetPostForm } from '@/post';
+	import { PostList } from '@/post';
+	import { ArrowUp } from 'lucide-svelte';
+	import type { PageData } from './$types';
 
 	const { data } = $props();
 	const { postsPromise, setPostForm }: PageData = data;
@@ -35,16 +36,5 @@
 		</Button>
 	{/if}
 
-	{#await postsPromise}
-		<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-		{#each { length: 5 } as _}
-			<PostCardSkeleton />
-		{/each}
-	{:then posts}
-		{#each posts as post (post.id)}
-			<PostContext init={{ post, setPostForm }}>
-				<PostCard />
-			</PostContext>
-		{/each}
-	{/await}
+	<PostList posts={postsPromise} {setPostForm} />
 </div>

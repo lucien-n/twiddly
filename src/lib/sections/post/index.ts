@@ -2,8 +2,9 @@ import { DeletePostDialog, SetPostDialog } from './dialog';
 import PostCard from './post-card.svelte';
 import PostCardSkeleton from './post-card-skeleton.svelte';
 import PostFooter from './post-footer.svelte';
+import PostList from './post-list.svelte';
 import { SetPostForm } from './form';
-import PostContext from './state/post-context.svelte';
+import { PostContext } from './state';
 
 export {
 	DeletePostDialog,
@@ -12,7 +13,8 @@ export {
 	PostCardSkeleton,
 	PostFooter,
 	SetPostForm,
-	PostContext
+	PostContext,
+	PostList
 };
 
-export * from './state/post-state.svelte';
+export * from './state';
