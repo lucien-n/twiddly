@@ -43,7 +43,15 @@
 	</Card.Header>
 	<Card.Content>
 		<p class="mb-2 text-foreground">{postState.post.content}</p>
-		<p class="text-sm text-muted-foreground">{formatDate(postState.post.createdAt)}</p>
+		<p class="flex gap-1 text-sm text-muted-foreground">
+			<span>
+				{formatDate(postState.post.createdAt)}
+			</span>
+			{#if postState.post.edited}
+				<span>·</span>
+				<span>Edited</span>
+			{/if}
+		</p>
 	</Card.Content>
 	<Card.Footer class="justify-between py-3">
 		<PostFooter />

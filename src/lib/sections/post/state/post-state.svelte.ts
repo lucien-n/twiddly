@@ -3,7 +3,7 @@ import type { Like, Post, Profile } from '@prisma/client';
 import { getContext, setContext } from 'svelte';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-type PublicPost = Pick<Post, 'id' | 'content' | 'likeCount' | 'createdAt'> & {
+type PublicPost = Pick<Post, 'id' | 'edited' | 'content' | 'likeCount' | 'createdAt'> & {
 	author: Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'>;
 } & {
 	likes: Pick<Like, 'profileId'>[];

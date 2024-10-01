@@ -3,6 +3,7 @@ import { getProfileSelect } from './profile';
 
 export const getPostSelect = (currentUserId?: string): Prisma.PostSelect => ({
 	id: true,
+	edited: true,
 	content: true,
 	createdAt: true,
 	likeCount: true,

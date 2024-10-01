@@ -42,7 +42,8 @@
 		const form = result.data.setPostForm;
 		postState.post = {
 			...postState.post,
-			...form.data
+			...form.data,
+			edited: true
 		};
 	};
 

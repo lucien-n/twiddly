@@ -120,7 +120,8 @@ const seedPosts = async (db: PrismaClient, users: User[]): Promise<Post[]> => {
 					id: nanoid(),
 					content,
 					authorId: user.id,
-					createdAt
+					createdAt,
+					edited: Math.random() > 0.9 // 10% chance to be an edited post
 				}
 			});
 			posts.push(post);
