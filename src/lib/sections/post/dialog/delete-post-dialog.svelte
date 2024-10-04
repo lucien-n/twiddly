@@ -6,6 +6,7 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { getPostState } from '../state/post-state.svelte';
+	import { page } from '$app/stores';
 
 	interface Props {
 		open?: boolean;
@@ -30,8 +31,9 @@
 			const { data } = await res.json();
 			postState.deleted = Boolean(data);
 
-			if (postState.deleted) {
-				goto(route('/[handle]', { handle: postState.post.author.handle }));
+			const profileRoute = route('/[handle]', { handle: postState.post.author.handle });
+			if (postState.deleted && $page.url.pathname.startsWith(profileRoute)) {
+				goto(profileRoute);
 				toast.success('Success !');
 			}
 		} catch {

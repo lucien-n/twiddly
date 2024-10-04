@@ -20,8 +20,6 @@
 		if (!el) return;
 		el.scrollTo({ top: 0, behavior: 'smooth' });
 	};
-
-	$inspect(scroll);
 </script>
 
 <div
