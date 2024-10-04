@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { Button } from '&/button';
-	import { SetPostForm } from '@/post';
-	import { PostList } from '@/post';
+	import { PostList, SetPostForm } from '@/post';
 	import { ArrowUp } from 'lucide-svelte';
+	import { fade } from 'svelte/transition';
 	import type { PageData } from './$types';
 
 	const { data } = $props();
@@ -20,6 +20,8 @@
 		if (!el) return;
 		el.scrollTo({ top: 0, behavior: 'smooth' });
 	};
+
+	$inspect(scroll);
 </script>
 
 <div
@@ -30,10 +32,12 @@
 	<SetPostForm {setPostForm} action={route('setPost /')} />
 
 	{#if scroll > 200}
-		<Button class="absolute left-0 right-0 top-3 z-10 mx-auto w-fit" onclick={resetScroll}>
-			<ArrowUp />
-			<span>Back To Top</span>
-		</Button>
+		<div transition:fade class="fixed left-0 right-0 top-3 z-10 mx-auto w-fit">
+			<Button onclick={resetScroll}>
+				<ArrowUp />
+				<span>Back To Top</span>
+			</Button>
+		</div>
 	{/if}
 
 	<PostList posts={postsPromise} {setPostForm} />
