@@ -3,6 +3,7 @@ import { route } from '$lib/ROUTES';
 import { signInSchema } from '$lib/schemas/auth/sign-in';
 import { signUpSchema } from '$lib/schemas/auth/sign-up';
 import { signInWithEmailAndPassword, signUpWithEmailAndPassword } from '$lib/server/auth';
+import { lucia } from '$lib/server/lucia';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { error, fail, redirect, type Action } from '@sveltejs/kit';
 import { superValidate, setError } from 'sveltekit-superforms';
@@ -75,4 +76,20 @@ export const signUp: Action = async (event) => {
 	}
 
 	redirect(302, route('/'));
+};
+
+export const signOut: Action = async (event) => {
+	if (!event.locals.session) {
+		return redirect(302, route('/'));
+	}
+
+	await lucia.invalidateSession(event.locals.session.id);
+
+	const sessionCookie = lucia.createBlankSessionCookie();
+	event.cookies.set(sessionCookie.name, sessionCookie.value, {
+		path: '.',
+		...sessionCookie.attributes
+	});
+
+	return redirect(302, route('/'));
 };
