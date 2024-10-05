@@ -1,10 +1,7 @@
-import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
 import { signUpSchema } from '$lib/schemas/auth/sign-up.js';
-import { signUpWithEmailAndPassword } from '$lib/server/auth';
-import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
-import { error, redirect } from '@sveltejs/kit';
-import { fail, setError, superValidate } from 'sveltekit-superforms';
+import { redirect } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async (event) => {
@@ -13,45 +10,6 @@ export const load = async (event) => {
 	}
 
 	return {
-		form: await superValidate(zod(signUpSchema))
+		signUpForm: await superValidate(zod(signUpSchema))
 	};
-};
-
-export const actions = {
-	default: async (event) => {
-		if (event.locals.session) {
-			redirect(302, route('/'));
-		}
-
-		const form = await superValidate(event, zod(signUpSchema));
-
-		if (!form.valid) {
-			return fail(400, {
-				form
-			});
-		}
-
-		const { email, password, displayName, handle } = form.data;
-
-		try {
-			await signUpWithEmailAndPassword(event, email, password, { displayName, handle });
-		} catch (e) {
-			if (dev) console.error(e);
-
-			if (!(e instanceof AuthError)) return error(500, { message: 'An unknown error occurred' });
-
-			switch (e.code) {
-				case AuthErrorCode.EmailAlreadyInUse:
-					return setError(form, 'email', 'Already in use');
-				case AuthErrorCode.HandleAlreadyInUse:
-					return setError(form, 'handle', 'Already in use');
-				case AuthErrorCode.InvalidHandle:
-					return setError(form, 'handle', 'Invalid');
-				default:
-					return error(500, { message: 'An error occured' });
-			}
-		}
-
-		redirect(302, route('/'));
-	}
 };

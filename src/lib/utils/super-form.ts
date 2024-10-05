@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import type { ActionResult } from '@sveltejs/kit';
 import { toast } from 'svelte-sonner';
 
@@ -16,23 +17,20 @@ export type ActionResultFailure<Failure extends ResultFailure> = Extract<
 export type ActionResultRedirect = Extract<ActionResult, { type: 'redirect' }>;
 export type ActionResultError = Extract<ActionResult, { type: 'error' }>;
 
+export type SuperFormResultHandler = {
+	onSuccess?: <Success extends ResultSuccess>(result: ActionResultSuccess<Success>) => void;
+	onFailure?: <Failure extends ResultFailure>(result: ActionResultFailure<Failure>) => void;
+	onRedirect?: (result: ActionResultRedirect) => void;
+	onError?: (result: ActionResultError) => void;
+};
+
 export const handleSuperResult = (
 	event: {
 		result: ActionResult;
 		formElement: HTMLFormElement;
 		cancel: () => void;
 	},
-	{
-		onSuccess,
-		onFailure,
-		onError,
-		onRedirect
-	}: {
-		onSuccess?: <Success extends ResultSuccess>(result: ActionResultSuccess<Success>) => void;
-		onFailure?: <Failure extends ResultFailure>(result: ActionResultFailure<Failure>) => void;
-		onRedirect?: (result: ActionResultRedirect) => void;
-		onError?: (result: ActionResultError) => void;
-	}
+	{ onSuccess, onFailure, onError, onRedirect }: SuperFormResultHandler
 ) => {
 	const result = event.result;
 
@@ -60,5 +58,7 @@ export const onSuperFormError = (event: {
 			  };
 	};
 }) => {
+	if (dev) console.error(event.result.error);
+
 	toast.error(event.result.error.message);
 };

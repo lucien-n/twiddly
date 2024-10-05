@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { setAuthState, type AuthState, type SetAuthState } from './auth-state.svelte';
-	import SignoutDialog from './dialog/sign-out-dialog.svelte';
+	import { SignOutDialog } from '.';
 	import { getModeWatcherTheme } from '$lib/utils/theme';
 	import { setMode } from 'mode-watcher';
 
@@ -19,4 +19,4 @@
 
 {@render children(authState)}
 
-<SignoutDialog />
+<SignOutDialog />

@@ -43,20 +43,12 @@ const SERVERS = {
  * ACTIONS
  */
 const ACTIONS = {
-  "setPost /": `/?/setPost`,
-  "default /sign-in": `/sign-in`,
-  "default /sign-up": `/sign-up`,
-  "setProfile /[handle]": (params: { handle: (string | number) }) => {
-    return `/${params.handle}?/setProfile`
-  },
-  "setPost /[handle]": (params: { handle: (string | number) }) => {
-    return `/${params.handle}?/setPost`
-  },
-  "setPost /[handle]/[postId]": (params: { handle: (string | number), postId: (string | number) }) => {
-    return `/${params.handle}/${params.postId}?/setPost`
-  },
-  "default /settings/interface": `/settings/interface`,
-  "default /settings/privacy": `/settings/privacy`
+  "signIn /actions/v1/auth": `/actions/v1/auth?/signIn`,
+  "signUp /actions/v1/auth": `/actions/v1/auth?/signUp`,
+  "setPost /actions/v1/post": `/actions/v1/post?/setPost`,
+  "setProfile /actions/v1/profile": `/actions/v1/profile?/setProfile`,
+  "setPrivacySettings /actions/v1/settings": `/actions/v1/settings?/setPrivacySettings`,
+  "setInterfaceSettings /actions/v1/settings": `/actions/v1/settings?/setInterfaceSettings`
 }
 
 /**
@@ -165,7 +157,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId', '/settings': never, '/settings/interface': never, '/settings/privacy': never }
   SERVERS: { 'POST /sign-out': never, 'POST /api/v1/post/[id]/delete': 'id', 'POST /api/v1/post/[id]/like': 'id', 'POST /api/v1/post/[id]/unlike': 'id' }
-  ACTIONS: { 'setPost /': never, 'default /sign-in': never, 'default /sign-up': never, 'setProfile /[handle]': 'handle', 'setPost /[handle]': 'handle', 'setPost /[handle]/[postId]': 'handle' | 'postId', 'default /settings/interface': never, 'default /settings/privacy': never }
+  ACTIONS: { 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'setPost /actions/v1/post': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never }
   LINKS: Record<string, never>
   Params: { handle: never, postId: never, id: never }
 }

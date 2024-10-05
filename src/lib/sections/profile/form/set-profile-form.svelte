@@ -7,17 +7,16 @@
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Input } from '&/input';
-	import { AvatarBackgroundColor, type Profile } from '@prisma/client';
+	import { AvatarBackgroundColor } from '@prisma/client';
 	import type { ActionResult } from '@sveltejs/kit';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	interface Props {
-		profile: Pick<Profile, 'handle'>;
 		data: SuperValidated<Infer<SetProfileSchema>>;
 		onSuccess?: (result: ActionResult) => void;
 	}
-	let { profile, data, onSuccess }: Props = $props();
+	let { data, onSuccess }: Props = $props();
 
 	const form = superForm(data, {
 		validators: zodClient(setProfileSchema),
@@ -29,7 +28,7 @@
 	const loading = $derived($submitting);
 </script>
 
-<form action={route('setProfile /[handle]', { handle: profile.handle })} method="post" use:enhance>
+<form action={route('setProfile /actions/v1/profile')} method="post" use:enhance>
 	<Form.Field {form} name="displayName">
 		<Form.Control let:attrs>
 			<Form.Label>Name</Form.Label>

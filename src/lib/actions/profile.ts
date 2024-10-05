@@ -36,7 +36,7 @@ export const setProfile: Action = async (event) => {
 			data: updatedData,
 			where: { id: event.locals.session.userId },
 			select: {
-				id: true // EMPTY QUERY
+				id: true // EMPTY SELECT
 			}
 		});
 	} catch (e) {

@@ -23,7 +23,7 @@ export const setPost: Action = async (event) => {
 				data: { content },
 				where: { id, authorId: event.locals.session.userId },
 				select: {
-					id: true // EMPTY QUERY
+					id: true // EMPTY SELECT
 				}
 			});
 		} else {

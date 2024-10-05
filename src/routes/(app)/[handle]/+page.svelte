@@ -4,9 +4,8 @@
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth';
 	import { PostList } from '@/post';
-	import { ProfileAvatar } from '@/profile';
+	import { ProfileAvatar, SetProfileDialog } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
-	import SetProfileDialog from './set-profile-dialog.svelte';
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
@@ -55,4 +54,4 @@
 	</div>
 </div>
 
-<SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} {profile} />
+<SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} />

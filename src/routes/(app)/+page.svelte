@@ -27,7 +27,7 @@
 	bind:this={el}
 	onscroll={handleScroll}
 >
-	<SetPostForm {setPostForm} action={route('setPost /')} />
+	<SetPostForm {setPostForm} action={route('setPost /actions/v1/post')} />
 
 	{#if scroll > 200}
 		<div transition:fade class="fixed left-0 right-0 top-3 z-10 mx-auto w-fit">

@@ -1,13 +1,11 @@
-import { setProfile } from '$lib/actions/profile';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
 import { getPostSelect } from '$lib/utils/post';
 import { getProfileSelect } from '$lib/utils/profile';
-import { error, type Actions } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { setPost } from '$lib/actions/post';
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
@@ -33,9 +31,4 @@ export const load: PageServerLoad = async (event) => {
 		postsPromise,
 		setProfileForm: await superValidate(profile, zod(setProfileSchema))
 	};
-};
-
-export const actions: Actions = {
-	setProfile,
-	setPost
 };

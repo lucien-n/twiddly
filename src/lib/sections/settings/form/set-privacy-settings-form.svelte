@@ -19,7 +19,7 @@
 	const { form: formData } = form;
 </script>
 
-<SetSettingsForm label="Privacy" action={route('default /settings/privacy')} {form}>
+<SetSettingsForm label="Privacy" action={route('setPrivacySettings /actions/v1/settings')} {form}>
 	<Form.Field {form} name="private">
 		<Form.Control let:attrs>
 			<Form.Label>Private</Form.Label>

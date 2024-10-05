@@ -1,7 +1,7 @@
 <script>
-	import SignupForm from './signup-form.svelte';
+	import { SignUpForm } from '@/auth';
 
 	const { data } = $props();
 </script>
 
-<SignupForm data={data.form} />
+<SignUpForm data={data.signUpForm} />

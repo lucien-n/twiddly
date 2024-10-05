@@ -20,7 +20,11 @@
 	const { form: formData } = form;
 </script>
 
-<SetSettingsForm label="Interface" action={route('default /settings/interface')} {form}>
+<SetSettingsForm
+	label="Interface"
+	action={route('setInterfaceSettings /actions/v1/settings')}
+	{form}
+>
 	<Form.Field {form} name="theme">
 		<Form.Control let:attrs>
 			<Form.Label>Theme</Form.Label>

@@ -1,7 +1,5 @@
-import { setPost } from '$lib/actions/post';
 import { prisma } from '$lib/server/prisma';
 import { getPostSelect } from '$lib/utils/post';
-import { type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -29,8 +27,4 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		postsPromise
 	};
-};
-
-export const actions: Actions = {
-	setPost
 };

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SigninForm from './signin-form.svelte';
+	import { SignInForm } from '@/auth';
 
 	const { data } = $props();
 </script>
 
-<SigninForm data={data.form} />
+<SignInForm data={data.signInForm} />

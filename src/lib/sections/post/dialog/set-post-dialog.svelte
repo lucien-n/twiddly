@@ -16,6 +16,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import PostContentField from '../form/fields/post-content-field.svelte';
 	import { getPostState } from '../state/post-state.svelte';
+	import { route } from '$lib/ROUTES';
 
 	interface Props {
 		open: boolean;
@@ -72,7 +73,7 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content>
-		<form action={'?/setPost'} method="post" use:enhance>
+		<form action={route('setPost /actions/v1/post')} method="post" use:enhance>
 			<Dialog.Header>
 				<Dialog.Title>Edit post</Dialog.Title>
 			</Dialog.Header>
