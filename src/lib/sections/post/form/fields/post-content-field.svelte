@@ -14,14 +14,16 @@
 
 	const authState = getAuthState();
 
-	const MIN_LINE = 5;
+	const MAX_LINES = 20;
+	const MIN_LINES = 5;
+
+	const getRows = () => {
+		const lines = content.split('\n').length;
+		return Math.max(MIN_LINES, Math.min(lines, MAX_LINES));
+	};
 
 	const content = $derived($formData.content.trimEnd());
-	let rows: number = $state(MIN_LINE);
-	$effect(() => {
-		const lines = content.split('\n').length;
-		rows = lines < MIN_LINE ? MIN_LINE : lines;
-	});
+	const rows: number = $derived(getRows());
 </script>
 
 <Form.Field {form} name="content" class="relative">
