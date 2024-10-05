@@ -16,7 +16,10 @@ export const setPost: Action = async (event) => {
 	}
 
 	try {
-		const { id, content } = form.data;
+		const { data } = form;
+		const { id } = data;
+		// primitive formatting
+		const content = data.content.trimEnd();
 
 		if (id) {
 			await prisma.post.update({

@@ -1,5 +1,5 @@
 import { prisma } from '$lib/server/prisma';
-import { getPostSelect } from '$lib/utils/post';
+import { getPostSelect, getPostWhere } from '$lib/utils/post';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -9,16 +9,10 @@ export const load: PageServerLoad = async (event) => {
 		where: {
 			OR: [
 				{
-					AND: [
-						{ author: { privacySettings: { private: false } } },
-						{ OR: [{ deleted: false }, { deleted: null }] }
-					]
+					AND: [{ author: { privacySettings: { private: false } } }, getPostWhere()]
 				},
 				{
-					AND: [
-						{ authorId: event.locals.session?.userId },
-						{ OR: [{ deleted: false }, { deleted: null }] }
-					]
+					AND: [{ authorId: event.locals.session?.userId }, getPostWhere()]
 				}
 			]
 		}

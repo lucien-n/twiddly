@@ -20,8 +20,8 @@ export const POST: RequestHandler = async (event) => {
 				}
 			}),
 			prisma.post.update({
-				where: { id: postId },
 				data: { likeCount: { decrement: 1 } },
+				where: { id: postId },
 				select: { likeCount: true }
 			})
 		]);

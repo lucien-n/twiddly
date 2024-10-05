@@ -11,7 +11,9 @@ export const POST: RequestHandler = async (event) => {
 		const result = await prisma.post.update({
 			data: { deleted: true },
 			where: { id: postId, authorId: event.locals.session.userId },
-			select: { id: true }
+			select: {
+				id: true // EMPTY SELECT
+			}
 		});
 
 		return json({ data: !!result });

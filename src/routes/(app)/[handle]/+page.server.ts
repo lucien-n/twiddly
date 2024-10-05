@@ -1,6 +1,6 @@
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
-import { getPostSelect } from '$lib/utils/post';
+import { getPostOrderBy, getPostSelect, getPostWhere } from '$lib/utils/post';
 import { getProfileSelect } from '$lib/utils/profile';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
@@ -20,8 +20,9 @@ export const load: PageServerLoad = async (event) => {
 
 	const postsPromise = prisma.post
 		.findMany({
-			where: { authorId: profile.id, OR: [{ deleted: false }, { deleted: null }] },
 			select: getPostSelect(event.locals.session?.userId),
+			where: getPostWhere({ authorId: profile.id }),
+			orderBy: getPostOrderBy(),
 			take: 10
 		})
 		.then((posts) => posts.map((post) => ({ ...post, author: profile })));

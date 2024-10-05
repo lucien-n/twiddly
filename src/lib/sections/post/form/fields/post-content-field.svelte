@@ -16,9 +16,10 @@
 
 	const MIN_LINE = 5;
 
+	const content = $derived($formData.content.trimEnd());
 	let rows: number = $state(MIN_LINE);
 	$effect(() => {
-		const lines = $formData.content.split('\n').length;
+		const lines = content.split('\n').length;
 		rows = lines < MIN_LINE ? MIN_LINE : lines;
 	});
 </script>
@@ -36,7 +37,7 @@
 			required
 		/>
 		<p class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground">
-			{$formData.content.length}/{$constraints.content?.maxlength}
+			{content.length}/{$constraints.content?.maxlength}
 		</p>
 	</Form.Control>
 </Form.Field>
