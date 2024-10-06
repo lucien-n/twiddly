@@ -1,23 +1,17 @@
 import type { SetPostSchema } from '$lib/schemas/post/set-post';
-import type { Like, Post, Profile } from '@prisma/client';
+import type { Post } from '$lib/types';
 import { getContext, setContext } from 'svelte';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
-
-export type PublicPost = Pick<Post, 'id' | 'editedAt' | 'content' | 'likeCount' | 'createdAt'> & {
-	author: Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'>;
-} & {
-	likes: Pick<Like, 'profileId'>[];
-};
 
 type SetPostForm = SuperValidated<Infer<SetPostSchema>>;
 
 export interface PostStateInit {
-	post: PublicPost;
+	post: Post;
 	setPostForm: SetPostForm;
 }
 
 export class PostState {
-	post: PublicPost = $state() as PublicPost;
+	post: Post = $state() as Post;
 	setPostForm: SetPostForm = $state() as SetPostForm;
 
 	openSetDialog: boolean = $state(false);

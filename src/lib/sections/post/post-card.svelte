@@ -47,7 +47,7 @@
 			<span>
 				{formatDate(postState.post.createdAt)}E
 			</span>
-			{#if postState.post.editedAt}
+			{#if postState.post.edited}
 				<span>·</span>
 				<span>Edited</span>
 			{/if}

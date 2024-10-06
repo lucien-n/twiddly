@@ -1,10 +1,6 @@
-import { prisma } from '$lib/server/prisma';
-import { getPostSelect, getPostWhere } from '$lib/utils/post';
+import { getPostById } from '$lib/server/services/post';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => ({
-	postPromise: prisma.post.findFirst({
-		where: { id: event.params.postId, ...getPostWhere() },
-		select: getPostSelect(event.locals.session?.userId)
-	})
+	postPromise: getPostById(event.params.postId, event.locals.session?.userId)
 });

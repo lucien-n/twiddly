@@ -1,6 +1,6 @@
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
-import { getPostOrderBy, getPostSelect, getPostWhere } from '$lib/utils/post';
+import { getPosts } from '$lib/server/services/post';
 import { getProfileSelect } from '$lib/utils/profile';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
@@ -18,14 +18,7 @@ export const load: PageServerLoad = async (event) => {
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
 		error(401, `@${handle}'s profile is private`);
 
-	const postsPromise = prisma.post
-		.findMany({
-			select: getPostSelect(event.locals.session?.userId),
-			where: getPostWhere({ authorId: profile.id }),
-			orderBy: getPostOrderBy(),
-			take: 10
-		})
-		.then((posts) => posts.map((post) => ({ ...post, author: profile })));
+	const postsPromise = getPosts(event.locals.session?.userId);
 
 	return {
 		profile,
