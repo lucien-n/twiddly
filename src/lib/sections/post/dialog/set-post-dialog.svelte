@@ -29,6 +29,7 @@
 		if (content && content.length) return;
 
 		cancel();
+		postState.openSetDialog = false;
 		postState.openDeleteDialog = true;
 	};
 
