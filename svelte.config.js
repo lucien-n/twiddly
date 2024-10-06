@@ -14,7 +14,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'&': './src/lib/shadcn/ui',
-			'@': './src/lib/sections'
+			'@': './src/lib/sections',
+			$tests: './tests'
 		}
 	}
 };
