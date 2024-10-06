@@ -45,7 +45,7 @@
 		postState.post = {
 			...postState.post,
 			...form.data,
-			edited: true
+			editedAt: new Date()
 		};
 	};
 

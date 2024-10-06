@@ -9,7 +9,7 @@ export const POST: RequestHandler = async (event) => {
 	const { id: postId } = event.params;
 	try {
 		const result = await prisma.post.update({
-			data: { deleted: true },
+			data: { deletedAt: new Date() },
 			where: { id: postId, authorId: event.locals.session.userId },
 			select: {
 				id: true // EMPTY SELECT

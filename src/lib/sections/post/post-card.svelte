@@ -45,9 +45,9 @@
 		<p class="mb-2 text-foreground">{postState.post.content}</p>
 		<p class="flex gap-1 text-sm text-muted-foreground">
 			<span>
-				{formatDate(postState.post.createdAt)}
+				{formatDate(postState.post.createdAt)}E
 			</span>
-			{#if postState.post.edited}
+			{#if postState.post.editedAt}
 				<span>·</span>
 				<span>Edited</span>
 			{/if}

@@ -5,9 +5,18 @@ import { nanoid } from 'nanoid';
 
 const getRandomInArray = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-export const getRandomInEnum = <T>(anEnum: T): T[keyof T] => {
+const getRandomInEnum = <T>(anEnum: T): T[keyof T] => {
 	const enumValues = Object.values(anEnum as object) as unknown as T[keyof T][];
 	return enumValues[Math.floor(Math.random() * enumValues.length)];
+};
+
+const getRandomDateBetweenNowAndThen = (thenDays: number = 14): Date => {
+	const date = new Date();
+	date.setDate(-Math.floor(Math.random() * thenDays) + date.getDate()); // past n days
+	date.setHours(Math.floor(Math.random() * 24)); // randomize hours
+	date.setMinutes(Math.floor(Math.random() * 60)); // randomize minutes
+
+	return date;
 };
 
 const emptyTables = async (db: PrismaClient) => {
@@ -98,7 +107,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 const seedPosts = async (db: PrismaClient, users: User[]): Promise<Post[]> => {
 	const posts: Post[] = [];
 
-	const getContent = (retries = 0, maxRetries = 8): string => {
+	const getContent = (retries = 0, maxRetries = 5): string => {
 		const content = getRandomInArray(mock['posts']);
 		if (retries >= maxRetries) return content;
 
@@ -107,13 +116,10 @@ const seedPosts = async (db: PrismaClient, users: User[]): Promise<Post[]> => {
 	};
 
 	for (const user of users) {
-		const numberOfPosts = Math.floor(Math.random() * 5) + 2; // between 2 and 6 posts
+		const numberOfPosts = Math.floor(Math.random() * 8) + 3; // between 3 and 9 posts
 		for (let i = 0; i < numberOfPosts; i++) {
 			const content = getContent();
-			const createdAt = new Date();
-			createdAt.setDate(-Math.floor(Math.random() * 14) + createdAt.getDate()); // past fourteen days
-			createdAt.setHours(Math.floor(Math.random() * 24)); // randomize hours
-			createdAt.setMinutes(Math.floor(Math.random() * 60)); // randomize minutes
+			const createdAt = getRandomDateBetweenNowAndThen(14);
 
 			const post = await db.post.create({
 				data: {
@@ -121,7 +127,8 @@ const seedPosts = async (db: PrismaClient, users: User[]): Promise<Post[]> => {
 					content,
 					authorId: user.id,
 					createdAt,
-					edited: Math.random() > 0.9 // 10% chance to be an edited post
+					editedAt: Math.random() > 0.9 ? getRandomDateBetweenNowAndThen(14) : null, // 10% chance to be an edited post
+					deletedAt: Math.random() > 0.95 ? getRandomDateBetweenNowAndThen(14) : null // 5% chance to be a deleted post
 				}
 			});
 			posts.push(post);

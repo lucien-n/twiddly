@@ -40,7 +40,7 @@
 							<span>
 								{formatDate(postState.post.createdAt)}
 							</span>
-							{#if postState.post.edited}
+							{#if postState.post.editedAt}
 								<span>·</span>
 								<span>Edited</span>
 							{/if}

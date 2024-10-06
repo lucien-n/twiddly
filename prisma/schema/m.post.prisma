@@ -1,9 +1,9 @@
 model Post {
-    id        String   @id
+    id        String    @id
     content   String
-    likeCount Int      @default(0)
-    deleted   Boolean?
-    edited    Boolean?
+    likeCount Int       @default(0)
+    deletedAt DateTime?
+    editedAt  DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()

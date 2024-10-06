@@ -8,7 +8,7 @@ export const isLiked = (
 
 export const getPostSelect = (currentUserId?: string): Prisma.PostSelect => ({
 	id: true,
-	edited: true,
+	editedAt: true,
 	content: true,
 	createdAt: true,
 	likeCount: true,
@@ -24,6 +24,6 @@ export const getPostOrderBy = (
 });
 
 export const getPostWhere = (where?: Prisma.PostWhereInput): Prisma.PostWhereInput => ({
-	OR: [{ deleted: false }, { deleted: null }],
+	deletedAt: null,
 	...where
 });
