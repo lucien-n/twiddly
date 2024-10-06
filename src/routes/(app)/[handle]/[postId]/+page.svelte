@@ -2,7 +2,7 @@
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/button';
-	import { PostContext, PostFooter } from '@/post';
+	import { PostCard, PostContext, PostFooter } from '@/post';
 	import { ProfileAvatar } from '@/profile';
 	import { ChevronLeft } from 'lucide-svelte';
 	import type { PageData } from './$types';
@@ -36,6 +36,17 @@
 						<p class="mb-4 text-xl">
 							{postState.post.content}
 						</p>
+
+						{#if postState.post.sourcePost}
+							<div class="my-3">
+								<PostContext
+									init={{ post: postState.post.sourcePost, setPostForm: postState.setPostForm }}
+								>
+									<PostCard />
+								</PostContext>
+							</div>
+						{/if}
+
 						<p class="mb-4 flex gap-1 text-sm text-muted-foreground">
 							<span>
 								{formatDate(postState.post.createdAt)}

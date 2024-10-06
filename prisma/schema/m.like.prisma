@@ -1,10 +1,11 @@
 model Like {
-    postId    String
-    profileId String
-    post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-    profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+    postId String
+    userId String
 
     createdAt DateTime @default(now())
 
-    @@unique([postId, profileId])
+    post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+    profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, userId])
 }

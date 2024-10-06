@@ -1,6 +1,6 @@
 model PrivacySettings {
     private Boolean @default(false)
-
     userId  String  @unique
+
     profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

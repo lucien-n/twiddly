@@ -1,15 +1,18 @@
 model Post {
-    id        String   @id
-    content   String
-    likeCount Int      @default(0)
-    deleted   Boolean?
-    edited    Boolean?
+    id           String   @id
+    content      String
+    likeCount    Int      @default(0)
+    deleted      Boolean?
+    edited       Boolean?
+    authorId     String
+    sourcePostId String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
 
-    authorId String
-    author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
+    author Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
+    likes  Like[]
 
-    likes Like[]
+    sourcePost Post?  @relation("Reposts", fields: [sourcePostId], references: [id], onDelete: SetNull)
+    reposts    Post[] @relation("Reposts")
 }

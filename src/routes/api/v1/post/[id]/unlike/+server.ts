@@ -13,9 +13,9 @@ export const POST: RequestHandler = async (event) => {
 		const result = await prisma.$transaction([
 			prisma.like.delete({
 				where: {
-					postId_profileId: {
+					postId_userId: {
 						postId,
-						profileId: event.locals.session.userId
+						userId: event.locals.session.userId
 					}
 				}
 			}),

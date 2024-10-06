@@ -24,8 +24,8 @@
 	const handleRepost = async (event: Event) => {
 		event.stopPropagation();
 
-		reposted = !reposted;
-		reposts += reposted ? 1 : -1;
+		postState.reposting = true;
+		postState.openSetDialog = true;
 	};
 
 	let likes: number = $state(postState.post.likeCount);

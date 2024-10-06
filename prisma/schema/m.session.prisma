@@ -1,7 +1,8 @@
 model Session {
-    id        String   @id
+    id     String @id
+    userId String
+
     expiresAt DateTime
 
-    userId String
-    user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+    user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

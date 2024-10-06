@@ -14,7 +14,7 @@ export const POST: RequestHandler = async (event) => {
 			prisma.like.create({
 				data: {
 					postId,
-					profileId: event.locals.session.userId
+					userId: event.locals.session.userId
 				}
 			}),
 			prisma.post.update({

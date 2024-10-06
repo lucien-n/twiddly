@@ -1,9 +1,10 @@
 import { z } from 'zod';
-import { contentField } from './fields';
+import { contentField, idField, sourcePostIdField } from './fields';
 
 export const setPostSchema = z.object({
-	id: z.string().length(21).optional(),
-	content: contentField
+	id: idField,
+	content: contentField,
+	sourcePostId: sourcePostIdField
 });
 
 export type SetPostSchema = typeof setPostSchema;

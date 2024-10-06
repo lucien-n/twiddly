@@ -3,10 +3,14 @@ import type { Like, Post, Profile } from '@prisma/client';
 import { getContext, setContext } from 'svelte';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-export type PublicPost = Pick<Post, 'id' | 'edited' | 'content' | 'likeCount' | 'createdAt'> & {
+export type BasePublicPost = Pick<Post, 'id' | 'edited' | 'content' | 'likeCount' | 'createdAt'> & {
 	author: Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'>;
 } & {
-	likes: Pick<Like, 'profileId'>[];
+	likes: Pick<Like, 'userId'>[];
+};
+
+export type PublicPost = BasePublicPost & {
+	sourcePost?: BasePublicPost | null;
 };
 
 type SetPostForm = SuperValidated<Infer<SetPostSchema>>;
@@ -24,6 +28,7 @@ export class PostState {
 	openDeleteDialog: boolean = $state(false);
 
 	deleted: boolean = $state(false);
+	reposting: boolean = $state(false);
 
 	constructor({ post, setPostForm }: PostStateInit) {
 		this.post = post;

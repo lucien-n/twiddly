@@ -2,6 +2,8 @@ import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
 import { setPostSchema } from '$lib/schemas/post/set-post';
 import { prisma } from '$lib/server/prisma';
+import { getPostWhere } from '$lib/utils/post';
+import type { Prisma } from '@prisma/client';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { superValidate } from 'sveltekit-superforms';
@@ -17,28 +19,33 @@ export const setPost: Action = async (event) => {
 
 	try {
 		const { data } = form;
-		const { id } = data;
+		const { id, sourcePostId } = data;
 		// primitive formatting
 		const content = data.content.trimEnd();
 
 		if (id) {
 			await prisma.post.update({
 				data: { content },
-				where: { id, authorId: event.locals.session.userId },
+				where: getPostWhere({
+					id,
+					authorId: event.locals.session.userId,
+					sourcePostId
+				}) as Prisma.PostWhereUniqueInput,
 				select: {
 					id: true // EMPTY SELECT
 				}
 			});
 		} else {
 			const post = await prisma.post.create({
-				data: { id: nanoid(), content, authorId: event.locals.session.userId },
+				data: { id: nanoid(), content, authorId: event.locals.session.userId, sourcePostId },
 				select: {
 					id: true,
 					author: {
 						select: {
 							handle: true
 						}
-					}
+					},
+					sourcePost: true
 				}
 			});
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { route } from '$lib/ROUTES';
 	import { setPostSchema, type SetPostSchema } from '$lib/schemas/post/set-post';
 	import {
 		handleSuperResult,
@@ -9,19 +10,19 @@
 	import * as Form from '&/form';
 	import { LoadingButton } from '&/form';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { PostCard, PostContext } from '..';
 	import PostContentField from '../form/fields/post-content-field.svelte';
 	import { getPostState } from '../state/post-state.svelte';
-	import { route } from '$lib/ROUTES';
 
 	interface Props {
 		open: boolean;
 	}
 	let { open = $bindable() }: Props = $props();
+
 	const postState = getPostState();
 
 	const handleSubmit: SubmitFunction = ({ formData, cancel }) => {
@@ -63,10 +64,11 @@
 
 	const loading = $derived($submitting);
 
-	onMount(() => {
+	$effect(() => {
 		$formData = {
-			id: postState.post.id,
-			content: postState.post.content
+			id: postState.reposting ? undefined : postState.post.id,
+			content: postState.reposting ? '' : postState.post.content,
+			sourcePostId: postState.reposting ? postState.post.id : null
 		};
 		$tainted = undefined;
 	});
@@ -90,9 +92,25 @@
 
 			<Dialog.Footer>
 				<LoadingButton {loading} disabled={!$tainted}>
-					{loading ? 'Editing' : 'Edit'}
+					{#if postState.reposting}
+						{loading ? 'Reposting' : 'Repost'}
+					{:else}
+						{loading ? 'Editing' : 'Edit'}
+					{/if}
 				</LoadingButton>
 			</Dialog.Footer>
+
+			{#if postState && postState.reposting}
+				<Form.Field {form} name="sourcePostId">
+					<Form.Control let:attrs>
+						<input {...attrs} hidden bind:value={$formData.sourcePostId} />
+					</Form.Control>
+				</Form.Field>
+
+				<PostContext init={{ post: postState.post, setPostForm: postState.setPostForm }}>
+					<PostCard />
+				</PostContext>
+			{/if}
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

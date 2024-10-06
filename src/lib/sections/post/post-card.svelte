@@ -7,6 +7,8 @@
 	import { ProfileAvatar } from '@/profile';
 	import PostFooter from './post-footer.svelte';
 	import { getPostState } from './state/post-state.svelte';
+	import { PostContext } from './state';
+	import { PostCard } from '.';
 
 	const postState = getPostState();
 
@@ -43,6 +45,15 @@
 	</Card.Header>
 	<Card.Content>
 		<p class="mb-2 text-foreground">{postState.post.content}</p>
+
+		{#if postState.post.sourcePost}
+			<div class="my-3">
+				<PostContext init={{ post: postState.post.sourcePost, setPostForm: postState.setPostForm }}>
+					<PostCard />
+				</PostContext>
+			</div>
+		{/if}
+
 		<p class="flex gap-1 text-sm text-muted-foreground">
 			<span>
 				{formatDate(postState.post.createdAt)}
