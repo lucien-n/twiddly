@@ -27,11 +27,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build project
-        run: pnpm build
-
       - name: Generate prisma
         run: pnpm prisma generate
+
+      - name: Build project
+        run: pnpm build
 
       - name: Run tests
         run: pnpm test
