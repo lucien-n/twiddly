@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Dropdown } from '$lib/components/dropdown';
+	import { Scrollable } from '$lib/components/scrollable';
 	import { Separator } from '&/separator';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth';
@@ -17,8 +18,8 @@
 	let openEditProfileDialog: boolean = $state(false);
 </script>
 
-<div class="flex flex-col">
-	<div class="flex">
+<div class="flex h-screen max-h-screen flex-col">
+	<div class="flex py-4">
 		<div class="relative">
 			<ProfileAvatar {profile} size="lg" />
 			{#if profile.privacySettings?.private}
@@ -47,11 +48,11 @@
 		{/if}
 	</div>
 
-	<Separator class="my-12" />
+	<Separator class="my-5" />
 
-	<div class="w-full space-y-4 py-4">
+	<Scrollable>
 		<PostList posts={postsPromise} setPostForm={data.setPostForm} />
-	</div>
+	</Scrollable>
 </div>
 
 <SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} />

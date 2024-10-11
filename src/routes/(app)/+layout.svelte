@@ -11,7 +11,7 @@
 		<SideNav />
 
 		<section
-			class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4 sm:py-4"
+			class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4"
 		>
 			{@render children()}
 		</section>
