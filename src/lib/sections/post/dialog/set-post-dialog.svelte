@@ -22,15 +22,15 @@
 		open: boolean;
 	}
 	let { open = $bindable() }: Props = $props();
-	const postState = getPostState();
+	const post = getPostState();
 
 	const handleSubmit: SubmitFunction = ({ formData, cancel }) => {
 		const content = formData.get('content')?.toString();
 		if (content && content.length) return;
 
 		cancel();
-		postState.openSetDialog = false;
-		postState.openDeleteDialog = true;
+		post.openSetDialog = false;
+		post.openDeleteDialog = true;
 	};
 
 	const handleSuccess = (
@@ -42,15 +42,15 @@
 		if (!result.data?.setPostForm) return;
 
 		const form = result.data.setPostForm;
-		postState.post = {
-			...postState.post,
-			...form.data,
-			editedAt: new Date()
+		post.data = {
+			...post.data,
+			...form.data
 		};
+		post.edited = true
 	};
 
-	const form = superForm(postState.setPostForm, {
-		id: `set-post-${postState.post.id}`,
+	const form = superForm(post.setPostForm, {
+		id: `set-post-${post.data.id}`,
 		validators: zodClient(setPostSchema),
 		onError: onSuperFormError,
 		onSubmit: handleSubmit,
@@ -65,8 +65,8 @@
 
 	onMount(() => {
 		$formData = {
-			id: postState.post.id,
-			content: postState.post.content
+			id: post.data.id,
+			content: post.data.content
 		};
 		$tainted = undefined;
 	});

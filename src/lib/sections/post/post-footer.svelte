@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { Dropdown } from '$lib/components/dropdown';
-	import { route } from '$lib/ROUTES';
-	import { isLiked } from '$lib/utils/post';
 	import { Button, buttonVariants } from '&/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
-	import { EllipsisVertical, Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
-	import { toast } from 'svelte-sonner';
+	import {
+		EllipsisVertical,
+		Heart,
+		MessageCircle,
+		Pencil,
+		Repeat2,
+		Share2,
+		Trash
+	} from 'lucide-svelte';
 	import { getPostState } from './state/post-state.svelte';
-	import { Pencil, Trash } from 'lucide-svelte';
 
 	const authState = getAuthState();
-	const postState = getPostState();
+	const post = getPostState();
 
 	let comments = $state(0);
 	const handleComment = async (event: Event) => {
@@ -28,32 +32,10 @@
 		reposts += reposted ? 1 : -1;
 	};
 
-	let likes: number = $state(postState.post.likeCount);
-	let liked: boolean = $state(isLiked(authState.user?.id, postState.post.likes));
 	const handleLike = async (event: Event) => {
 		event.stopPropagation();
 
-		const url = liked
-			? route('POST /api/v1/post/[id]/unlike', { id: postState.post.id })
-			: route('POST /api/v1/post/[id]/like', { id: postState.post.id });
-		const res = await fetch(url, {
-			method: 'POST'
-		});
-		if (!res.ok) {
-			liked = !liked;
-			return;
-		}
-
-		try {
-			const { data } = await res.json();
-			const newLikeCount = parseInt(data);
-			if (isNaN(newLikeCount)) return;
-
-			likes = newLikeCount;
-			liked = !liked;
-		} catch {
-			toast.error('An error occured');
-		}
+		await post.toggleLike();
 	};
 
 	const handleShare = async (event: Event) => {
@@ -86,12 +68,12 @@
 		variant="ghost"
 		size="icon"
 		class={`flex w-auto items-center space-x-2 px-2 transition-colors duration-200 ${
-			liked ? 'text-red-500' : 'hover:text-red-500'
+			post.liked ? 'text-red-500' : 'hover:text-red-500'
 		}`}
 		onclick={handleLike}
 	>
-		<Heart class={`h-4 w-4 ${liked ? 'fill-current' : ''}`} />
-		<span>{likes}</span>
+		<Heart class={`h-4 w-4 ${post.liked ? 'fill-current' : ''}`} />
+		<span>{post.likes}</span>
 	</Button>
 </div>
 <div class="flex sm:space-x-5">
@@ -103,12 +85,12 @@
 	>
 		<Share2 class="h-4 w-4" />
 	</Button>
-	{#if authState.session?.userId === postState.post.author.id}
+	{#if authState.session?.userId === post.data.author.id}
 		<Dropdown
 			class={buttonVariants({ variant: 'ghost', size: 'icon' })}
 			items={[
-				{ item: dropdownEditItem, onclick: () => (postState.openSetDialog = true) },
-				{ item: dropdownDeleteItem, onclick: () => (postState.openDeleteDialog = true) }
+				{ item: dropdownEditItem, onclick: () => (post.openSetDialog = true) },
+				{ item: dropdownDeleteItem, onclick: () => (post.openDeleteDialog = true) }
 			]}
 			stopPropagation
 		>

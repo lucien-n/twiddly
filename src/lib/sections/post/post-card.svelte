@@ -8,13 +8,13 @@
 	import PostFooter from './post-footer.svelte';
 	import { getPostState } from './state/post-state.svelte';
 
-	const postState = getPostState();
+	const post = getPostState();
 
 	const redirectToPost = () => {
 		goto(
 			route('/[handle]/[postId]', {
-				handle: postState.post.author.handle,
-				postId: postState.post.id
+				handle: post.data.author.handle,
+				postId: post.data.id
 			})
 		);
 	};
@@ -26,28 +26,28 @@
 >
 	<Card.Header>
 		<div class="flex items-center space-x-4">
-			<a href={route('/[handle]', { handle: postState.post.author.handle })}>
-				<ProfileAvatar profile={postState.post.author} />
+			<a href={route('/[handle]', { handle: post.data.author.handle })}>
+				<ProfileAvatar profile={post.data.author} />
 			</a>
 			<div>
-				<p class="font-semibold">{postState.post.author.displayName}</p>
+				<p class="font-semibold">{post.data.author.displayName}</p>
 				<Button
 					variant="link"
-					href={route('/[handle]', { handle: postState.post.author.handle })}
+					href={route('/[handle]', { handle: post.data.author.handle })}
 					class="h-0 p-0 text-sm text-gray-500"
 				>
-					@{postState.post.author.handle}
+					@{post.data.author.handle}
 				</Button>
 			</div>
 		</div>
 	</Card.Header>
 	<Card.Content>
-		<p class="mb-2 text-foreground">{postState.post.content}</p>
+		<p class="mb-2 text-foreground">{post.data.content}</p>
 		<p class="flex gap-1 text-sm text-muted-foreground">
 			<span>
-				{formatDate(postState.post.createdAt)}E
+				{formatDate(post.data.createdAt)}E
 			</span>
-			{#if postState.post.editedAt}
+			{#if post.data.editedAt}
 				<span>·</span>
 				<span>Edited</span>
 			{/if}

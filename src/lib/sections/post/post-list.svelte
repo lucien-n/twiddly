@@ -1,18 +1,18 @@
 <script lang="ts">
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import { PostCard, PostCardSkeleton, PostContext, type PublicPost } from '.';
+	import { PostCard, PostCardSkeleton, PostContext, type PostData } from '.';
 	import type { SetPostSchema } from '$lib/schemas/post/set-post';
 
 	interface Props {
-		posts: PublicPost[] | Promise<PublicPost[]>;
+		posts: PostData[] | Promise<PostData[]>;
 		setPostForm: SuperValidated<Infer<SetPostSchema>>;
 	}
 	const { posts, setPostForm }: Props = $props();
 </script>
 
-{#snippet postsList(data: PublicPost[])}
+{#snippet postsList(data: PostData[])}
 	{#each data as post (post.id)}
-		<PostContext init={{ post, setPostForm }}>
+		<PostContext init={{ data: post, setPostForm }}>
 			{#snippet children(postState)}
 				{#if !postState.deleted}
 					<PostCard />

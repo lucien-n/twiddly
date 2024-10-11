@@ -9,13 +9,13 @@
 	}
 	const { init, children }: Props = $props();
 
-	const postState = $state(setPostState(init));
+	const post = $state(setPostState(init));
 	$effect(() => {
-		postState.post = init.post;
+		post.data = init.data;
 	});
 </script>
 
-{@render children(postState)}
+{@render children(post)}
 
-<DeletePostDialog bind:open={postState.openDeleteDialog} />
-<SetPostDialog bind:open={postState.openSetDialog} />
+<DeletePostDialog bind:open={post.openDeleteDialog} />
+<SetPostDialog bind:open={post.openSetDialog} />
