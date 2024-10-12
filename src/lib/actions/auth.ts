@@ -5,6 +5,9 @@ import { signInSchema } from '$lib/schemas/auth/sign-in';
 import { signUpSchema } from '$lib/schemas/auth/sign-up';
 import {
 	createSession,
+	generateEmailVerificationCode,
+	isAuthenticated,
+	isVerified,
 	signInWithEmailAndPassword,
 	signUpWithEmailAndPassword,
 	verifyVerificationCode
@@ -128,4 +131,18 @@ export const otpVerification: Action = async (event) => {
 	await createSession(event.locals.session.userId, event);
 
 	return redirect(302, route('/'));
+};
+
+export const sendOtpEmail: Action = async (event) => {
+	if (isVerified(event) || !isAuthenticated(event)) {
+		return redirect(302, route('/'));
+	}
+
+	try {
+		await generateEmailVerificationCode(event.locals.session.userId, event.locals.user.email);
+	} catch (e) {
+		if (dev) console.error(e);
+
+		throw new Error('An unexpected error occured');
+	}
 };

@@ -49,6 +49,7 @@ const ACTIONS = {
   "signUp /actions/v1/auth": `/actions/v1/auth?/signUp`,
   "signOut /actions/v1/auth": `/actions/v1/auth?/signOut`,
   "otpVerification /actions/v1/auth": `/actions/v1/auth?/otpVerification`,
+  "sendOtpEmail /actions/v1/auth": `/actions/v1/auth?/sendOtpEmail`,
   "setPost /actions/v1/post": `/actions/v1/post?/setPost`,
   "setProfile /actions/v1/profile": `/actions/v1/profile?/setProfile`,
   "setPrivacySettings /actions/v1/settings": `/actions/v1/settings?/setPrivacySettings`,
@@ -161,7 +162,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[postId]': 'handle' | 'postId', '/settings': never, '/settings/interface': never, '/settings/privacy': never, '/temp': never }
   SERVERS: { 'POST /api/v1/post/[id]/delete': 'id', 'POST /api/v1/post/[id]/like': 'id', 'POST /api/v1/post/[id]/unlike': 'id', 'GET /temp/send-otp-email': never }
-  ACTIONS: { 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'setPost /actions/v1/post': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never }
+  ACTIONS: { 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'setPost /actions/v1/post': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never }
   LINKS: Record<string, never>
   Params: { handle: never, postId: never, id: never }
 }

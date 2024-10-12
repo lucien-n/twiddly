@@ -47,7 +47,6 @@ export class PostState {
 		const { data, error } = await fetcher<number>(url, 'POST');
 
 		if (error) {
-			this.liked = !this.liked;
 			toast.error(error);
 			return;
 		}
