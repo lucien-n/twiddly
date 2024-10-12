@@ -1,6 +1,10 @@
+import { dev } from '$app/environment';
 import { emailVerificationCodeExpiryMinutes } from '../auth';
 import type { EmailTo } from '../email';
 
+const domain = dev ? 'http://localhost:5432' : 'https://twiddly.dev';
+
+// todo: privacy policy page
 export default (code: string, to: EmailTo) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -84,12 +88,14 @@ export default (code: string, to: EmailTo) => `
 
             <p>This code is valid for the next ${emailVerificationCodeExpiryMinutes} minutes. Please use it to complete your sign-up process.</p>
 
+            <p>Verify your code <a href="${domain}/verify">here</a></p>
+
             <p>If you did not request this code, please ignore this email.</p>
         </div>
 
         <div class="email-footer">
             <p>Sent with ❤️ from Twiddly</p>
-            <p><a href="https://twiddly.dev">Visit our website</a> | <a href="https://twiddly.dev/privacy">Privacy Policy</a></p>
+            <p><a href="${domain}">Visit our website</a> | <a href="${domain}/privacy">Privacy Policy</a></p>
         </div>
     </div>
 </body>

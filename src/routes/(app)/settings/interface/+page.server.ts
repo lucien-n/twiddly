@@ -5,9 +5,11 @@ import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
+import { isVerified } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
-	if (!event.locals.session) redirect(303, route('/'));
+	// ? this is redundant since we redirect to auth routes if the user isn't signed in but it assures type safety
+	if (!isVerified(event)) redirect(303, route('/'));
 
 	const { userId } = event.locals.session;
 	const interfaceSettings = await prisma.interfaceSettings.findFirst({

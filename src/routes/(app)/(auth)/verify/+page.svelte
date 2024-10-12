@@ -36,4 +36,8 @@
 			</Form.LoadingButton>
 		</form>
 	{/snippet}
+
+	{#snippet footer()}
+		<!-- todo: resend otp code button -->
+	{/snippet}
 </AuthLayout>

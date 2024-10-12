@@ -3,7 +3,7 @@ import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
 import { type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
-import { generateIdFromEntropySize } from 'lucia';
+import { generateIdFromEntropySize, type Session } from 'lucia';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 
@@ -171,3 +171,13 @@ export const verifyVerificationCode = async (
 
 	return true;
 };
+
+export const isAuthenticated = (
+	event: RequestEvent
+): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
+	!!event.locals.session;
+
+export const isVerified = (
+	event: RequestEvent
+): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
+	!!event.locals.user?.emailVerified;

@@ -1,6 +1,7 @@
 import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
 import { setPostSchema } from '$lib/schemas/post/set-post';
+import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
@@ -8,7 +9,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const setPost: Action = async (event) => {
-	if (!event.locals.session) return fail(401);
+	if (!isVerified(event)) return fail(401);
 
 	const form = await superValidate(event, zod(setPostSchema));
 	if (!form.valid) {

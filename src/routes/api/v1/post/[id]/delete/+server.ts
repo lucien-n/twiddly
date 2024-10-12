@@ -2,9 +2,10 @@ import { prisma } from '$lib/server/prisma';
 import { AuthErrorCode } from '$lib/utils/auth-error';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { isVerified } from '$lib/server/auth';
 
 export const POST: RequestHandler = async (event) => {
-	if (!event.locals.session) return error(401, AuthErrorCode.AuthRequired);
+	if (!isVerified(event)) return error(401, AuthErrorCode.AuthRequired);
 
 	const { id: postId } = event.params;
 	try {
