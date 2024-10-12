@@ -40,6 +40,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 		data: {
 			id: generateIdFromEntropySize(10),
 			email: 'demo@mail.com',
+			emailVerified: true,
 			passwordHash:
 				'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
 			profile: {
@@ -61,6 +62,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 			email: 'admin@mail.com',
 			passwordHash:
 				'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
+			emailVerified: true,
 			profile: {
 				create: {
 					displayName: 'Admin',
@@ -87,6 +89,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 				email,
 				passwordHash:
 					'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
+				emailVerified: true,
 				profile: {
 					create: {
 						displayName: firstName + Math.floor(Math.random() * 99).toString(),

@@ -1,11 +1,13 @@
 model User {
-    id           String @id
-    email        String @unique
-    passwordHash String
+    id            String  @id
+    email         String  @unique
+    emailVerified Boolean @default(false)
+    passwordHash  String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
 
-    sessions Session[]
-    profile  Profile[]
+    sessions              Session[]
+    profile               Profile[]
+    emailVerificationCode EmailVerificationCode[]
 }

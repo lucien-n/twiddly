@@ -1,9 +1,16 @@
 import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
+import { otpSchema } from '$lib/schemas/auth/otp';
 import { signInSchema } from '$lib/schemas/auth/sign-in';
 import { signUpSchema } from '$lib/schemas/auth/sign-up';
-import { signInWithEmailAndPassword, signUpWithEmailAndPassword } from '$lib/server/auth';
+import {
+	createSession,
+	signInWithEmailAndPassword,
+	signUpWithEmailAndPassword,
+	verifyVerificationCode
+} from '$lib/server/auth';
 import { lucia } from '$lib/server/lucia';
+import { prisma } from '$lib/server/prisma';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { error, fail, redirect, type Action } from '@sveltejs/kit';
 import { superValidate, setError } from 'sveltekit-superforms';
@@ -75,7 +82,7 @@ export const signUp: Action = async (event) => {
 		}
 	}
 
-	redirect(302, route('/'));
+	redirect(302, route('/verify'));
 };
 
 export const signOut: Action = async (event) => {
@@ -90,6 +97,35 @@ export const signOut: Action = async (event) => {
 		path: '.',
 		...sessionCookie.attributes
 	});
+
+	return redirect(302, route('/'));
+};
+
+export const otpVerification: Action = async (event) => {
+	if (!event.locals.session || !event.locals.user) {
+		return redirect(302, route('/'));
+	}
+
+	const otpForm = await superValidate(event, zod(otpSchema));
+	if (!otpForm.valid) {
+		return fail(400, {
+			otpForm
+		});
+	}
+
+	const { otp } = otpForm.data;
+	const validCode = await verifyVerificationCode(event.locals.user, otp);
+	if (!validCode) {
+		return setError(otpForm, 'Invalid code');
+	}
+
+	await lucia.invalidateSession(event.locals.session.id);
+	await prisma.user.update({
+		data: { emailVerified: true },
+		where: { id: event.locals.session.userId }
+	});
+
+	await createSession(event.locals.session.userId, event);
 
 	return redirect(302, route('/'));
 };

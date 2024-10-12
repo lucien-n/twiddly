@@ -20,3 +20,8 @@ export const handleField = z
 	.regex(/^[a-zA-Z0-9_]+$/, {
 		message: 'Handle can only contain letters, numbers, and underscores'
 	});
+
+export const otpField = z
+	.string()
+	.length(6)
+	.regex(/^[A-Z0-9]{6}$/);

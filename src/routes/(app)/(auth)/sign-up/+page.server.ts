@@ -1,5 +1,5 @@
 import { route } from '$lib/ROUTES';
-import { signUpSchema } from '$lib/schemas/auth/sign-up.js';
+import { signUpSchema } from '$lib/schemas/auth/sign-up';
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

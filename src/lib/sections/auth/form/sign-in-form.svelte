@@ -16,7 +16,7 @@
 
 	const form = superForm(data, {
 		validators: zodClient(signInSchema),
-		onError: onSuperFormError,
+		onError: onSuperFormError
 	});
 	const { form: formData, enhance, errors, submitting, tainted } = form;
 
@@ -29,7 +29,7 @@
 			<Form.Label>Email</Form.Label>
 			<Input {...attrs} bind:value={$formData.email} />
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="password">
@@ -37,7 +37,7 @@
 			<Form.Label>Password</Form.Label>
 			<PasswordInput bind:value={$formData.password} {attrs} />
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />

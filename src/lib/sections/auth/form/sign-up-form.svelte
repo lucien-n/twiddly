@@ -36,7 +36,7 @@
 				}}
 			/>
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="handle">
@@ -47,7 +47,7 @@
 				<Input {...attrs} bind:value={$formData.handle} class="pl-7" />
 			</div>
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="email">
@@ -55,7 +55,7 @@
 			<Form.Label>Email</Form.Label>
 			<Input {...attrs} bind:value={$formData.email} />
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="password">
@@ -63,7 +63,7 @@
 			<Form.Label>Password</Form.Label>
 			<PasswordInput bind:value={$formData.password} {attrs} />
 		</Form.Control>
-		<Form.FieldErrors />
+		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { route } from '$lib/ROUTES.js';
+	import { route } from '$lib/ROUTES';
 	import { Button } from '&/button';
 	import { ChevronRight } from 'lucide-svelte';
 

@@ -7,12 +7,18 @@ import { generateIdFromEntropySize } from 'lucia';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 
+import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
+import { generateRandomString, alphabet } from 'oslo/crypto';
+import { sendOTPVerificationEmail } from './email';
+
 export const hashOptions = {
 	memoryCost: 19456,
 	timeCost: 2,
 	outputLen: 32,
 	parallelism: 1
 };
+
+export const emailVerificationCodeExpiryMinutes = 15;
 
 export const hashPassword = async (password: string) => hash(password, hashOptions);
 
@@ -53,6 +59,16 @@ export const signUpWithEmailAndPassword = async (
 			}
 		}
 	});
+
+	const verificationCode = await generateEmailVerificationCode(id, email);
+	const success = await sendOTPVerificationEmail(verificationCode, {
+		email,
+		name: meta.displayName
+	});
+
+	if (!success) {
+		throw new Error('Could not send verification code email');
+	}
 
 	await createSession(id, event);
 
@@ -117,4 +133,41 @@ export const createSession = async (userId: string, event: RequestEvent) => {
 		path: '.',
 		...sessionCookie.attributes
 	});
+};
+
+export const generateEmailVerificationCode = async (
+	userId: string,
+	email: string
+): Promise<string> => {
+	await prisma.emailVerificationCode.deleteMany({ where: { userId } });
+
+	const code = generateRandomString(6, alphabet('0-9', 'A-Z'));
+	await prisma.emailVerificationCode.create({
+		data: {
+			userId,
+			email,
+			code,
+			expiresAt: createDate(new TimeSpan(emailVerificationCodeExpiryMinutes, 'm'))
+		}
+	});
+
+	return code;
+};
+
+export const verifyVerificationCode = async (
+	user: Pick<User, 'id' | 'email'>,
+	code: string
+): Promise<boolean> => {
+	const databaseCode = await prisma.emailVerificationCode.findFirst({
+		where: { userId: user.id },
+		select: { id: true, code: true, email: true, expiresAt: true }
+	});
+	if (!databaseCode || databaseCode.code !== code) return false;
+
+	await prisma.emailVerificationCode.delete({ where: { id: databaseCode.id } });
+
+	if (!isWithinExpirationDate(databaseCode.expiresAt)) return false;
+	if (databaseCode.email !== user.email) return false;
+
+	return true;
 };
