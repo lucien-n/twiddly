@@ -25,8 +25,8 @@ export const sendEmail = async (content: string, to: EmailTo) => {
 				},
 				To: [
 					{
-						Email: to.email,
-						Name: dev ? 'contact@lucienn.dev' : to.name
+						Email: dev ? 'contact@lucienn.dev' : to.email,
+						Name: to.name
 					}
 				],
 				Subject: 'Your verification code',

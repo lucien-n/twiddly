@@ -3,8 +3,6 @@ import type { PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { otpSchema } from '$lib/schemas/auth/otp';
 
-export const load: PageServerLoad = async () => {
-	return {
-		otpForm: await superValidate(zod(otpSchema))
-	};
-};
+export const load: PageServerLoad = async () => ({
+	otpForm: await superValidate(zod(otpSchema))
+});

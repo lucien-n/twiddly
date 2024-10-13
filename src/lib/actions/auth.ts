@@ -12,6 +12,7 @@ import {
 	signUpWithEmailAndPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
+import { sendOTPVerificationEmail } from '$lib/server/email';
 import { lucia } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
@@ -139,7 +140,9 @@ export const sendOtpEmail: Action = async (event) => {
 	}
 
 	try {
-		await generateEmailVerificationCode(event.locals.session.userId, event.locals.user.email);
+		const email = event.locals.user.email;
+		const code = await generateEmailVerificationCode(event.locals.session.userId, email);
+		await sendOTPVerificationEmail(code, { email, name: event.locals.profile.displayName });
 	} catch (e) {
 		if (dev) console.error(e);
 

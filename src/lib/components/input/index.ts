@@ -1,5 +1,6 @@
 import type { ControlAttrs } from 'formsnap';
 import PasswordInput from './password-input.svelte';
+import OTPInput from './otp-input.svelte';
 
 interface PasswordInputProps {
 	value?: string;
@@ -7,4 +8,9 @@ interface PasswordInputProps {
 	attrs?: ControlAttrs;
 }
 
-export { PasswordInput, type PasswordInputProps };
+interface OTPInputProps {
+	value?: string;
+	attrs?: ControlAttrs;
+}
+
+export { PasswordInput, OTPInput, type PasswordInputProps, type OTPInputProps };
