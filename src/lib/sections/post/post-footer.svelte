@@ -40,6 +40,8 @@
 
 	const handleShare = async (event: Event) => {
 		event.stopPropagation();
+
+		post.openShareDialog = true;
 	};
 </script>
 

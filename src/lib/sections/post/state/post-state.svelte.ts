@@ -25,6 +25,7 @@ export class PostState {
 
 	openSetDialog: boolean = $state(false);
 	openDeleteDialog: boolean = $state(false);
+	openShareDialog: boolean = $state(false);
 
 	deleted: boolean = $state(false);
 	edited: boolean = $state(false);

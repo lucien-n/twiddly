@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import { PostState, setPostState, type PostStateInit } from './post-state.svelte';
 	import { DeletePostDialog, SetPostDialog } from '../dialog';
+	import SharePostDialog from '../dialog/share-post-dialog.svelte';
 
 	interface Props {
 		init: PostStateInit;
@@ -19,3 +20,4 @@
 
 <DeletePostDialog bind:open={post.openDeleteDialog} />
 <SetPostDialog bind:open={post.openSetDialog} />
+<SharePostDialog bind:open={post.openShareDialog} />
