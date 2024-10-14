@@ -1,4 +1,4 @@
-import { sendOTPVerificationEmail } from '$lib/server/email';
+import { sendOTPVerificationEmail } from '$lib/server/mailjet';
 import type { RequestHandler } from '@sveltejs/kit';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 

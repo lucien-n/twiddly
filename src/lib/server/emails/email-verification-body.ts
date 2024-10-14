@@ -1,6 +1,6 @@
 import { dev } from '$app/environment';
 import { emailVerificationCodeExpiryMinutes } from '../auth';
-import type { EmailTo } from '../email';
+import type { EmailTo } from '../mailjet';
 
 const domain = dev ? 'http://localhost:5432' : 'https://twiddly.dev';
 

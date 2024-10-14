@@ -1,14 +1,6 @@
 import { dev } from '$app/environment';
-import { MJ_APIKEY_PRIVATE, MJ_APIKEY_PUBLIC } from '$env/static/private';
-import Mailjet from 'node-mailjet';
-import emailVerificationBody from './email/email-verification-body';
-
-export const mailjet = new Mailjet({
-	apiKey: MJ_APIKEY_PUBLIC,
-	apiSecret: MJ_APIKEY_PRIVATE
-});
-
-const noReplyEmail = 'no-reply@twiddly.dev';
+import emailVerificationBody from './emails/email-verification-body';
+import { mailjet, noReplyEmail } from './mailjet';
 
 export interface EmailTo {
 	email: string;
