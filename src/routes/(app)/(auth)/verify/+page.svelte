@@ -5,18 +5,19 @@
 	import { onSuperFormError } from '$lib/utils/super-form';
 	import { Button } from '&/button';
 	import * as Form from '&/form';
-	import { Input } from '&/input';
 	import { AuthLayout } from '@/auth';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { OTPInput } from '$lib/components/input';
 
 	const { data } = $props();
 
 	const form = superForm(data.otpForm, {
 		validators: zodClient(otpSchema),
-		onError: onSuperFormError
+		onError: onSuperFormError,
+		validationMethod: 'onsubmit'
 	});
 	const { form: formData, enhance, errors, tainted, submitting } = form;
 
@@ -41,13 +42,13 @@
 	};
 </script>
 
-<AuthLayout title="Verify your email" description="Fill in the code you've received by email">
+<AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
 	{#snippet children()}
 		<form method="POST" action={route('otpVerification /actions/v1/auth')} use:enhance>
 			<Form.Field {form} name="otp">
 				<Form.Control let:attrs>
 					<Form.Label>Code</Form.Label>
-					<Input {...attrs} bind:value={$formData.otp} />
+					<OTPInput {attrs} bind:value={$formData.otp} />
 				</Form.Control>
 			</Form.Field>
 
