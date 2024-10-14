@@ -4,13 +4,13 @@
 	import { Separator } from '&/separator';
 	import * as Tooltip from '&/tooltip';
 	import { getAuthState } from '@/auth';
-	import { PostList } from '@/post';
+	import { TwiddleList } from '@/twiddle/index.js';
 	import { ProfileAvatar, SetProfileDialog } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
-	const postsPromise = $derived(data.postsPromise);
+	const twiddlesPromise = $derived(data.twiddlesPromise);
 
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
@@ -51,7 +51,7 @@
 	<Separator class="my-5" />
 
 	<Scrollable>
-		<PostList posts={postsPromise} setPostForm={data.setPostForm} />
+		<TwiddleList twiddles={twiddlesPromise} setTwiddleForm={data.setTwiddleForm} />
 	</Scrollable>
 </div>
 

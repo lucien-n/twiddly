@@ -28,7 +28,7 @@
 	const loading = $derived($submitting);
 </script>
 
-<form action={route('setProfile /actions/v1/profile')} method="post" use:enhance>
+<form method="post" action={route('setProfile /actions/v1/profile')} use:enhance>
 	<Form.Field {form} name="displayName">
 		<Form.Control let:attrs>
 			<Form.Label>Name</Form.Label>

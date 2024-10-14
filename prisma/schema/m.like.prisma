@@ -1,10 +1,10 @@
 model Like {
-    postId    String
+    twiddleId String
     profileId String
-    post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+    twiddle   Twiddle @relation(fields: [twiddleId], references: [id], onDelete: Cascade)
     profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
 
-    @@unique([postId, profileId])
+    @@unique([twiddleId, profileId])
 }

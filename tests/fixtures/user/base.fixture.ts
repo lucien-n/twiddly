@@ -8,5 +8,6 @@ export const baseUserFixtureA: BaseUser = {
 	passwordHash:
 		'$argon2id$v=19$m=19456,t=2,p=1$NpDqOwIw8x/YWcct0OuomA$LqJv3svMkTHLmp1P6zsP24uyHK1tce7Ri6pr5YPwYuc',
 	createdAt: new Date('2024-10-04T00:00:00Z'),
-	updatedAt: new Date('2024-10-04T00:00:00Z')
+	updatedAt: new Date('2024-10-04T00:00:00Z'),
+	emailVerified: true
 };

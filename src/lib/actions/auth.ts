@@ -12,7 +12,7 @@ import {
 	signUpWithEmailAndPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
-import { sendOTPVerificationEmail } from '$lib/server/mailjet';
+import { sendOTPVerificationEmail } from '$lib/server/email';
 import { lucia } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';

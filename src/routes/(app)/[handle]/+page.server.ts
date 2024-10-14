@@ -1,6 +1,6 @@
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
-import { getPostOrderBy, getPostSelect, getPostWhere } from '$lib/utils/post';
+import { getTwiddleOrderBy, getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import { getProfileSelect } from '$lib/utils/profile';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
@@ -18,18 +18,18 @@ export const load: PageServerLoad = async (event) => {
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
 		error(401, `@${handle}'s profile is private`);
 
-	const postsPromise = prisma.post
+	const twiddlesPromise = prisma.twiddle
 		.findMany({
-			select: getPostSelect(event.locals.session?.userId),
-			where: getPostWhere({ authorId: profile.id }),
-			orderBy: getPostOrderBy(),
+			select: getTwiddleSelect(event.locals.session?.userId),
+			where: getTwiddleWhere({ authorId: profile.id }),
+			orderBy: getTwiddleOrderBy(),
 			take: 10
 		})
-		.then((posts) => posts.map((post) => ({ ...post, author: profile })));
+		.then((twiddles) => twiddles.map((twiddle) => ({ ...twiddle, author: profile })));
 
 	return {
 		profile,
-		postsPromise,
+		twiddlesPromise,
 		setProfileForm: await superValidate(profile, zod(setProfileSchema))
 	};
 };

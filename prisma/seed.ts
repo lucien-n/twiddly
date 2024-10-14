@@ -1,4 +1,4 @@
-import { AvatarBackgroundColor, Post, PrismaClient, Role, User } from '@prisma/client';
+import { AvatarBackgroundColor, PrismaClient, Role, Twiddle, User } from '@prisma/client';
 import { generateIdFromEntropySize } from 'lucia';
 import mock from './mock.json';
 import { nanoid } from 'nanoid';
@@ -22,7 +22,7 @@ const getRandomDateBetweenNowAndThen = (thenDays: number = 14): Date => {
 const emptyTables = async (db: PrismaClient) => {
 	const deletes = [
 		db.like.deleteMany(),
-		db.post.deleteMany(),
+		db.twiddle.deleteMany(),
 		db.interfaceSettings.deleteMany(),
 		db.privacySettings.deleteMany(),
 		db.profile.deleteMany(),
@@ -107,38 +107,38 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 	return users;
 };
 
-const seedPosts = async (db: PrismaClient, users: User[]): Promise<Post[]> => {
-	const posts: Post[] = [];
+const seedTwiddles = async (db: PrismaClient, users: User[]): Promise<Twiddle[]> => {
+	const twiddles: Twiddle[] = [];
 
 	const getContent = (retries = 0, maxRetries = 5): string => {
-		const content = getRandomInArray(mock['posts']);
+		const content = getRandomInArray(mock['twiddles']);
 		if (retries >= maxRetries) return content;
 
-		const contentAlreadyUsed = posts.some((post) => post.content === content);
+		const contentAlreadyUsed = twiddles.some((twiddle) => twiddle.content === content);
 		return contentAlreadyUsed ? getContent(retries + 1) : content;
 	};
 
 	for (const user of users) {
-		const numberOfPosts = Math.floor(Math.random() * 8) + 3; // between 3 and 9 posts
-		for (let i = 0; i < numberOfPosts; i++) {
+		const numberOfTwiddles = Math.floor(Math.random() * 8) + 3; // between 3 and 9 twiddles
+		for (let i = 0; i < numberOfTwiddles; i++) {
 			const content = getContent();
 			const createdAt = getRandomDateBetweenNowAndThen(14);
 
-			const post = await db.post.create({
+			const twiddle = await db.twiddle.create({
 				data: {
 					id: nanoid(),
 					content,
 					authorId: user.id,
 					createdAt,
-					editedAt: Math.random() > 0.9 ? getRandomDateBetweenNowAndThen(14) : null, // 10% chance to be an edited post
-					deletedAt: Math.random() > 0.95 ? getRandomDateBetweenNowAndThen(14) : null // 5% chance to be a deleted post
+					editedAt: Math.random() > 0.9 ? getRandomDateBetweenNowAndThen(14) : null, // 10% chance to be an edited twiddle
+					deletedAt: Math.random() > 0.95 ? getRandomDateBetweenNowAndThen(14) : null // 5% chance to be a deleted twiddle
 				}
 			});
-			posts.push(post);
+			twiddles.push(twiddle);
 		}
 	}
 
-	return posts;
+	return twiddles;
 };
 
 const main = async () => {
@@ -147,7 +147,7 @@ const main = async () => {
 	await emptyTables(db);
 
 	const users = await createUsers(db);
-	await seedPosts(db, users);
+	await seedTwiddles(db, users);
 };
 
 main();

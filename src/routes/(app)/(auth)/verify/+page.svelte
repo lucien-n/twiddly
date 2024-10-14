@@ -44,7 +44,7 @@
 
 <AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
 	{#snippet children()}
-		<form method="POST" action={route('otpVerification /actions/v1/auth')} use:enhance>
+		<form method="post" action={route('otpVerification /actions/v1/auth')} use:enhance>
 			<Form.Field {form} name="otp">
 				<Form.Control let:attrs>
 					<Form.Label>Code</Form.Label>
@@ -62,7 +62,7 @@
 
 	{#snippet footer()}
 		<form
-			method="POST"
+			method="post"
 			action={route('sendOtpEmail /actions/v1/auth')}
 			use:svelteEnhance={handleResendSubmit}
 		>

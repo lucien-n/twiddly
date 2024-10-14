@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import { PostList, SetPostForm } from '@/post';
+	import { TwiddleList, SetTwiddleForm } from '@/twiddle';
 	import type { PageData } from './$types';
 	import { Scrollable } from '$lib/components/scrollable';
 
 	const { data } = $props();
-	const { postsPromise, setPostForm }: PageData = data;
+	const { twiddlesPromise, setTwiddleForm }: PageData = data;
 </script>
 
 <Scrollable>
-	<SetPostForm {setPostForm} action={route('setPost /actions/v1/post')} />
-	<PostList posts={postsPromise} {setPostForm} />
+	<SetTwiddleForm {setTwiddleForm} action={route('setTwiddle /actions/v1/twiddle')} />
+	<TwiddleList twiddles={twiddlesPromise} {setTwiddleForm} />
 </Scrollable>

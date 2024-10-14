@@ -1,24 +1,24 @@
 import { prisma } from '$lib/server/prisma';
-import { getPostSelect, getPostWhere } from '$lib/utils/post';
+import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-	const postsPromise = prisma.post.findMany({
+	const twiddlesPromise = prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getPostSelect(event.locals.session?.userId),
+		select: getTwiddleSelect(event.locals.session?.userId),
 		where: {
 			OR: [
 				{
-					AND: [{ author: { privacySettings: { private: false } } }, getPostWhere()]
+					AND: [{ author: { privacySettings: { private: false } } }, getTwiddleWhere()]
 				},
 				{
-					AND: [{ authorId: event.locals.session?.userId }, getPostWhere()]
+					AND: [{ authorId: event.locals.session?.userId }, getTwiddleWhere()]
 				}
 			]
 		}
 	});
 
 	return {
-		postsPromise
+		twiddlesPromise
 	};
 };
