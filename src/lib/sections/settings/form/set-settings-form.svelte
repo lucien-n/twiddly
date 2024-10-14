@@ -8,24 +8,27 @@
 	interface Props {
 		label: string;
 		action: string;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		form: SuperForm<any>;
 		children: Snippet;
 	}
 	const { label, action, form, children }: Props = $props();
 
-	const { form: formData, enhance, errors, submitting, tainted } = form;
+	const { form: formData, enhance, submitting, tainted } = form;
 </script>
 
-<form method="post" {action} use:enhance>
+{#if browser}
+	<div class="absolute right-0 p-5">
+		<SuperDebug data={$formData} />
+	</div>
+{/if}
+
+<form method="post" {action} use:enhance class="flex h-full flex-col">
 	<h1 class="mb-5 text-3xl font-bold">{label}</h1>
 
 	{@render children()}
 
-	<Form.Errors errors={$errors._errors} />
-
-	<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
-
-	{#if browser}
-		<SuperDebug data={$formData} />
-	{/if}
+	<div class="mt-auto py-5">
+		<Form.Button class="w-full" disabled={$submitting || !$tainted}>Save</Form.Button>
+	</div>
 </form>
