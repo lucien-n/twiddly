@@ -11,7 +11,7 @@ export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
 
 	const profile = await prisma.profile.findFirst({
-		where: { handle },
+		where: { handle, user: { deletedAt: null } },
 		select: getProfileSelect()
 	});
 	if (!profile) error(404, `Profile @${handle} not found`);

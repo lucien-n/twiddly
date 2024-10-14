@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { userId } = event.locals.session;
 	const privacySettings = await prisma.privacySettings.findFirst({
-		where: { userId },
+		where: { userId, profile: { user: { deletedAt: null } } },
 		select: {
 			private: true
 		}

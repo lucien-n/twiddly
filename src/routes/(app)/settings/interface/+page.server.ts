@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { userId } = event.locals.session;
 	const interfaceSettings = await prisma.interfaceSettings.findFirst({
-		where: { userId },
+		where: { userId, profile: { user: { deletedAt: null } } },
 		select: {
 			theme: true
 		}

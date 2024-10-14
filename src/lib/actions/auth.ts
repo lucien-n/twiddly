@@ -149,3 +149,25 @@ export const sendOtpEmail: Action = async (event) => {
 		throw new Error('An unexpected error occured');
 	}
 };
+
+export const deleteAccount: Action = async (event) => {
+	if (!isAuthenticated(event)) {
+		return redirect(302, route('/'));
+	}
+
+	try {
+		await prisma.user.update({
+			data: { deletedAt: new Date() },
+			where: { id: event.locals.session.userId, deletedAt: null },
+			select: {
+				id: true // EMPTY SELECT
+			}
+		});
+	} catch (e) {
+		if (dev) console.error(e);
+
+		throw new Error('An unexpected error occured');
+	}
+
+	await signOut(event);
+};

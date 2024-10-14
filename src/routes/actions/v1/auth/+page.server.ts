@@ -1,4 +1,11 @@
-import { otpVerification, sendOtpEmail, signIn, signOut, signUp } from '$lib/actions/auth';
+import {
+	deleteAccount,
+	otpVerification,
+	sendOtpEmail,
+	signIn,
+	signOut,
+	signUp
+} from '$lib/actions/auth';
 import type { Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
@@ -6,5 +13,6 @@ export const actions: Actions = {
 	signUp,
 	signOut,
 	otpVerification,
-	sendOtpEmail
+	sendOtpEmail,
+	deleteAccount
 };

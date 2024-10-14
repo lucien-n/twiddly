@@ -25,5 +25,6 @@ export const getTwiddleOrderBy = (
 
 export const getTwiddleWhere = (where?: Prisma.TwiddleWhereInput): Prisma.TwiddleWhereInput => ({
 	deletedAt: null,
+	author: { user: { deletedAt: null } },
 	...where
 });

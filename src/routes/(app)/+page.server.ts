@@ -7,6 +7,7 @@ export const load: PageServerLoad = async (event) => {
 		orderBy: { createdAt: 'desc' },
 		select: getTwiddleSelect(event.locals.session?.userId),
 		where: {
+			author: { user: { deletedAt: null } },
 			OR: [
 				{
 					AND: [{ author: { privacySettings: { private: false } } }, getTwiddleWhere()]

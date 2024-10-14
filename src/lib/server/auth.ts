@@ -1,16 +1,15 @@
+import { dev } from '$app/environment';
 import { handleField } from '$lib/schemas/auth/fields';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
 import { type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import { generateIdFromEntropySize, type Session } from 'lucia';
+import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
+import { alphabet, generateRandomString } from 'oslo/crypto';
+import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
-
-import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
-import { generateRandomString, alphabet } from 'oslo/crypto';
-import { sendOTPVerificationEmail } from './email';
-import { dev } from '$app/environment';
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -83,7 +82,7 @@ export const signInWithEmailAndPassword = async (
 	password: string
 ): Promise<void> => {
 	const existingUser = await prisma.user.findFirst({
-		where: { email },
+		where: { email, deletedAt: null },
 		select: { id: true, passwordHash: true }
 	});
 	if (!existingUser) {
