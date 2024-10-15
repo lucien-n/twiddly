@@ -33,5 +33,6 @@ export const HANDLES_BLACKLIST: string[] = [
 	'sign-up', // ? already rejected since they contain dashes
 	'verify',
 	'actions',
-	'api'
+	'api',
+	'healthz'
 ];
