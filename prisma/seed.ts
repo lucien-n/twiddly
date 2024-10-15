@@ -19,19 +19,17 @@ const getRandomDateBetweenNowAndThen = (thenDays: number = 14): Date => {
 	return date;
 };
 
-const emptyTables = async (db: PrismaClient) => {
-	const deletes = [
+const emptyTables = async (db: PrismaClient) =>
+	db.$transaction([
 		db.like.deleteMany(),
 		db.twiddle.deleteMany(),
 		db.interfaceSettings.deleteMany(),
 		db.privacySettings.deleteMany(),
 		db.profile.deleteMany(),
 		db.session.deleteMany(),
-		db.user.deleteMany()
-	];
-
-	await db.$transaction(deletes);
-};
+		db.user.deleteMany(),
+		db.handleBlacklist.deleteMany()
+	]);
 
 const seedHandleBlacklist = async (db: PrismaClient): Promise<void> => {
 	const baseBlacklist: string[] = ['settings', 'sign-in', 'sign-up', 'verify', 'actions', 'api'];
