@@ -1,4 +1,3 @@
-import { route } from '$lib/ROUTES';
 import { z } from 'zod';
 
 export const displayNameField = z

@@ -33,10 +33,8 @@ export const signUpWithEmailAndPassword = async (
 ): Promise<User> => {
 	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
 
-	const existingHandle = await prisma.profile.findFirst({
-		where: { handle: meta.handle }
-	});
-	if (existingHandle) throw new AuthError(AuthErrorCode.HandleAlreadyInUse);
+	const handleError = await checkHandle(meta.handle);
+	if (handleError) throw new AuthError(handleError);
 
 	const existingUserEmail = await prisma.user.findFirst({
 		where: { email }
@@ -171,6 +169,26 @@ export const verifyVerificationCode = async (
 	if (databaseCode.email !== user.email) return false;
 
 	return true;
+};
+
+export const checkHandle = async (handle: string): Promise<AuthErrorCode | undefined> => {
+	const result = await prisma.$transaction([
+		prisma.handleBlacklist.findFirst({ where: { handle } }),
+		prisma.profile.findFirst({
+			where: { handle },
+			select: {
+				id: true // EMPTY SELECT
+			}
+		})
+	]);
+
+	if (result[0]) {
+		return AuthErrorCode.InvalidHandle;
+	}
+
+	if (result[1]) {
+		return AuthErrorCode.HandleAlreadyInUse;
+	}
 };
 
 export const isAuthenticated = (

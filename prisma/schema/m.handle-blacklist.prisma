@@ -1,0 +1,3 @@
+model HandleBlacklist {
+    handle String @id @unique
+}

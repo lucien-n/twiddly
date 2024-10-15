@@ -10,7 +10,9 @@ import {
 	mEmailVerificationCodeDelete,
 	mEmailVerificationCodeDeleteMany,
 	mEmailVerificationCodeFindFirst,
+	mHandleBlacklistFindFirst,
 	mProfileFindFirst,
+	mTransaction,
 	mUserCreate,
 	mUserFindFirst
 } from '$tests/mocks/prisma';
@@ -18,6 +20,7 @@ import { baseProfileFixtureA } from '$tests/fixtures/profile';
 import { baseSessionFixtureA } from '$tests/fixtures/session';
 import { baseUserFixtureA } from '$tests/fixtures/user';
 import {
+	checkHandle,
 	hashPassword,
 	isAuthenticated,
 	isVerified,
@@ -53,6 +56,7 @@ describe('auth', () => {
 		vi.resetAllMocks();
 
 		mSendOTPVerificationEmail.mockResolvedValue(true);
+		mTransaction.mockResolvedValue([null, null]);
 	});
 
 	describe('hashPassword', () => {
@@ -97,7 +101,8 @@ describe('auth', () => {
 			expect(result).toBeDefined();
 			expect(mProfileFindFirst).toHaveBeenCalledTimes(1);
 			expect(mProfileFindFirst).toHaveBeenCalledWith({
-				where: { handle: baseProfileFixtureA.handle }
+				where: { handle: baseProfileFixtureA.handle },
+				select: { id: true }
 			});
 			expect(mUserFindFirst).toHaveBeenCalledTimes(1);
 			expect(mUserFindFirst).toHaveBeenCalledWith({ where: { email: baseUserFixtureA.email } });
@@ -135,7 +140,7 @@ describe('auth', () => {
 		});
 
 		it('should throw error if handle is already in use', async () => {
-			mProfileFindFirst.mockResolvedValue(baseProfileFixtureA);
+			mTransaction.mockResolvedValue([null, { id: baseUserFixtureA.id }]);
 
 			await expect(
 				signUpWithEmailAndPassword(mRequestEvent, 'different@mail.com', mPassword, {
@@ -154,11 +159,23 @@ describe('auth', () => {
 			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
 		});
 
-		it('should throw error if handle is invalid (in blacklist)', async () => {
+		it('should throw error if handle is invalid (in hardcoded blacklist)', async () => {
 			await expect(
 				signUpWithEmailAndPassword(mRequestEvent, 'different@mail.com', mPassword, {
 					displayName: baseProfileFixtureA.displayName,
 					handle: 'verify'
+				})
+			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
+		});
+
+		it('should throw error if handle is invalid (in db blacklist)', async () => {
+			const mHandle = 'blacklistedHandle';
+			mTransaction.mockResolvedValue([{ handle: mHandle }, null]);
+
+			await expect(
+				signUpWithEmailAndPassword(mRequestEvent, 'different@mail.com', mPassword, {
+					displayName: baseProfileFixtureA.displayName,
+					handle: mHandle
 				})
 			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
 		});
@@ -348,6 +365,41 @@ describe('auth', () => {
 			expect(mEmailVerificationCodeDelete).toHaveBeenCalledWith({
 				where: { id: relationalEmailVerificationCodeFixtureA.id }
 			});
+		});
+	});
+
+	describe('checkHandle', () => {
+		it('should not return error for valid handle', async () => {
+			const mHandle = 'handle';
+
+			const result = await checkHandle(mHandle);
+
+			expect(result).toBeUndefined();
+			expect(mProfileFindFirst).toHaveBeenCalledWith({
+				where: { handle: mHandle },
+				select: { id: true }
+			});
+			expect(mHandleBlacklistFindFirst).toHaveBeenCalledWith({
+				where: { handle: mHandle }
+			});
+		});
+
+		it('should return invalid handle auth error code for blacklisted handle', async () => {
+			const mHandle = 'blacklistedHandle';
+			mTransaction.mockResolvedValue([{ handle: mHandle }, null]);
+
+			const result = await checkHandle(mHandle);
+
+			expect(result).toEqual(AuthErrorCode.InvalidHandle);
+		});
+
+		it('should return handle already used auth error code for duplicated handle', async () => {
+			const mHandle = 'usedHandle';
+			mTransaction.mockResolvedValue([null, { id: 'userId' }]);
+
+			const result = await checkHandle(mHandle);
+
+			expect(result).toEqual(AuthErrorCode.HandleAlreadyInUse);
 		});
 	});
 

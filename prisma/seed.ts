@@ -33,6 +33,12 @@ const emptyTables = async (db: PrismaClient) => {
 	await db.$transaction(deletes);
 };
 
+const seedHandleBlacklist = async (db: PrismaClient): Promise<void> => {
+	const baseBlacklist: string[] = ['settings', 'sign-in', 'sign-up', 'verify', 'actions', 'api'];
+
+	await db.handleBlacklist.createMany({ data: baseBlacklist.map((handle) => ({ handle })) });
+};
+
 const createUsers = async (db: PrismaClient): Promise<User[]> => {
 	const users: User[] = [];
 
@@ -146,6 +152,7 @@ const main = async () => {
 
 	await emptyTables(db);
 
+	await seedHandleBlacklist(db);
 	const users = await createUsers(db);
 	await seedTwiddles(db, users);
 };
