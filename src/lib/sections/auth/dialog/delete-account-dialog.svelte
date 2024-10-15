@@ -30,7 +30,9 @@
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<AlertDialog.Title>Delete account</AlertDialog.Title>
-			<AlertDialog.Description>This action CAN be undone.</AlertDialog.Description>
+			<AlertDialog.Description
+				>This action CAN be undone.<br />Your account will be marked for deletion after 30 days.</AlertDialog.Description
+			>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
