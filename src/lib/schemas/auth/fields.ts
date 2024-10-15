@@ -1,3 +1,4 @@
+import { route } from '$lib/ROUTES';
 import { z } from 'zod';
 
 export const displayNameField = z
@@ -19,9 +20,19 @@ export const handleField = z
 	.max(22, { message: 'Handle must be at most 22 characters long' })
 	.regex(/^[a-zA-Z0-9_]+$/, {
 		message: 'Handle can only contain letters, numbers, and underscores'
-	});
+	})
+	.refine((handle) => !HANDLES_BLACKLIST.includes(handle), 'Invalid handle');
 
 export const otpField = z
 	.string()
 	.length(6)
 	.regex(/^[A-Z0-9]{6}$/);
+
+export const HANDLES_BLACKLIST: string[] = [
+	'settings',
+	'sign-in', // ? already rejected since they contain dashes
+	'sign-up', // ? already rejected since they contain dashes
+	'verify',
+	'actions',
+	'api'
+];

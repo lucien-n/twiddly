@@ -6,8 +6,10 @@ export default defineConfig({
 	plugins: [kitRoutes(), sveltekit()],
 	test: {
 		include: ['tests/src/**/*.test.ts'],
+		exclude: ['src/lib/ROUTES.ts'],
 		coverage: {
-			all: false
+			all: false,
+			exclude: ['src/lib/ROUTES.ts', 'tests/']
 		}
 	},
 	resolve: {
