@@ -22,6 +22,7 @@
 <PageInfos
 	title="{profile.displayName}'s profile"
 	description="{profile.displayName}'s profile & latest posts"
+	author={profile.handle}
 />
 
 <div class="flex h-screen max-h-screen flex-col">
