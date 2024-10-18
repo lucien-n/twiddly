@@ -29,8 +29,9 @@ export const otpField = z
 
 export const HANDLES_BLACKLIST: string[] = [
 	'settings',
-	'sign-in', // ? already rejected since they contain dashes
-	'sign-up', // ? already rejected since they contain dashes
+	'sign-in', // ? already rejected since it contains a dash
+	'sign-up', // ? already rejected since it contains a dash
+	'sitemaps.xml', // ? already rejected since it contains a dot
 	'verify',
 	'actions',
 	'api',

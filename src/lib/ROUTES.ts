@@ -37,7 +37,8 @@ const SERVERS = {
   "POST /api/v1/twiddle/[id]/unlike": (params: { id: (string | number) }) => {
     return `/api/v1/twiddle/${params.id}/unlike`
   },
-  "GET /healthz": `/healthz`
+  "GET /healthz": `/healthz`,
+  "GET /sitemaps.xml": `/sitemaps.xml`
 }
 
 /**
@@ -161,7 +162,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/settings': never, '/settings/interface': never, '/settings/privacy': never }
-  SERVERS: { 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id', 'GET /healthz': never }
+  SERVERS: { 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id', 'GET /healthz': never, 'GET /sitemaps.xml': never }
   ACTIONS: { 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
   Params: { handle: never, twiddleId: never, id: never }
