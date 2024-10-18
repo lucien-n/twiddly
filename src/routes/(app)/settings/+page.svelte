@@ -3,6 +3,7 @@
 	import { Button } from '&/button';
 	import { ChevronRight } from 'lucide-svelte';
 	import { DeleteAccountDialog } from '@/auth';
+	import { PageInfos } from '$lib/components/page-infos';
 
 	const paths: { label: string; href: string }[] = [
 		{
@@ -17,6 +18,8 @@
 
 	let openDeleteAccountDialog = $state(false);
 </script>
+
+<PageInfos title="Settings" description="Customize your experience on Twiddly" />
 
 <div class="flex h-screen flex-col">
 	<h1 class="mb-5 text-5xl font-bold">Settings</h1>

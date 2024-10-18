@@ -3,10 +3,13 @@
 	import { TwiddleList, SetTwiddleForm } from '@/twiddle';
 	import type { PageData } from './$types';
 	import { Scrollable } from '$lib/components/scrollable';
+	import { PageInfos } from '$lib/components/page-infos';
 
 	const { data } = $props();
 	const { twiddlesPromise, setTwiddleForm }: PageData = data;
 </script>
+
+<PageInfos title="Twiddly" description="Interact with the latest twiddles" />
 
 <Scrollable>
 	<SetTwiddleForm {setTwiddleForm} action={route('setTwiddle /actions/v1/twiddle')} />

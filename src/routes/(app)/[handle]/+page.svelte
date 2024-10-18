@@ -7,6 +7,7 @@
 	import { TwiddleList } from '@/twiddle/index.js';
 	import { ProfileAvatar, SetProfileDialog } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
+	import { PageInfos } from '$lib/components/page-infos';
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
@@ -17,6 +18,11 @@
 
 	let openEditProfileDialog: boolean = $state(false);
 </script>
+
+<PageInfos
+	title="{profile.displayName}'s profile"
+	description="{profile.displayName}'s profile & latest posts"
+/>
 
 <div class="flex h-screen max-h-screen flex-col">
 	<div class="flex py-4">

@@ -4,12 +4,14 @@
 	import { navigating } from '$app/stores';
 	import '../app.css';
 	import { fly } from 'svelte/transition';
+	import { PageInfos } from '$lib/components/page-infos';
 
 	const { children } = $props();
 </script>
 
 <Toaster richColors />
 <ModeWatcher />
+<PageInfos title="Twiddly" description="Share and connect with your peers" />
 
 {#if $navigating}
 	<div class="absolute z-[9] w-full" transition:fly={{ y: -100, duration: 100 }}>

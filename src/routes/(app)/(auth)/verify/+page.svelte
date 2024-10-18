@@ -11,6 +11,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { OTPInput } from '$lib/components/input';
+	import { PageInfos } from '$lib/components/page-infos';
 
 	const { data } = $props();
 
@@ -41,6 +42,8 @@
 		};
 	};
 </script>
+
+<PageInfos title="Verify" description="Verify the OTP (one time password) sent to your email" />
 
 <AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
 	{#snippet children()}
