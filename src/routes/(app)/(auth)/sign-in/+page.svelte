@@ -6,7 +6,7 @@
 	const { data } = $props();
 </script>
 
-<PageInfos title="Sign In" description="Sign in to your Twiddly account" />
+<PageInfos/>
 
 <AuthLayout title="Sign In" description="Enter your email below to sign in to your account">
 	{#snippet children()}

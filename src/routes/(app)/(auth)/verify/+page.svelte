@@ -43,7 +43,7 @@
 	};
 </script>
 
-<PageInfos title="Verify" description="Verify the OTP (one time password) sent to your email" />
+<PageInfos />
 
 <AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
 	{#snippet children()}

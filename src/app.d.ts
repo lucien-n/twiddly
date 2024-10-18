@@ -13,7 +13,15 @@ declare global {
 			session: import('lucia').Session | null;
 			profile: ProfileWithSettings | null;
 		}
-		// interface PageData {}
+		interface PageData {
+			infos: {
+				title: string;
+				description?: string;
+				author?: string;
+				image?: string;
+				imageType?: string;
+			};
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}

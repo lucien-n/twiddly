@@ -11,7 +11,7 @@
 
 <Toaster richColors />
 <ModeWatcher />
-<PageInfos title="Twiddly" description="Share and connect with your peers" />
+<PageInfos />
 
 {#if $navigating}
 	<div class="absolute z-[9] w-full" transition:fly={{ y: -100, duration: 100 }}>
