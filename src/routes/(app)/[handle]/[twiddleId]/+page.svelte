@@ -7,13 +7,19 @@
 	import { ChevronLeft } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { PageInfos } from '$lib/components/page-infos';
+	import { getProfileAvatar } from '$lib/utils/avatar';
 
 	const { data } = $props();
 	const { twiddle, setTwiddleForm }: PageData = data;
 </script>
 
 {#if twiddle}
-	<PageInfos title="{twiddle.author.displayName} on Twiddly: {twiddle.content}" />
+	<PageInfos
+		title="{twiddle.author.displayName} on Twiddly: {twiddle.content}"
+		description={twiddle.content}
+		author={twiddle.author.handle}
+		imageHref={getProfileAvatar(twiddle.author)}
+	/>
 {/if}
 
 {#if twiddle}

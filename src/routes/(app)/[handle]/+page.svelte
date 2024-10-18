@@ -8,6 +8,7 @@
 	import { ProfileAvatar, SetProfileDialog } from '@/profile';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 	import { PageInfos } from '$lib/components/page-infos';
+	import { getProfileAvatar } from '$lib/utils/avatar.js';
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
@@ -23,6 +24,7 @@
 	title="{profile.displayName}'s profile"
 	description="{profile.displayName}'s profile & latest posts"
 	author={profile.handle}
+	imageHref={getProfileAvatar(profile)}
 />
 
 <div class="flex h-screen max-h-screen flex-col">
