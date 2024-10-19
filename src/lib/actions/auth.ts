@@ -21,7 +21,7 @@ import { superValidate, setError } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const signIn: Action = async (event) => {
-	if (event.locals.session) {
+	if (isAuthenticated(event)) {
 		redirect(302, route('/'));
 	}
 
@@ -53,7 +53,7 @@ export const signIn: Action = async (event) => {
 };
 
 export const signUp: Action = async (event) => {
-	if (event.locals.session) {
+	if (isAuthenticated(event)) {
 		redirect(302, route('/'));
 	}
 
@@ -90,7 +90,7 @@ export const signUp: Action = async (event) => {
 };
 
 export const signOut: Action = async (event) => {
-	if (!event.locals.session) {
+	if (!isAuthenticated(event)) {
 		return redirect(302, route('/'));
 	}
 
@@ -106,7 +106,7 @@ export const signOut: Action = async (event) => {
 };
 
 export const otpVerification: Action = async (event) => {
-	if (!event.locals.session || !event.locals.user) {
+	if (isVerified(event) || !isAuthenticated(event)) {
 		return redirect(302, route('/'));
 	}
 
