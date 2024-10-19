@@ -1,48 +1,44 @@
-import { MAINTENANCE_MODE } from '$env/static/private';
 import { route } from '$lib/ROUTES';
-import { handlerRedirect } from '$lib/server/utils';
+import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
 import { Role } from '@prisma/client';
 import { error, type Handle } from '@sveltejs/kit';
 
+const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];
+
 const unauthicatedAutorizedRoutes = [
-	route('/sign-in'),
+	...signInRoutes,
 	route('/sign-up'),
-	route('signIn /actions/v1/auth'),
 	route('signUp /actions/v1/auth')
 ];
 
-type MaintenanceMode = 0 | 1 | 2;
-
 export const handleRouting: Handle = ({ event, resolve }) => {
-	const maintenanceMode: MaintenanceMode = ['0', '1', '2'].includes(MAINTENANCE_MODE)
-		? (parseInt(MAINTENANCE_MODE) as MaintenanceMode)
-		: 1; // default to 1: site accessible only by admins
-
-	switch (maintenanceMode) {
+	switch (getMaintenanceMode()) {
+		// todo: DRYify
 		case 1:
-			// still allow access to sign in route
-			if (
-				event.locals.profile?.role !== Role.ADMIN &&
-				![route('/sign-in'), route('signIn /actions/v1/auth').split('?')[0]].includes(
-					event.url.pathname
-				)
-			) {
-				return handlerRedirect(303, route('/sign-in'));
+			if (event.locals.profile) {
+				if (event.locals.profile.role === Role.ADMIN) break;
+				else throw error(503, 'Twiddly is under maintenance');
 			}
-			break;
+
+			// still allow access to sign in route
+			if (signInRoutes.some((p) => p.split('?')[0] === event.url.pathname)) {
+				break;
+			}
+
+			return handlerRedirect(303, '/sign-in');
 		case 2:
 			throw error(503, 'Twiddly is under maintenance');
 	}
 
 	if (event.url.pathname.startsWith('<admin-route>') && event.locals.profile?.role !== Role.ADMIN) {
-		return handlerRedirect(303, route('/'));
+		return handlerRedirect(303, '/');
 	}
 
 	if (
 		!event.locals.session &&
 		!unauthicatedAutorizedRoutes.some((pathname) => pathname.split('?')[0] === event.url.pathname)
 	) {
-		return handlerRedirect(303, route('/sign-in'));
+		return handlerRedirect(303, '/sign-in');
 	}
 
 	return resolve(event);
