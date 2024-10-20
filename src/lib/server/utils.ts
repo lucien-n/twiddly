@@ -7,6 +7,18 @@ export const handlerRedirect = (status: number, key: Parameters<typeof route>[0]
 		headers: { location: route(key) }
 	});
 
-export type MaintenanceMode = 0 | 1 | 2;
-export const getMaintenanceMode = (): MaintenanceMode =>
-	['0', '1', '2'].includes(MAINTENANCE_MODE) ? (parseInt(MAINTENANCE_MODE) as MaintenanceMode) : 1;
+export enum MaintenanceMode {
+	UNRESTRICTED = 0,
+	ADMIN_ONLY = 1,
+	LOCKED = 2
+}
+
+export const getMaintenanceMode = (): MaintenanceMode => {
+	const mode = parseInt(MAINTENANCE_MODE ?? '1');
+
+	if (Object.values(MaintenanceMode).includes(mode)) {
+		return mode;
+	}
+
+	return MaintenanceMode.ADMIN_ONLY;
+};

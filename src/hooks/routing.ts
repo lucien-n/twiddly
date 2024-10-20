@@ -1,42 +1,39 @@
 import { route } from '$lib/ROUTES';
-import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
+import { getMaintenanceMode, handlerRedirect, MaintenanceMode } from '$lib/server/utils';
 import { Role } from '@prisma/client';
 import { error, type Handle } from '@sveltejs/kit';
 
 const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];
 
-const unauthicatedAutorizedRoutes = [
+const unauthentiicatedAutorizedRoutes = [
 	...signInRoutes,
 	route('/sign-up'),
 	route('signUp /actions/v1/auth')
 ];
 
 export const handleRouting: Handle = ({ event, resolve }) => {
-	switch (getMaintenanceMode()) {
-		// todo: DRYify
-		case 1:
-			if (event.locals.profile) {
-				if (event.locals.profile.role === Role.ADMIN) break;
-				else throw error(503, 'Twiddly is under maintenance');
-			}
+	const maintenanceMode = getMaintenanceMode();
+	const isAdmin = event.locals.profile?.role === Role.ADMIN;
 
-			// still allow access to sign in route
-			if (signInRoutes.some((p) => p.split('?')[0] === event.url.pathname)) {
-				break;
-			}
+	if (maintenanceMode === MaintenanceMode.ADMIN_ONLY && !isAdmin) {
+		if (signInRoutes.some((p) => p.split('?')[0] === event.url.pathname)) {
+			return resolve(event);
+		}
 
-			return handlerRedirect(303, '/sign-in');
-		case 2:
-			throw error(503, 'Twiddly is under maintenance');
+		throw error(503, 'Twiddly is under maintenance (Admin access only).');
 	}
 
-	if (event.url.pathname.startsWith('<admin-route>') && event.locals.profile?.role !== Role.ADMIN) {
+	if (maintenanceMode === MaintenanceMode.LOCKED) {
+		throw error(503, 'Twiddly is under maintenance.');
+	}
+
+	if (event.url.pathname.startsWith('/admin') && !isAdmin) {
 		return handlerRedirect(303, '/');
 	}
 
 	if (
 		!event.locals.session &&
-		!unauthicatedAutorizedRoutes.some((pathname) => pathname.split('?')[0] === event.url.pathname)
+		!unauthentiicatedAutorizedRoutes.some((p) => p.split('?')[0] === event.url.pathname)
 	) {
 		return handlerRedirect(303, '/sign-in');
 	}

@@ -9,6 +9,6 @@ model User {
     updatedAt DateTime @updatedAt()
 
     sessions              Session[]
-    profile               Profile[]
+    profile               Profile?
     emailVerificationCode EmailVerificationCode[]
 }

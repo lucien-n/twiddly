@@ -3,7 +3,8 @@ export enum AuthErrorCode {
 	InvalidCredentials = 'auth/invalid-credentials',
 	InvalidHandle = 'auth/invalid-handle',
 	HandleAlreadyInUse = 'auth/handle-already-in-use',
-	AuthRequired = 'auth/auth-required'
+	AuthRequired = 'auth/auth-required',
+	Unauthorized = 'auth/Unauthorized'
 }
 
 export class AuthError extends Error {
