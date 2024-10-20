@@ -3,7 +3,7 @@ model EmailVerificationCode {
     code      String
     email     String
     expiresAt DateTime
-    userId    String
+    userId    String   @unique
 
     user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 }

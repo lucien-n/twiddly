@@ -10,5 +10,5 @@ model User {
 
     sessions              Session[]
     profile               Profile?
-    emailVerificationCode EmailVerificationCode[]
+    emailVerificationCode EmailVerificationCode?
 }

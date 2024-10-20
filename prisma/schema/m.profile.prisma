@@ -6,10 +6,9 @@ model Profile {
     avatarBackgroundColor AvatarBackgroundColor?
     role                  Role                   @default(USER)
 
-    user     User      @relation(references: [id], fields: [id], onDelete: Cascade)
-    twiddles Twiddle[]
-
+    user              User               @relation(references: [id], fields: [id], onDelete: Cascade)
     interfaceSettings InterfaceSettings?
     privacySettings   PrivacySettings?
+    twiddles          Twiddle[]
     likes             Like[]
 }
