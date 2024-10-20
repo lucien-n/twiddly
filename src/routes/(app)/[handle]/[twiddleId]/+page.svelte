@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { PageInfos } from '$lib/components/page-infos';
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/button';
@@ -10,8 +9,6 @@
 	const { data } = $props();
 	const { twiddle, setTwiddleForm }: PageData = data;
 </script>
-
-<PageInfos />
 
 <TwiddleContext init={{ data: twiddle, setTwiddleForm }}>
 	{#snippet children(twiddle)}

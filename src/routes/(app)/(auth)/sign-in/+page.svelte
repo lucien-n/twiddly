@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { PageInfos } from '$lib/components/page-infos';
 	import { route } from '$lib/ROUTES';
 	import { AuthLayout, SignInForm } from '@/auth';
 
 	const { data } = $props();
 </script>
-
-<PageInfos/>
 
 <AuthLayout title="Sign In" description="Enter your email below to sign in to your account">
 	{#snippet children()}
