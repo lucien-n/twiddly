@@ -1,3 +1,5 @@
+import { mGetMaintenanceMode } from '$tests/mocks/utils';
+import { mSendOTPVerificationEmail } from '$tests/mocks/email';
 import {
 	mCreateBlankSessionCookie,
 	mCreateSession,
@@ -16,9 +18,6 @@ import {
 	mUserCreate,
 	mUserFindFirst
 } from '$tests/mocks/prisma';
-import { baseProfileFixtureA } from '$tests/fixtures/profile';
-import { baseSessionFixtureA } from '$tests/fixtures/session';
-import { baseUserFixtureA } from '$tests/fixtures/user';
 import {
 	checkHandle,
 	hashPassword,
@@ -30,10 +29,15 @@ import {
 	verifyPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
+import { MaintenanceMode } from '$lib/server/types';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
+import { baseProfileFixtureA } from '$tests/fixtures/profile';
+import { baseSessionFixtureA } from '$tests/fixtures/session';
+import { baseUserFixtureA } from '$tests/fixtures/user';
 import type { RequestEvent } from '@sveltejs/kit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Role } from '@prisma/client';
 
 const mPassword = 'password';
 const mHashedPassword =
@@ -46,17 +50,13 @@ const mRequestEvent = {
 	locals: {}
 } as unknown as RequestEvent;
 
-const mSendOTPVerificationEmail = vi.fn();
-vi.mock('$lib/server/email', () => ({
-	sendOTPVerificationEmail: (...args: unknown[]) => mSendOTPVerificationEmail(...args)
-}));
-
 describe('auth', () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
 
 		mSendOTPVerificationEmail.mockResolvedValue(true);
 		mTransaction.mockResolvedValue([null, null]);
+		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.UNRESTRICTED);
 	});
 
 	describe('hashPassword', () => {
@@ -227,6 +227,31 @@ describe('auth', () => {
 			await expect(
 				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, 'wrong-password')
 			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidCredentials));
+		});
+
+		it('should throw error if site is under admin access only and user is unauthorized', async () => {
+			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN_ONLY);
+
+			await expect(
+				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
+			).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		});
+
+		it('should sign in if site is under admin access only and user is authorized', async () => {
+			mUserFindFirst.mockResolvedValue({
+				...baseUserFixtureA,
+				profile: {
+					role: Role.ADMIN
+				}
+			});
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN_ONLY);
+			mCreateSession.mockResolvedValue(baseSessionFixtureA);
+			mCreateSessionCookie.mockResolvedValue({
+				cookieName: mSessionCookieName
+			});
+
+			await signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword);
 		});
 	});
 

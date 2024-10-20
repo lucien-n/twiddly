@@ -10,7 +10,8 @@ import { alphabet, generateRandomString } from 'oslo/crypto';
 import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
-import { getMaintenanceMode, MaintenanceMode } from './utils';
+import { getMaintenanceMode } from './utils';
+import { MaintenanceMode } from './types';
 
 export const hashOptions = {
 	memoryCost: 19456,

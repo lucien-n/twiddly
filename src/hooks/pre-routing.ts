@@ -1,4 +1,5 @@
-import { getMaintenanceMode, MaintenanceMode } from '$lib/server/utils';
+import { MaintenanceMode } from '$lib/server/types';
+import { getMaintenanceMode } from '$lib/server/utils';
 import type { Handle } from '@sveltejs/kit';
 import { error } from 'console';
 

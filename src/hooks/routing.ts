@@ -1,5 +1,6 @@
 import { route } from '$lib/ROUTES';
-import { getMaintenanceMode, handlerRedirect, MaintenanceMode } from '$lib/server/utils';
+import { MaintenanceMode } from '$lib/server/types';
+import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
 import { Role } from '@prisma/client';
 import { error, type Handle } from '@sveltejs/kit';
 
