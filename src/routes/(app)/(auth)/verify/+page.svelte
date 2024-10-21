@@ -44,7 +44,12 @@
 
 <AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
 	{#snippet children()}
-		<form method="post" action={route('otpVerification /actions/v1/auth')} use:enhance>
+		<form
+			method="post"
+			action={route('otpVerification /actions/v1/auth')}
+			use:enhance
+			class="space-y-4"
+		>
 			<Form.Field {form} name="otp">
 				<Form.Control let:attrs>
 					<Form.Label>Code</Form.Label>
@@ -54,7 +59,7 @@
 
 			<Form.Errors errors={$errors._errors} />
 
-			<Form.LoadingButton class="mt-3 w-full" {loading} disabled={!$tainted}>
+			<Form.LoadingButton class="w-full" {loading} disabled={!$tainted}>
 				{loading ? 'Verifying' : 'Verify'}
 			</Form.LoadingButton>
 		</form>

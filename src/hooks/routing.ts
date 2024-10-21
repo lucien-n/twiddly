@@ -6,7 +6,7 @@ import { error, type Handle } from '@sveltejs/kit';
 
 const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];
 
-const unauthentiicatedAutorizedRoutes = [
+const unauthenticatedAutorizedRoutes = [
 	...signInRoutes,
 	route('/sign-up'),
 	route('signUp /actions/v1/auth')
@@ -34,7 +34,7 @@ export const handleRouting: Handle = ({ event, resolve }) => {
 
 	if (
 		!event.locals.session &&
-		!unauthentiicatedAutorizedRoutes.some((p) => p.split('?')[0] === event.url.pathname)
+		!unauthenticatedAutorizedRoutes.some((p) => p.split('?')[0] === event.url.pathname)
 	) {
 		return handlerRedirect(303, '/sign-in');
 	}

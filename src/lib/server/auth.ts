@@ -63,7 +63,6 @@ export const signUpWithEmailAndPassword = async (
 	await createSession(id, event);
 
 	const verificationCode = await generateEmailVerificationCode(id, email);
-	if (dev) console.log(`Verification code for ${email}:`, verificationCode);
 	const success = await sendOTPVerificationEmail(verificationCode, {
 		email,
 		name: meta.displayName
@@ -71,6 +70,8 @@ export const signUpWithEmailAndPassword = async (
 
 	if (!success) {
 		throw new Error('Could not send verification code email');
+	} else if (dev) {
+		console.log(`Verification code sent for "${email}":`, verificationCode);
 	}
 
 	return user;

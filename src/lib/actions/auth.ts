@@ -68,7 +68,7 @@ export const signUp: Action = async (event) => {
 	const { email, password, displayName, handle } = signUpForm.data;
 
 	try {
-		await signUpWithEmailAndPassword(event, email, password, { displayName, handle });
+		await signUpWithEmailAndPassword(event, email.toLowerCase(), password, { displayName, handle });
 	} catch (e) {
 		if (dev) console.error(e);
 

@@ -7,7 +7,7 @@
 
 <AuthLayout title="Sign In" description="Enter your email below to sign in to your account">
 	{#snippet children()}
-		<SignInForm data={data.signInForm} />
+		<SignInForm data={data.signInForm} class="space-y-4" />
 	{/snippet}
 
 	{#snippet footer()}
