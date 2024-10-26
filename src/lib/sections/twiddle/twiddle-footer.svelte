@@ -2,15 +2,7 @@
 	import { Dropdown } from '$lib/components/dropdown';
 	import { Button, buttonVariants } from '&/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
-	import {
-		EllipsisVertical,
-		Heart,
-		MessageCircle,
-		Pencil,
-		Repeat2,
-		Share2,
-		Trash
-	} from 'lucide-svelte';
+	import { EllipsisVertical, Heart, MessageCircle, Pencil, Share2, Trash } from 'lucide-svelte';
 	import { getTwiddleState } from './state/twiddle-state.svelte';
 
 	const authState = getAuthState();
@@ -21,15 +13,6 @@
 		event.stopPropagation();
 
 		comments++;
-	};
-
-	let retwiddles = $state(0);
-	let retwiddled = $state(false);
-	const handleRetwiddle = async (event: Event) => {
-		event.stopPropagation();
-
-		retwiddled = !retwiddled;
-		retwiddles += retwiddled ? 1 : -1;
 	};
 
 	const handleLike = async (event: Event) => {
@@ -55,17 +38,7 @@
 		<MessageCircle class="h-4 w-4" />
 		<span>{comments}</span>
 	</Button>
-	<Button
-		variant="ghost"
-		size="icon"
-		class={`flex w-auto items-center space-x-2 px-2 transition-colors duration-200 ${
-			retwiddled ? 'text-green-500' : 'hover:text-green-500'
-		}`}
-		onclick={handleRetwiddle}
-	>
-		<Repeat2 class="h-4 w-4" />
-		<span>{retwiddles}</span>
-	</Button>
+
 	<Button
 		variant="ghost"
 		size="icon"
