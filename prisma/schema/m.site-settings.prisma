@@ -1,0 +1,3 @@
+model SiteSettings {
+    maintenanceMode MaintenanceMode @unique @default(Open)
+}

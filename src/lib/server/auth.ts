@@ -2,7 +2,7 @@ import { dev } from '$app/environment';
 import { handleField } from '$lib/schemas/auth/fields';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
-import { Role, type Profile, type User } from '@prisma/client';
+import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import { generateIdFromEntropySize, type Session } from 'lucia';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
@@ -11,7 +11,6 @@ import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 import { getMaintenanceMode } from './utils';
-import { MaintenanceMode } from './types';
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -33,6 +32,13 @@ export const signUpWithEmailAndPassword = async (
 	password: string,
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
+	switch (getMaintenanceMode(event)) {
+		case MaintenanceMode.Verified:
+		case MaintenanceMode.AdminOnly:
+		case MaintenanceMode.Locked:
+			throw new AuthError(AuthErrorCode.Unauthorized);
+	}
+
 	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
 
 	const handleError = await checkHandle(meta.handle);
@@ -84,17 +90,31 @@ export const signInWithEmailAndPassword = async (
 ): Promise<void> => {
 	const existingUser = await prisma.user.findFirst({
 		where: { email, deletedAt: null },
-		select: { id: true, passwordHash: true, profile: { select: { role: true } } }
+		select: {
+			id: true,
+			passwordHash: true,
+			emailVerified: true,
+			profile: { select: { role: true } }
+		}
 	});
 	if (!existingUser) {
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}
 
-	if (
-		getMaintenanceMode() === MaintenanceMode.ADMIN_ONLY &&
-		existingUser.profile?.role !== Role.ADMIN
-	)
-		throw new AuthError(AuthErrorCode.Unauthorized);
+	switch (getMaintenanceMode(event)) {
+		case MaintenanceMode.Verified: {
+			if (!existingUser.emailVerified) throw new AuthError(AuthErrorCode.Unauthorized);
+			break;
+		}
+		case MaintenanceMode.AdminOnly: {
+			if (existingUser.profile?.role !== Role.ADMIN)
+				throw new AuthError(AuthErrorCode.Unauthorized);
+			break;
+		}
+		case MaintenanceMode.Locked: {
+			throw new AuthError(AuthErrorCode.Unauthorized);
+		}
+	}
 
 	const validPassword = await verifyPassword(password, existingUser.passwordHash);
 	if (!validPassword) {

@@ -1,6 +1,6 @@
-import { MAINTENANCE_MODE } from '$env/static/private';
 import { route } from '$lib/ROUTES';
-import { MaintenanceMode } from './types';
+import { MaintenanceMode } from '@prisma/client';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export const handlerRedirect = (status: number, key: Parameters<typeof route>[0]) =>
 	new Response(null, {
@@ -8,12 +8,5 @@ export const handlerRedirect = (status: number, key: Parameters<typeof route>[0]
 		headers: { location: route(key) }
 	});
 
-export const getMaintenanceMode = (): MaintenanceMode => {
-	const mode = parseInt(MAINTENANCE_MODE ?? '1');
-
-	if (Object.values(MaintenanceMode).includes(mode)) {
-		return mode;
-	}
-
-	return MaintenanceMode.ADMIN_ONLY;
-};
+export const getMaintenanceMode = (event: RequestEvent): MaintenanceMode =>
+	event.locals.siteSettings?.maintenanceMode ?? MaintenanceMode.AdminOnly;

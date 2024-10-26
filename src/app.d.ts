@@ -12,6 +12,7 @@ declare global {
 			user: import('lucia').User | null;
 			session: import('lucia').Session | null;
 			profile: ProfileWithSettings | null;
+			siteSettings: import('@prisma/client').SiteSettings | null;
 		}
 		interface PageData {
 			infos: {

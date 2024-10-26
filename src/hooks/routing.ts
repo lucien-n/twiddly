@@ -1,43 +1,48 @@
 import { route } from '$lib/ROUTES';
-import { MaintenanceMode } from '$lib/server/types';
+import { isVerified } from '$lib/server/auth';
 import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
-import { Role } from '@prisma/client';
-import { error, type Handle } from '@sveltejs/kit';
+import { MaintenanceMode, Role } from '@prisma/client';
+import { error, type Handle, type RequestEvent } from '@sveltejs/kit';
 
 const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];
 
-const unauthenticatedAutorizedRoutes = [
-	...signInRoutes,
-	route('/sign-up'),
-	route('signUp /actions/v1/auth')
-];
+const isInRoute = (event: RequestEvent, routes: string[]) =>
+	routes.some((p) => p.split('?')[0] === event.url.pathname);
 
-export const handleRouting: Handle = ({ event, resolve }) => {
-	const maintenanceMode = getMaintenanceMode();
-	const isAdmin = event.locals.profile?.role === Role.ADMIN;
-
-	if (maintenanceMode === MaintenanceMode.ADMIN_ONLY && !isAdmin) {
-		if (signInRoutes.some((p) => p.split('?')[0] === event.url.pathname)) {
-			return resolve(event);
+export const handleRouting: {
+	beforeAuth: Handle;
+	afterAuth: Handle;
+} = {
+	beforeAuth: ({ event, resolve }) => {
+		if (getMaintenanceMode(event) === MaintenanceMode.Locked) {
+			error(503, 'Twiddly is under maintenance.');
 		}
 
-		throw error(503, 'Twiddly is under maintenance (Admin access only).');
-	}
+		return resolve(event);
+	},
+	afterAuth: ({ event, resolve }) => {
+		const maintenanceMode = getMaintenanceMode(event);
+		const isAdmin = event.locals.profile?.role === Role.ADMIN;
 
-	if (maintenanceMode === MaintenanceMode.LOCKED) {
-		throw error(503, 'Twiddly is under maintenance.');
-	}
+		switch (maintenanceMode) {
+			case MaintenanceMode.Verified: {
+				if (isVerified(event) || isInRoute(event, signInRoutes)) break;
 
-	if (event.url.pathname.startsWith('/admin') && !isAdmin) {
-		return handlerRedirect(303, '/');
-	}
+				error(503, 'Twiddly access is locked (Verified users only).');
+				break;
+			}
+			case MaintenanceMode.AdminOnly: {
+				if (isAdmin || isInRoute(event, signInRoutes)) break;
 
-	if (
-		!event.locals.session &&
-		!unauthenticatedAutorizedRoutes.some((p) => p.split('?')[0] === event.url.pathname)
-	) {
-		return handlerRedirect(303, '/sign-in');
-	}
+				error(503, 'Twiddly access is locked (Admin only).');
+				break;
+			}
+		}
 
-	return resolve(event);
+		if (event.url.pathname.startsWith('/admin') && !isAdmin) {
+			return handlerRedirect(303, '/');
+		}
+
+		return resolve(event);
+	}
 };
