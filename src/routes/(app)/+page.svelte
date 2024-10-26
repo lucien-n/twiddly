@@ -5,10 +5,10 @@
 	import type { PageData } from './$types';
 
 	const { data } = $props();
-	const { twiddlesPromise, setTwiddleForm }: PageData = data;
+	const { twiddles, setTwiddleForm }: PageData = data;
 </script>
 
 <Scrollable>
 	<SetTwiddleForm {setTwiddleForm} action={route('setTwiddle /actions/v1/twiddle')} />
-	<TwiddleList twiddles={twiddlesPromise} {setTwiddleForm} />
+	<TwiddleList {twiddles} {setTwiddleForm} />
 </Scrollable>

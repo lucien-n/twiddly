@@ -6,7 +6,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
-	import TwiddleContentField from './fields/twiddle-content-field.svelte';
+	import { getTwiddleState, TwiddleContentField } from '@/twiddle';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
@@ -18,13 +18,33 @@
 		validators: zodClient(setTwiddleSchema),
 		onError: onSuperFormError
 	});
-	const { enhance, submitting, errors } = form;
+	const { enhance, submitting, errors, form: formData } = form;
+
+	const twiddleState = getTwiddleState();
 
 	const loading = $derived($submitting);
+	const isComment = $derived(!!setTwiddleForm.data.parentId);
 </script>
 
 <form method="post" {action} use:enhance>
-	<TwiddleContentField {form} />
+	<TwiddleContentField
+		{form}
+		placeholder={isComment
+			? `Share your thoughts on ${twiddleState.data.author.displayName}'s twiddle !`
+			: undefined}
+	/>
+
+	<Form.Field {form} name="id">
+		<Form.Control let:attrs>
+			<input {...attrs} bind:value={$formData.id} hidden />
+		</Form.Control>
+	</Form.Field>
+
+	<Form.Field {form} name="parentId">
+		<Form.Control let:attrs>
+			<input {...attrs} bind:value={$formData.parentId} hidden />
+		</Form.Control>
+	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />
 
@@ -33,7 +53,7 @@
 			{#if !loading}
 				<Send class="mr-2" />
 			{/if}
-			<p>Twiddle</p>
+			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
 	</div>
 </form>

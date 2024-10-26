@@ -18,7 +18,7 @@ export const setTwiddle: Action = async (event) => {
 
 	try {
 		const { data } = setTwiddleForm;
-		const { id } = data;
+		const { id, parentId } = data;
 		// primitive formatting
 		const content = data.content.trimEnd();
 
@@ -30,24 +30,37 @@ export const setTwiddle: Action = async (event) => {
 					id: true // EMPTY SELECT
 				}
 			});
-		} else {
-			const twiddle = await prisma.twiddle.create({
-				data: { id: nanoid(), content, authorId: event.locals.session.userId },
+
+			return { setTwiddleForm };
+		}
+
+		if (parentId) {
+			await prisma.twiddle.create({
+				data: { id: nanoid(), content, authorId: event.locals.session.userId, parentId },
 				select: {
-					id: true,
-					author: {
-						select: {
-							handle: true
-						}
-					}
+					id: true // EMPTY SELECT
 				}
 			});
 
-			redirect(
-				303,
-				route('/[handle]/[twiddleId]', { handle: twiddle.author.handle, twiddleId: twiddle.id })
-			);
+			return { setTwiddleForm };
 		}
+
+		const twiddle = await prisma.twiddle.create({
+			data: { id: nanoid(), content, authorId: event.locals.session.userId },
+			select: {
+				id: true,
+				author: {
+					select: {
+						handle: true
+					}
+				}
+			}
+		});
+
+		redirect(
+			303,
+			route('/[handle]/[twiddleId]', { handle: twiddle.author.handle, twiddleId: twiddle.id })
+		);
 	} catch (e) {
 		if (dev) console.error(e);
 
@@ -55,8 +68,4 @@ export const setTwiddle: Action = async (event) => {
 
 		return error(500, { message: 'An error occured' });
 	}
-
-	return {
-		setTwiddleForm
-	};
 };

@@ -11,5 +11,9 @@ model Twiddle {
     authorId String
     author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
 
+    parentId String?
+    parent   Twiddle?  @relation("TwiddleToTwiddle", fields: [parentId], references: [id])
+    children Twiddle[] @relation("TwiddleToTwiddle")
+
     likes Like[]
 }

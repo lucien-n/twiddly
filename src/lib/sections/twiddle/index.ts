@@ -3,7 +3,7 @@ import TwiddleCard from './twiddle-card.svelte';
 import TwiddleCardSkeleton from './twiddle-card-skeleton.svelte';
 import TwiddleFooter from './twiddle-footer.svelte';
 import TwiddleList from './twiddle-list.svelte';
-import { SetTwiddleForm } from './form';
+import { SetTwiddleForm, TwiddleContentField } from './form';
 import { TwiddleContext } from './state';
 
 export {
@@ -14,7 +14,8 @@ export {
 	TwiddleFooter,
 	SetTwiddleForm,
 	TwiddleContext,
-	TwiddleList
+	TwiddleList,
+	TwiddleContentField
 };
 
 export * from './state';

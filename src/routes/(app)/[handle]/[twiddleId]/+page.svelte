@@ -3,14 +3,13 @@
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/button';
 	import { ProfileAvatar } from '@/profile';
-	import { TwiddleContext, TwiddleFooter } from '@/twiddle';
-	import type { PageData } from './$types';
+	import { SetTwiddleForm, TwiddleContext, TwiddleFooter, TwiddleList } from '@/twiddle';
+	import { Separator } from '&/separator';
 
 	const { data } = $props();
-	const { twiddle, setTwiddleForm }: PageData = data;
 </script>
 
-<TwiddleContext init={{ data: twiddle, setTwiddleForm }}>
+<TwiddleContext init={{ data: data.twiddle, setTwiddleForm: data.setTwiddleForm }}>
 	{#snippet children(twiddle)}
 		<div class="p-4">
 			<div class="mb-2 flex items-center gap-3 p-6">
@@ -42,6 +41,25 @@
 			</div>
 			<div class="flex items-center justify-between p-6 py-3 pt-0">
 				<TwiddleFooter />
+			</div>
+
+			<Separator class="mb-8 mt-4" />
+
+			<div class="mb-8">
+				<SetTwiddleForm
+					action={route('setTwiddle /actions/v1/twiddle')}
+					setTwiddleForm={data.setCommentForm}
+				/>
+			</div>
+
+			<div class="flex h-full">
+				{#if twiddle.data.children?.length}
+					<div class="h-full w-full">
+						<TwiddleList twiddles={twiddle.data.children} setTwiddleForm={data.setTwiddleForm} />
+					</div>
+				{:else}
+					<h1 class="mx-auto self-center text-3xl font-bold">No one commented yet</h1>
+				{/if}
 			</div>
 		</div>
 	{/snippet}

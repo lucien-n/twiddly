@@ -6,13 +6,14 @@ import { getContext, setContext } from 'svelte';
 import { toast } from 'svelte-sonner';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-export type TwiddleData = Pick<
-	Twiddle,
-	'id' | 'editedAt' | 'content' | 'likeCount' | 'createdAt'
-> & {
+type BaseTwiddleData = Pick<Twiddle, 'id' | 'editedAt' | 'content' | 'likeCount' | 'createdAt'> & {
 	author: Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'>;
 } & {
 	likes: Pick<Like, 'profileId'>[];
+};
+
+export type TwiddleData = BaseTwiddleData & {
+	children?: BaseTwiddleData[];
 };
 
 type SetTwiddleForm = SuperValidated<Infer<SetTwiddlechema>>;

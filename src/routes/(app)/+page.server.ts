@@ -1,9 +1,10 @@
 import { prisma } from '$lib/server/prisma';
 import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
+import type { TwiddleData } from '@/twiddle';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-	const twiddlesPromise = prisma.twiddle.findMany({
+	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
 		select: getTwiddleSelect(event.locals.session?.userId),
 		where: {
@@ -19,7 +20,8 @@ export const load: PageServerLoad = async (event) => {
 		}
 	});
 
+	// todo: rework
 	return {
-		twiddlesPromise
+		twiddles: twiddles as unknown as TwiddleData[]
 	};
 };

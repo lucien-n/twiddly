@@ -7,9 +7,10 @@
 
 	interface Props {
 		form: SuperForm<Infer<SetTwiddlechema>>;
+		placeholder?: string;
 	}
 
-	const { form }: Props = $props();
+	const { form, placeholder }: Props = $props();
 	const { form: formData, constraints } = form;
 
 	const authState = getAuthState();
@@ -35,7 +36,7 @@
 			class="resize-none text-lg"
 			minlength={$constraints.content?.minlength}
 			maxlength={$constraints.content?.maxlength}
-			placeholder="What's up {authState.profile?.displayName ?? 'Stranger'} ?"
+			placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
 		/>
 		<p class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground">
 			{content.length}/{$constraints.content?.maxlength}
