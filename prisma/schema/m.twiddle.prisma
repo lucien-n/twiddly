@@ -12,7 +12,7 @@ model Twiddle {
     author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
 
     parentId String?
-    parent   Twiddle?  @relation("TwiddleToTwiddle", fields: [parentId], references: [id])
+    parent   Twiddle?  @relation("TwiddleToTwiddle", references: [id], fields: [parentId], onDelete: Cascade)
     children Twiddle[] @relation("TwiddleToTwiddle")
 
     likes Like[]
