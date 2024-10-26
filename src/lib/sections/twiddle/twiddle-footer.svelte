@@ -8,6 +8,7 @@
 	const authState = getAuthState();
 	const twiddle = getTwiddleState();
 
+	// todo: base this on twiddle's state
 	let comments = $state(0);
 	const handleComment = async (event: Event) => {
 		event.stopPropagation();
