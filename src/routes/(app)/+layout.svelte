@@ -5,7 +5,7 @@
 
 	const { children, data } = $props();
 
-	let bannerOpen = $state(!data.user?.emailVerified);
+	let bannerOpen = $state(!!data.user && !data.user?.emailVerified);
 </script>
 
 <AuthContext init={{ user: data.user, session: data.session, profile: data.profile }}>

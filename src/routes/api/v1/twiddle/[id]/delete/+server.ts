@@ -10,7 +10,7 @@ export const POST: RequestHandler = async (event) => {
 	const { id: twiddleId } = event.params;
 	try {
 		const result = await prisma.twiddle.update({
-			data: { deletedAt: new Date() },
+			data: { deletedAt: new Date(), parent: { update: { commentCount: { decrement: 1 } } } },
 			where: { id: twiddleId, authorId: event.locals.session.userId },
 			select: {
 				id: true // EMPTY SELECT

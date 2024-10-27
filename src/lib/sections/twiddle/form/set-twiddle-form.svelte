@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
-	import { onSuperFormError } from '$lib/utils/super-form';
+	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/form';
 	import { Send } from 'lucide-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
 	import { getTwiddleState, TwiddleContentField } from '@/twiddle';
+	import { toast } from 'svelte-sonner';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
@@ -16,7 +17,12 @@
 
 	const form = superForm(setTwiddleForm, {
 		validators: zodClient(setTwiddleSchema),
-		onError: onSuperFormError
+		onError: onSuperFormError,
+		onResult: (event) =>
+			handleSuperResult(event, {
+				onFailure: (result) =>
+					toast.warning(result.status === 401 ? 'You must be signed-in' : 'An error occured')
+			})
 	});
 	const { enhance, submitting, errors, form: formData } = form;
 

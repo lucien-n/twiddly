@@ -1,11 +1,22 @@
+import { formatTwiddle } from '$lib';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
-import { getTwiddleOrderBy, getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import { getProfileSelect } from '$lib/utils/profile';
+import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
+
+const getTwiddles = async (profileId: string, currentUserId?: string) => {
+	const twiddles = await prisma.twiddle.findMany({
+		orderBy: { createdAt: 'desc' },
+		select: getTwiddleSelect(currentUserId),
+		where: getTwiddleWhere({ authorId: profileId })
+	});
+
+	return twiddles.map((t) => formatTwiddle(t, currentUserId));
+};
 
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
@@ -18,18 +29,9 @@ export const load: PageServerLoad = async (event) => {
 	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
 		error(401, `@${handle}'s profile is private`);
 
-	const twiddlesPromise = prisma.twiddle
-		.findMany({
-			select: getTwiddleSelect(event.locals.session?.userId),
-			where: getTwiddleWhere({ authorId: profile.id }),
-			orderBy: getTwiddleOrderBy(),
-			take: 10
-		})
-		.then((twiddles) => twiddles.map((twiddle) => ({ ...twiddle, author: profile })));
-
 	return {
 		profile,
-		twiddlesPromise,
+		twiddles: await getTwiddles(profile.id, event.locals.session?.userId),
 		setProfileForm: await superValidate(profile, zod(setProfileSchema))
 	};
 };

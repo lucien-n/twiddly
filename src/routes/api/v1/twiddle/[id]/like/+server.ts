@@ -5,7 +5,7 @@ import type { RequestHandler } from './$types';
 import { isVerified } from '$lib/server/auth';
 
 export const POST: RequestHandler = async (event) => {
-	if (!isVerified(event)) return error(401, AuthErrorCode.AuthRequired);
+	if (!isVerified(event)) error(401, AuthErrorCode.AuthRequired);
 
 	const { id: twiddleId } = event.params;
 	try {
@@ -35,6 +35,6 @@ export const POST: RequestHandler = async (event) => {
 
 		return json({ data: result[1].likeCount });
 	} catch {
-		return error(500, 'Could not like twiddle');
+		error(500, 'Could not like twiddle');
 	}
 };

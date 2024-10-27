@@ -35,12 +35,21 @@ export const setTwiddle: Action = async (event) => {
 		}
 
 		if (parentId) {
-			await prisma.twiddle.create({
-				data: { id: nanoid(), content, authorId: event.locals.session.userId, parentId },
-				select: {
-					id: true // EMPTY SELECT
-				}
-			});
+			await prisma.$transaction([
+				prisma.twiddle.create({
+					data: {
+						id: nanoid(),
+						content,
+						authorId: event.locals.session.userId,
+						parentId
+					},
+
+					select: {
+						id: true // EMPTY SELECT
+					}
+				}),
+				prisma.twiddle.update({ where: { id: parentId }, data: { commentCount: { increment: 1 } } })
+			]);
 
 			return { setTwiddleForm };
 		}

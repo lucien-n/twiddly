@@ -1,6 +1,4 @@
-import type { Prisma } from '@prisma/client';
-
-export const getProfileSelect = (): Prisma.ProfileSelect & Prisma.ProfileInclude => ({
+export const getProfileSelect = () => ({
 	id: true,
 	role: true,
 	handle: true,

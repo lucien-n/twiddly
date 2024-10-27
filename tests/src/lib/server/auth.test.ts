@@ -29,7 +29,6 @@ import {
 	verifyPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
-import { MaintenanceMode } from '$lib/server/types';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
 import { baseProfileFixtureA } from '$tests/fixtures/profile';
@@ -37,7 +36,7 @@ import { baseSessionFixtureA } from '$tests/fixtures/session';
 import { baseUserFixtureA } from '$tests/fixtures/user';
 import type { RequestEvent } from '@sveltejs/kit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Role } from '@prisma/client';
+import { MaintenanceMode, Role } from '@prisma/client';
 
 const mPassword = 'password';
 const mHashedPassword =
@@ -56,7 +55,7 @@ describe('auth', () => {
 
 		mSendOTPVerificationEmail.mockResolvedValue(true);
 		mTransaction.mockResolvedValue([null, null]);
-		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.UNRESTRICTED);
+		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Open);
 	});
 
 	describe('hashPassword', () => {
@@ -231,7 +230,7 @@ describe('auth', () => {
 
 		it('should throw error if site is under admin access only and user is unauthorized', async () => {
 			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN_ONLY);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.AdminOnly);
 
 			await expect(
 				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
@@ -245,7 +244,7 @@ describe('auth', () => {
 					role: Role.ADMIN
 				}
 			});
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN_ONLY);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.AdminOnly);
 			mCreateSession.mockResolvedValue(baseSessionFixtureA);
 			mCreateSessionCookie.mockResolvedValue({
 				cookieName: mSessionCookieName

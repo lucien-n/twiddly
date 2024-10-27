@@ -1,6 +1,7 @@
 export interface ApiResponse<T> {
 	data?: T;
 	error?: string;
+	errorBody?: unknown;
 }
 
 export const fetcher = async <T>(
@@ -14,7 +15,8 @@ export const fetcher = async <T>(
 		if (!res.ok) {
 			const errorBody = (await res.json()) as ApiResponse<T>;
 			return {
-				error: errorBody.error || 'Something went wrong'
+				error: errorBody.error || 'Something went wrong',
+				errorBody
 			};
 		}
 

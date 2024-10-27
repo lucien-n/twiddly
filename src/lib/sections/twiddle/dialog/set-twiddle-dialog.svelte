@@ -46,7 +46,7 @@
 			...twiddle.data,
 			...form.data
 		};
-		twiddle.edited = true;
+		twiddle.data.isEdited = true;
 	};
 
 	const form = superForm(twiddle.setTwiddleForm, {

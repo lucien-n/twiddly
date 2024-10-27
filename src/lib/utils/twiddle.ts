@@ -6,12 +6,13 @@ export const isLiked = (
 	likes: Pick<Like, 'profileId'>[]
 ): boolean => !!currentUserId && likes.some(({ profileId }) => currentUserId === profileId);
 
-export const getTwiddleSelect = (currentUserId?: string): Prisma.TwiddleSelect => ({
+export const getTwiddleSelect = (currentUserId?: string) => ({
 	id: true,
 	editedAt: true,
 	content: true,
 	createdAt: true,
 	likeCount: true,
+	commentCount: true,
 	author: { select: getProfileSelect() },
 	likes: { where: { profileId: currentUserId } }
 });

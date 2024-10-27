@@ -10,7 +10,6 @@
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
-	const twiddlesPromise = $derived(data.twiddlesPromise);
 
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
@@ -51,7 +50,7 @@
 	<Separator class="my-5" />
 
 	<Scrollable>
-		<TwiddleList twiddles={twiddlesPromise} setTwiddleForm={data.setTwiddleForm} />
+		<TwiddleList twiddles={data.twiddles} setTwiddleForm={data.setTwiddleForm} />
 	</Scrollable>
 </div>
 

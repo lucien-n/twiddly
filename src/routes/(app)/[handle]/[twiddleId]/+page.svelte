@@ -3,7 +3,13 @@
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/button';
 	import { ProfileAvatar } from '@/profile';
-	import { SetTwiddleForm, TwiddleContext, TwiddleFooter, TwiddleList } from '@/twiddle';
+	import {
+		SetTwiddleForm,
+		TwiddleCard,
+		TwiddleContext,
+		TwiddleFooter,
+		TwiddleList
+	} from '@/twiddle';
 	import { Separator } from '&/separator';
 
 	const { data } = $props();
@@ -12,6 +18,13 @@
 <TwiddleContext init={{ data: data.twiddle, setTwiddleForm: data.setTwiddleForm }}>
 	{#snippet children(twiddle)}
 		<div class="p-4">
+			<!-- todo: rework parent twiddle card -->
+			{#if twiddle.data.parent}
+				<TwiddleContext init={{ data: twiddle.data.parent, setTwiddleForm: data.setTwiddleForm }}>
+					<TwiddleCard />
+				</TwiddleContext>
+			{/if}
+
 			<div class="mb-2 flex items-center gap-3 p-6">
 				<ProfileAvatar profile={twiddle.data.author} />
 				<div>
@@ -33,12 +46,13 @@
 					<span>
 						{formatDate(twiddle.data.createdAt)}
 					</span>
-					{#if twiddle.edited}
+					{#if twiddle.data.isEdited}
 						<span>·</span>
 						<span>Edited</span>
 					{/if}
 				</p>
 			</div>
+
 			<div class="flex items-center justify-between p-6 py-3 pt-0">
 				<TwiddleFooter />
 			</div>
@@ -53,9 +67,9 @@
 			</div>
 
 			<div class="flex h-full">
-				{#if twiddle.data.children?.length}
-					<div class="h-full w-full">
-						<TwiddleList twiddles={twiddle.data.children} setTwiddleForm={data.setTwiddleForm} />
+				{#if twiddle.data.comments?.length}
+					<div class="w-full space-y-3">
+						<TwiddleList twiddles={twiddle.data.comments} setTwiddleForm={data.setTwiddleForm} />
 					</div>
 				{:else}
 					<h1 class="mx-auto self-center text-3xl font-bold">No one commented yet</h1>

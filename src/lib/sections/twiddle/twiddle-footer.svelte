@@ -8,12 +8,10 @@
 	const authState = getAuthState();
 	const twiddle = getTwiddleState();
 
-	// todo: base this on twiddle's state
-	let comments = $state(0);
 	const handleComment = async (event: Event) => {
 		event.stopPropagation();
 
-		comments++;
+		// todo: redirect to twiddle page with comment form focused
 	};
 
 	const handleLike = async (event: Event) => {
@@ -37,19 +35,19 @@
 		onclick={handleComment}
 	>
 		<MessageCircle class="h-4 w-4" />
-		<span>{comments}</span>
+		<span>{twiddle.data.commentCount}</span>
 	</Button>
 
 	<Button
 		variant="ghost"
 		size="icon"
 		class={`flex w-auto items-center space-x-2 px-2 transition-colors duration-200 ${
-			twiddle.liked ? 'text-red-500' : 'hover:text-red-500'
+			twiddle.data.isLiked ? 'text-red-500' : 'hover:text-red-500'
 		}`}
 		onclick={handleLike}
 	>
-		<Heart class={`h-4 w-4 ${twiddle.liked ? 'fill-current' : ''}`} />
-		<span>{twiddle.likes}</span>
+		<Heart class={`h-4 w-4 ${twiddle.data.isLiked ? 'fill-current' : ''}`} />
+		<span>{twiddle.data.likeCount}</span>
 	</Button>
 </div>
 <div class="flex sm:space-x-5">

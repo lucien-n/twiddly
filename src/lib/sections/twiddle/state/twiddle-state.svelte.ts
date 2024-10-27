@@ -1,30 +1,21 @@
+import type { Twiddle } from '$lib';
 import { route } from '$lib/ROUTES';
 import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
+import { AuthErrorCode } from '$lib/utils/auth-error';
 import { fetcher } from '$lib/utils/fetcher';
-import type { Like, Profile, Twiddle } from '@prisma/client';
 import { getContext, setContext } from 'svelte';
 import { toast } from 'svelte-sonner';
 import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-type BaseTwiddleData = Pick<Twiddle, 'id' | 'editedAt' | 'content' | 'likeCount' | 'createdAt'> & {
-	author: Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'>;
-} & {
-	likes: Pick<Like, 'profileId'>[];
-};
-
-export type TwiddleData = BaseTwiddleData & {
-	children?: BaseTwiddleData[];
-};
-
 type SetTwiddleForm = SuperValidated<Infer<SetTwiddlechema>>;
 
 export interface TwiddleStateInit {
-	data: TwiddleData;
+	data: Twiddle;
 	setTwiddleForm: SetTwiddleForm;
 }
 
 export class TwiddleState {
-	data: TwiddleData = $state() as TwiddleData;
+	data: Twiddle = $state() as Twiddle;
 	setTwiddleForm: SetTwiddleForm = $state() as SetTwiddleForm;
 
 	openSetDialog: boolean = $state(false);
@@ -32,24 +23,25 @@ export class TwiddleState {
 	openShareDialog: boolean = $state(false);
 
 	deleted: boolean = $state(false);
-	edited: boolean = $state(false);
-	liked: boolean = $state(false);
-	likes: number = $state(0);
 
 	constructor({ data, setTwiddleForm }: TwiddleStateInit) {
 		this.data = data;
 		this.setTwiddleForm = setTwiddleForm;
-		this.likes = data.likeCount;
-		this.liked = data.likes.length > 0;
-		this.edited = !!data.editedAt;
 	}
 
 	async toggleLike() {
-		const url = this.liked
+		const url = this.data.isLiked
 			? route('POST /api/v1/twiddle/[id]/unlike', { id: this.data.id })
 			: route('POST /api/v1/twiddle/[id]/like', { id: this.data.id });
 
-		const { data, error } = await fetcher<number>(url, 'POST');
+		const { data, error, errorBody } = await fetcher<number>(url, 'POST');
+
+		if (errorBody && typeof errorBody === 'object' && 'message' in errorBody) {
+			if (errorBody.message === AuthErrorCode.AuthRequired) {
+				toast.warning('You must be signed-in');
+				return;
+			}
+		}
 
 		if (error) {
 			toast.error(error);
@@ -57,8 +49,8 @@ export class TwiddleState {
 		}
 
 		if (data !== undefined) {
-			this.likes = data;
-			this.liked = !this.liked;
+			this.data.likeCount = data;
+			this.data.isLiked = !this.data.isLiked;
 		}
 	}
 

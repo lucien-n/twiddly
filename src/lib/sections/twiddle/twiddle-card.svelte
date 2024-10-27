@@ -47,7 +47,7 @@
 			<span>
 				{formatDate(twiddle.data.createdAt)}E
 			</span>
-			{#if twiddle.data.editedAt}
+			{#if twiddle.data.isEdited}
 				<span>·</span>
 				<span>Edited</span>
 			{/if}

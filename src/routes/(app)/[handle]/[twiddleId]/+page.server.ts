@@ -1,24 +1,26 @@
+import { formatTwiddle } from '$lib';
+import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
 import { prisma } from '$lib/server/prisma';
 import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import { error } from 'console';
-import type { PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
+import type { PageServerLoad } from './$types';
 
 const getTwiddle = async (id: string, currentUserId?: string) => {
 	const twiddle = await prisma.twiddle.findFirst({
 		where: { id, ...getTwiddleWhere() },
 		select: {
 			...getTwiddleSelect(currentUserId),
-			children: { select: getTwiddleSelect(currentUserId) }
+			children: { select: getTwiddleSelect(currentUserId), where: getTwiddleWhere() },
+			parent: { select: getTwiddleSelect(currentUserId) }
 		}
 	});
 	if (!twiddle) {
 		throw error(404, "Uh oh, we couldn't find this twiddle");
 	}
 
-	return twiddle;
+	return formatTwiddle(twiddle, currentUserId);
 };
 
 export const load: PageServerLoad = async (event) => {

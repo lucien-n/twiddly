@@ -1,27 +1,29 @@
+import { formatTwiddle } from '$lib';
 import { prisma } from '$lib/server/prisma';
 import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
-import type { TwiddleData } from '@/twiddle';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async (event) => {
+const getTwiddles = async (currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getTwiddleSelect(event.locals.session?.userId),
+		select: getTwiddleSelect(currentUserId),
 		where: {
 			author: { user: { deletedAt: null } },
+			parent: null,
 			OR: [
 				{
 					AND: [{ author: { privacySettings: { private: false } } }, getTwiddleWhere()]
 				},
 				{
-					AND: [{ authorId: event.locals.session?.userId }, getTwiddleWhere()]
+					AND: [{ authorId: currentUserId }, getTwiddleWhere()]
 				}
 			]
 		}
 	});
 
-	// todo: rework
-	return {
-		twiddles: twiddles as unknown as TwiddleData[]
-	};
+	return twiddles.map((t) => formatTwiddle(t, currentUserId));
 };
+
+export const load: PageServerLoad = async (event) => ({
+	twiddles: await getTwiddles(event.locals.session?.userId)
+});

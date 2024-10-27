@@ -1,9 +1,10 @@
 model Twiddle {
-    id        String    @id
-    content   String
-    likeCount Int       @default(0)
-    deletedAt DateTime?
-    editedAt  DateTime?
+    id           String    @id
+    content      String
+    likeCount    Int       @default(0)
+    commentCount Int       @default(0)
+    deletedAt    DateTime?
+    editedAt     DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
