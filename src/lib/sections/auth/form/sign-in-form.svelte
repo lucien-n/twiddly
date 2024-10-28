@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PasswordInput } from '$lib/components/input';
+	import { PasswordInput } from '&/input';
 	import { route } from '$lib/ROUTES';
 	import { signInSchema, type SignInSchema } from '$lib/schemas/auth/sign-in';
 	import { onSuperFormError } from '$lib/utils/super-form';

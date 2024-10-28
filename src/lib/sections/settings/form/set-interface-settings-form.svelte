@@ -1,6 +1,6 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
-	import { Select } from '$lib/components/select';
+	import { SingleSelect } from '&/select';
 	import { route } from '$lib/ROUTES';
 	import {
 		setInterfaceSettingsSchema,
@@ -27,27 +27,29 @@
 	{form}
 >
 	<Form.Field {form} name="theme">
-		<Form.Control let:attrs>
-			<Form.Label>Theme</Form.Label>
-			<Form.Description>Your preferred appearance for the app interface</Form.Description>
-			<Select
-				{attrs}
-				options={[
-					{
-						label: 'Light',
-						value: Theme.LIGHT
-					},
-					{
-						label: 'Dark',
-						value: Theme.DARK
-					},
-					{
-						label: 'System',
-						value: Theme.SYSTEM
-					}
-				]}
-				bind:selectedOption={$formData.theme as Theme}
-			/>
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Theme</Form.Label>
+				<Form.Description>Your preferred appearance for the app interface</Form.Description>
+				<SingleSelect
+					{...props}
+					options={[
+						{
+							label: 'Light',
+							value: Theme.LIGHT
+						},
+						{
+							label: 'Dark',
+							value: Theme.DARK
+						},
+						{
+							label: 'System',
+							value: Theme.SYSTEM
+						}
+					]}
+					bind:value={$formData.theme as Theme}
+				/>
+			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>

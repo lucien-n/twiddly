@@ -5,7 +5,7 @@
 	import type { ColorSelectProps } from '.';
 
 	// eslint-disable-next-line no-undef
-	let { options, value: value = $bindable(), attrs }: ColorSelectProps<T> = $props();
+	let { options, value: value = $bindable(), ...props }: ColorSelectProps<T> = $props();
 </script>
 
 <div class="grid grid-flow-col justify-between">
@@ -34,4 +34,4 @@
 		</Tooltip.Root>
 	{/each}
 </div>
-<input hidden bind:value name={attrs?.name} />
+<input {...props} hidden bind:value />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { LoadingButton, type LoadingButtonProps } from '$lib/components/button';
+	import { LoadingButton, type LoadingButtonProps } from '&/button';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	const { children, ...props }: Omit<LoadingButtonProps, keyof HTMLAttributes<HTMLAnchorElement>> =

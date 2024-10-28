@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PasswordInput } from '$lib/components/input';
+	import { PasswordInput } from '&/input';
 	import { route } from '$lib/ROUTES';
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
 	import { generateHandle } from '$lib/utils/handle';

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Dropdown } from '$lib/components/dropdown';
-	import { Scrollable } from '$lib/components/scrollable';
+	import { Dropdown } from '&/dropdown';
+	import { Scrollable } from '&/scrollable';
 	import { Separator } from '&/ui/separator';
 	import * as Tooltip from '&/ui/tooltip';
 	import { getAuthState } from '@/auth';
 	import { ProfileAvatar, SetProfileDialog } from '@/profile';
-	import { TwiddleList } from '@/twiddle/index.js';
+	import { TwiddleList } from '@/twiddle';
 	import { EllipsisVertical, Lock } from 'lucide-svelte';
 
 	const { data } = $props();

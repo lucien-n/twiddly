@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Scrollable } from '$lib/components/scrollable';
+	import { Scrollable } from '&/scrollable';
 	import { route } from '$lib/ROUTES';
 	import { SetTwiddleForm, TwiddleList } from '@/twiddle';
 

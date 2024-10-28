@@ -1,8 +1,8 @@
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { handleAuth } from './lib/hooks/auth';
-import { handleRouting } from './lib/hooks/routing';
-import { handleSiteSettings } from './lib/hooks/site-settings';
+import { handleAuth } from './hooks/auth';
+import { handleRouting } from './hooks/routing';
+import { handleSiteSettings } from './hooks/site-settings';
 
 export const handle: Handle = sequence(
 	handleSiteSettings,

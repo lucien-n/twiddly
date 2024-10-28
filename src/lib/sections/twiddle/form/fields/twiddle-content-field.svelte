@@ -29,18 +29,22 @@
 </script>
 
 <Form.Field {form} name="content" class="relative">
-	<Form.Control let:attrs>
-		<Textarea
-			{...props}
-			bind:value={$formData.content as string}
-			{rows}
-			class="resize-none text-lg"
-			minlength={$constraints.content?.minlength}
-			maxlength={$constraints.content?.maxlength}
-			placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
-		/>
-		<p class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground">
-			{content.length}/{$constraints.content?.maxlength}
-		</p>
+	<Form.Control>
+		{#snippet children({ props })}
+			<Textarea
+				{...props}
+				bind:value={$formData.content as string}
+				{rows}
+				class="resize-none text-lg"
+				minlength={$constraints.content?.minlength}
+				maxlength={$constraints.content?.maxlength}
+				placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
+			/>
+			<p
+				class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground"
+			>
+				{content.length}/{$constraints.content?.maxlength}
+			</p>
+		{/snippet}
 	</Form.Control>
 </Form.Field>

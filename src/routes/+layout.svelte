@@ -4,7 +4,7 @@
 	import { navigating } from '$app/stores';
 	import '../app.css';
 	import { fly } from 'svelte/transition';
-	import { PageInfos } from '$lib/components/page-infos';
+	import { PageInfos } from '&/page-infos';
 
 	const { children } = $props();
 </script>

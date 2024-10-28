@@ -10,7 +10,7 @@
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { OTPInput } from '$lib/components/input';
+	import { OTPInput } from '&/input';
 
 	const { data } = $props();
 

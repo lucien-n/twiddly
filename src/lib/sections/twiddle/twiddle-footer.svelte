@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Dropdown } from '$lib/components/dropdown';
+	import { Dropdown } from '&/dropdown';
 	import { Button, buttonVariants } from '&/ui/button';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import { EllipsisVertical, Heart, MessageCircle, Pencil, Share2, Trash } from 'lucide-svelte';

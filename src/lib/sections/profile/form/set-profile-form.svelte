@@ -1,7 +1,7 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { ColorSelect } from '$lib/components/select';
+	import { ColorSelect } from '&/select';
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
