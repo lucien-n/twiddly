@@ -10,13 +10,15 @@
 
 	const twiddle = getTwiddleState();
 
+	const twiddleHref = $derived(
+		route('/[handle]/[twiddleId]', {
+			handle: twiddle.data.author.handle,
+			twiddleId: twiddle.data.id
+		})
+	);
+
 	const redirectToTwiddle = () => {
-		goto(
-			route('/[handle]/[twiddleId]', {
-				handle: twiddle.data.author.handle,
-				twiddleId: twiddle.data.id
-			})
-		);
+		goto(twiddleHref);
 	};
 </script>
 
@@ -44,9 +46,9 @@
 	<Card.Content>
 		<p class="mb-2 text-foreground">{twiddle.data.content}</p>
 		<p class="flex gap-1 text-sm text-muted-foreground">
-			<span>
-				{formatDate(twiddle.data.createdAt)}E
-			</span>
+			<a href={twiddleHref} aria-label={twiddle.data.content}>
+				{formatDate(twiddle.data.createdAt)}
+			</a>
 			{#if twiddle.data.isEdited}
 				<span>·</span>
 				<span>Edited</span>
