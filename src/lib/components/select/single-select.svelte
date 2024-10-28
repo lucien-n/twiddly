@@ -5,7 +5,7 @@
 	// eslint-disable-next-line no-undef
 	let { options, value = $bindable(), placeholder, ...props }: SingleSelectProps<T> = $props();
 
-	let triggerContent = $derived(options.find((opt) => opt.value === value) ?? placeholder);
+	let triggerContent = $derived(options.find((opt) => opt.value === value)?.label ?? placeholder);
 </script>
 
 <Select.Root bind:value type="single" name={props?.name}>
