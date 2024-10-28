@@ -31,7 +31,7 @@
 <Form.Field {form} name="content" class="relative">
 	<Form.Control let:attrs>
 		<Textarea
-			{...attrs}
+			{...props}
 			bind:value={$formData.content as string}
 			{rows}
 			class="resize-none text-lg"

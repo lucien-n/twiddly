@@ -83,11 +83,11 @@
 			</div>
 
 			<Form.Field {form} name="id">
-				<Form.Control >
-					{#snippet children({ attrs })}
-										<input {...attrs} hidden bind:value={$formData.id} />
-														{/snippet}
-								</Form.Control>
+				<Form.Control>
+					{#snippet children({ props })}
+						<input {...props} hidden bind:value={$formData.id} />
+					{/snippet}
+				</Form.Control>
 			</Form.Field>
 
 			<Dialog.Footer>

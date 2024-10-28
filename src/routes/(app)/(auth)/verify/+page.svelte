@@ -51,12 +51,12 @@
 			class="space-y-4"
 		>
 			<Form.Field {form} name="otp">
-				<Form.Control >
-					{#snippet children({ attrs })}
-										<Form.Label>Code</Form.Label>
-						<OTPInput {attrs} bind:value={$formData.otp} />
-														{/snippet}
-								</Form.Control>
+				<Form.Control>
+					{#snippet children({ props })}
+						<Form.Label>Code</Form.Label>
+						<OTPInput {...props} bind:value={$formData.otp} />
+					{/snippet}
+				</Form.Control>
 			</Form.Field>
 
 			<Form.Errors errors={$errors._errors} />

@@ -41,19 +41,19 @@
 	/>
 
 	<Form.Field {form} name="id">
-		<Form.Control >
-			{#snippet children({ attrs })}
-						<input {...attrs} bind:value={$formData.id} hidden />
-								{/snippet}
-				</Form.Control>
+		<Form.Control>
+			{#snippet children({ props })}
+				<input {...props} bind:value={$formData.id} hidden />
+			{/snippet}
+		</Form.Control>
 	</Form.Field>
 
 	<Form.Field {form} name="parentId">
-		<Form.Control >
-			{#snippet children({ attrs })}
-						<input {...attrs} bind:value={$formData.parentId} hidden />
-								{/snippet}
-				</Form.Control>
+		<Form.Control>
+			{#snippet children({ props })}
+				<input {...props} bind:value={$formData.parentId} hidden />
+			{/snippet}
+		</Form.Control>
 	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />

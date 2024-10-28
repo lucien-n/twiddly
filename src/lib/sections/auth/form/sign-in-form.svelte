@@ -25,22 +25,22 @@
 
 <form method="POST" action={route('signIn /actions/v1/auth')} use:enhance class={className}>
 	<Form.Field {form} name="email">
-		<Form.Control >
-			{#snippet children({ attrs })}
-						<Form.Label>Email</Form.Label>
-				<Input {...attrs} bind:value={$formData.email} />
-								{/snippet}
-				</Form.Control>
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Email</Form.Label>
+				<Input {...props} bind:value={$formData.email} />
+			{/snippet}
+		</Form.Control>
 		<!-- <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="password">
-		<Form.Control >
-			{#snippet children({ attrs })}
-						<Form.Label>Password</Form.Label>
-				<PasswordInput bind:value={$formData.password} {attrs} />
-								{/snippet}
-				</Form.Control>
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Password</Form.Label>
+				<PasswordInput {...props} bind:value={$formData.password} />
+			{/snippet}
+		</Form.Control>
 		<!-- <Form.FieldErrors /> -->
 	</Form.Field>
 

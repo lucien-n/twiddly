@@ -40,7 +40,7 @@
 		<Dialog.Footer>
 			<Dialog.Close class="mr-3">Close</Dialog.Close>
 			<Button
-				on:click={() =>
+				onclick={() =>
 					copyToClipboard(
 						url,
 						(message) => toast.success(message),

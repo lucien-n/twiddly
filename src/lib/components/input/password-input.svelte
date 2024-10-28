@@ -4,7 +4,7 @@
 	import { Eye, EyeOff } from 'lucide-svelte';
 	import type { PasswordInputProps } from '.';
 
-	let { value = $bindable(), showPassword = $bindable(), attrs }: PasswordInputProps = $props();
+	let { value = $bindable(), showPassword = $bindable(), ...props }: PasswordInputProps = $props();
 </script>
 
 <div
@@ -14,7 +14,7 @@
 		class="rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0"
 		type={showPassword ? 'text' : 'password'}
 		bind:value
-		{...attrs}
+		{...props}
 	/>
 	<Button
 		onclick={() => (showPassword = !showPassword)}

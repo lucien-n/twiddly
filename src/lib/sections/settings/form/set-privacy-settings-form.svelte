@@ -21,13 +21,13 @@
 
 <SetSettingsForm label="Privacy" action={route('setPrivacySettings /actions/v1/settings')} {form}>
 	<Form.Field {form} name="private">
-		<Form.Control >
-			{#snippet children({ attrs })}
-						<Form.Label>Private</Form.Label>
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Private</Form.Label>
 				<Form.Description>Wether your profile is visible by others or not</Form.Description>
-				<Switch {...attrs} bind:checked={$formData.private} />
-								{/snippet}
-				</Form.Control>
+				<Switch {...props} bind:checked={$formData.private} />
+			{/snippet}
+		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 </SetSettingsForm>

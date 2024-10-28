@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { OTPInputProps } from '.';
 
-	let { value = $bindable(), attrs }: OTPInputProps = $props();
+	let { value = $bindable(), ...props }: OTPInputProps = $props();
 
 	let otp: string[] = $state(['', '', '', '', '', '']);
 	let inputRefs: HTMLInputElement[] = $state([]);
@@ -39,7 +39,7 @@
 	});
 </script>
 
-<input {...attrs} hidden bind:value />
+<input {...props} hidden bind:value />
 
 <div class="flex justify-between">
 	{#each otp as char, index}
