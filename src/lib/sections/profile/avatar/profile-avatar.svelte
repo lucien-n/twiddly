@@ -6,7 +6,7 @@
 
 	const { profile, size, class: className }: Props = $props();
 
-	const src = $derived(getProfileAvatar(profile));
+	const src = $derived(profile ? getProfileAvatar(profile) : undefined);
 </script>
 
 <Avatar.Root
@@ -15,6 +15,10 @@
 		className
 	})}
 >
-	<Avatar.Image {src} alt="@{profile.handle}" />
-	<Avatar.Fallback>{profile.handle.charAt(0).toUpperCase()}</Avatar.Fallback>
+	{#if profile}
+		<Avatar.Image {src} alt="@{profile.handle}" />
+		<Avatar.Fallback>{profile.handle.charAt(0).toUpperCase()}</Avatar.Fallback>
+	{:else}
+		<Avatar.Image alt="placeholder" />
+	{/if}
 </Avatar.Root>

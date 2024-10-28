@@ -1,6 +1,7 @@
 <script>
 	import { AuthContext, NonVerifiedBanner } from '@/auth';
-	import { SideNav } from '@/nav';
+	import * as Sidebar from '&/ui/sidebar';
+	import { AppSidebar } from '@/nav';
 	import '../../app.css';
 
 	const { children, data } = $props();
@@ -9,15 +10,17 @@
 </script>
 
 <AuthContext init={{ user: data.user, session: data.session, profile: data.profile }}>
-	<div class="flex min-h-screen w-full flex-col bg-muted/40">
-		<SideNav />
+	<Sidebar.Provider>
+		<AppSidebar />
+		<div class="flex min-h-screen w-full flex-col bg-muted/40">
+			<Sidebar.Trigger />
+			<NonVerifiedBanner bind:open={bannerOpen} />
 
-		<NonVerifiedBanner bind:open={bannerOpen} />
-
-		<section
-			class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4"
-		>
-			{@render children()}
-		</section>
-	</div>
+			<main
+				class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4"
+			>
+				{@render children()}
+			</main>
+		</div>
+	</Sidebar.Provider>
 </AuthContext>
