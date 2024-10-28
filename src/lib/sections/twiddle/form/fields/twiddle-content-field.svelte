@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
 	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import * as Form from '&/ui/form';

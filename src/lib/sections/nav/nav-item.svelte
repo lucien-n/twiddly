@@ -14,17 +14,19 @@
 
 {#if !hidden}
 	<Tooltip.Root>
-		<Tooltip.Trigger asChild let:builder>
-			{#if typeof action === 'string'}
-				<a href={action} class={className} use:builder.action {...builder}>
-					{@render item()}
-				</a>
-			{:else}
-				<button onclick={action} class={className} use:builder.action {...builder}>
-					{@render item()}
-				</button>
-			{/if}
-		</Tooltip.Trigger>
+		<Tooltip.Trigger asChild >
+			{#snippet children({ builder })}
+						{#if typeof action === 'string'}
+					<a href={action} class={className} use:builder.action {...builder}>
+						{@render item()}
+					</a>
+				{:else}
+					<button onclick={action} class={className} use:builder.action {...builder}>
+						{@render item()}
+					</button>
+				{/if}
+								{/snippet}
+				</Tooltip.Trigger>
 		<Tooltip.Content side="right">{label}</Tooltip.Content>
 	</Tooltip.Root>
 {/if}

@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
 	import { Select } from '$lib/components/select';
 	import { route } from '$lib/ROUTES';

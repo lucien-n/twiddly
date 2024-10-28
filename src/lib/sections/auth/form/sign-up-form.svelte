@@ -26,43 +26,51 @@
 
 <form method="post" action={route('signUp /actions/v1/auth')} use:enhance class={className}>
 	<Form.Field {form} name="displayName">
-		<Form.Control let:attrs>
-			<Form.Label>Name</Form.Label>
-			<Input
-				{...attrs}
-				bind:value={$formData.displayName}
-				oninput={() => {
-					$formData.handle = generateHandle($formData.displayName);
-				}}
-			/>
-		</Form.Control>
+		<Form.Control >
+			{#snippet children({ attrs })}
+						<Form.Label>Name</Form.Label>
+				<Input
+					{...attrs}
+					bind:value={$formData.displayName}
+					oninput={() => {
+						$formData.handle = generateHandle($formData.displayName);
+					}}
+				/>
+								{/snippet}
+				</Form.Control>
 		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="handle">
-		<Form.Control let:attrs>
-			<Form.Label>Handle</Form.Label>
-			<div class="relative">
-				<span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
-				<Input {...attrs} bind:value={$formData.handle} class="pl-7" />
-			</div>
-		</Form.Control>
+		<Form.Control >
+			{#snippet children({ attrs })}
+						<Form.Label>Handle</Form.Label>
+				<div class="relative">
+					<span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
+					<Input {...attrs} bind:value={$formData.handle} class="pl-7" />
+				</div>
+								{/snippet}
+				</Form.Control>
 		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="email">
-		<Form.Control let:attrs>
-			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} />
-		</Form.Control>
+		<Form.Control >
+			{#snippet children({ attrs })}
+						<Form.Label>Email</Form.Label>
+				<Input {...attrs} bind:value={$formData.email} />
+								{/snippet}
+				</Form.Control>
 		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 
 	<Form.Field {form} name="password">
-		<Form.Control let:attrs>
-			<Form.Label>Password</Form.Label>
-			<PasswordInput bind:value={$formData.password} {attrs} />
-		</Form.Control>
+		<Form.Control >
+			{#snippet children({ attrs })}
+						<Form.Label>Password</Form.Label>
+				<PasswordInput bind:value={$formData.password} {attrs} />
+								{/snippet}
+				</Form.Control>
 		<!-- todo: <Form.FieldErrors /> -->
 	</Form.Field>
 

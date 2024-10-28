@@ -4,7 +4,7 @@
 	import * as Dialog from '&/ui/dialog';
 	import { getAuthState } from '../auth-state.svelte';
 
-	const authState = getAuthState();
+	const authState = $state(getAuthState());
 </script>
 
 <Dialog.Root bind:open={authState.openSignOutDialog}>

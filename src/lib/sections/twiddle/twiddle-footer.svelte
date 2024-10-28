@@ -6,7 +6,7 @@
 	import { getTwiddleState } from './state/twiddle-state.svelte';
 
 	const authState = getAuthState();
-	const twiddle = getTwiddleState();
+	const twiddle = $state(getTwiddleState());
 
 	const handleComment = async (event: Event) => {
 		event.stopPropagation();
