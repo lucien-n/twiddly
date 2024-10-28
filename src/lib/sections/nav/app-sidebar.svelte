@@ -3,7 +3,7 @@
 	import { route } from '$lib/ROUTES';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import { Role } from '@prisma/client';
-	import { Home, LayoutDashboard, LogIn, LogOut, Settings, ChevronsUpDown } from 'lucide-svelte';
+	import { Home, LayoutDashboard, LogIn, LogOut, Settings } from 'lucide-svelte';
 	import * as DropdownMenu from '&/ui/dropdown-menu';
 	import NavUser from './nav-user.svelte';
 	import type { NavItemProps } from '.';
@@ -34,14 +34,7 @@
 
 	$effect(() => {
 		footerItems = isAuthenticated
-			? [
-					{
-						label: 'Sign In',
-						action: route('/sign-in'),
-						icon: LogIn,
-						hidden: isAuthenticated
-					}
-				]
+			? []
 			: [
 					{
 						label: 'Sign Out',
@@ -79,13 +72,11 @@
 								<div
 									class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
 								>
-									{@html TwiddlyIcon}
+									<img src="/favicon.svg" alt="Twiddly logo" class="p-[.07rem]" />
 								</div>
 								<div class="grid flex-1 text-left text-sm leading-tight">
 									<span class="truncate font-semibold"> Twiddly </span>
-									<!-- <span class="truncate text-xs">{activeTeam.plan}</span> -->
 								</div>
-								<ChevronsUpDown class="ml-auto" />
 							</Sidebar.MenuButton>
 						{/snippet}
 					</DropdownMenu.Trigger>
@@ -121,6 +112,34 @@
 		</Sidebar.Group>
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser />
+		{#if isAuthenticated}
+			<NavUser />
+		{:else}
+			<Sidebar.Group>
+				<Sidebar.GroupContent>
+					<Sidebar.Menu>
+						{#each [{ label: 'Sign In', action: route('/sign-in'), icon: LogIn, hidden: isAuthenticated }] as item (item.label)}
+							{#if !item.hidden}
+								<Sidebar.MenuItem>
+									<Sidebar.MenuButton>
+										{#snippet child({ props })}
+											{#if typeof item.action === 'string'}
+												<a href={item.action} {...props}>
+													{@render navItem(item)}
+												</a>
+											{:else}
+												<button onclick={item.action} {...props}>
+													{@render navItem(item)}
+												</button>
+											{/if}
+										{/snippet}
+									</Sidebar.MenuButton>
+								</Sidebar.MenuItem>
+							{/if}
+						{/each}
+					</Sidebar.Menu>
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+		{/if}
 	</Sidebar.Footer>
 </Sidebar.Root>

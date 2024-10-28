@@ -12,8 +12,8 @@
 <AuthContext init={{ user: data.user, session: data.session, profile: data.profile }}>
 	<Sidebar.Provider>
 		<AppSidebar />
+
 		<div class="flex min-h-screen w-full flex-col bg-muted/40">
-			<Sidebar.Trigger />
 			<NonVerifiedBanner bind:open={bannerOpen} />
 
 			<main
