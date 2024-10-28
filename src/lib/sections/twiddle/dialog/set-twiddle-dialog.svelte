@@ -5,9 +5,9 @@
 		onSuperFormError,
 		type ActionResultSuccess
 	} from '$lib/utils/super-form';
-	import * as Dialog from '&/dialog';
-	import * as Form from '&/form';
-	import { LoadingButton } from '&/form';
+	import * as Dialog from '&/ui/dialog';
+	import * as Form from '&/ui/form';
+	import { LoadingButton } from '&/ui/form';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';

@@ -3,8 +3,8 @@
 	import { route } from '$lib/ROUTES';
 	import { otpSchema } from '$lib/schemas/auth/otp';
 	import { onSuperFormError } from '$lib/utils/super-form';
-	import { Button } from '&/button';
-	import * as Form from '&/form';
+	import { Button } from '&/ui/button';
+	import * as Form from '&/ui/form';
 	import { AuthLayout } from '@/auth';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';

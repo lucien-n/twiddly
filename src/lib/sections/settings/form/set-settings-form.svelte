@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import * as Form from '&/form';
+	import * as Form from '&/ui/form';
 	import type { Snippet } from 'svelte';
 	import SuperDebug from 'sveltekit-superforms';
 	import type { SuperForm } from 'sveltekit-superforms/client';

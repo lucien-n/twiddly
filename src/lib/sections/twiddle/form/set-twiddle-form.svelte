@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
-	import * as Form from '&/form';
+	import * as Form from '&/ui/form';
 	import { Send } from 'lucide-svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Button } from '&/button';
-	import { Input } from '&/input';
+	import { Button } from '&/ui/button';
+	import { Input } from '&/ui/input';
 	import { Eye, EyeOff } from 'lucide-svelte';
 	import type { PasswordInputProps } from '.';
 

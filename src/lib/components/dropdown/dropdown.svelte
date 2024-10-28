@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Dropdown from '&/dropdown-menu';
+	import * as Dropdown from '&/ui/dropdown-menu';
 	import type { DropdownProps } from '.';
 
 	let { children, items, class: className, stopPropagation }: DropdownProps = $props();

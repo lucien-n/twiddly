@@ -2,7 +2,7 @@
 	import { MailWarning, X } from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
 	import { route } from '$lib/ROUTES';
-	import { Button } from '&/button';
+	import { Button } from '&/ui/button';
 
 	interface Props {
 		open: boolean;

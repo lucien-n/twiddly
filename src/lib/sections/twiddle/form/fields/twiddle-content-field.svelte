@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
-	import * as Form from '&/form';
-	import { Textarea } from '&/textarea';
+	import * as Form from '&/ui/form';
+	import { Textarea } from '&/ui/textarea';
 	import { getAuthState } from '@/auth';
 	import type { Infer, SuperForm } from 'sveltekit-superforms';
 

@@ -5,8 +5,8 @@
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
-	import * as Form from '&/form';
-	import { Input } from '&/input';
+	import * as Form from '&/ui/form';
+	import { Input } from '&/ui/input';
 	import { AvatarBackgroundColor } from '@prisma/client';
 	import type { ActionResult } from '@sveltejs/kit';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -76,7 +76,7 @@
 						color: AVATAR_BACKGROUND_COLORS[AvatarBackgroundColor.LIME]
 					}
 				]}
-				bind:selectedOption={$formData.avatarBackgroundColor as AvatarBackgroundColor}
+				bind:value={$formData.avatarBackgroundColor as AvatarBackgroundColor}
 			/>
 		</Form.Control>
 		<Form.FieldErrors />

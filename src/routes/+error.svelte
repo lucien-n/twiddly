@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { route } from '$lib/ROUTES';
-	import { Button } from '&/button';
-	import { Separator } from '&/separator';
+	import { Button } from '&/ui/button';
+	import { Separator } from '&/ui/separator';
 	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-expressions

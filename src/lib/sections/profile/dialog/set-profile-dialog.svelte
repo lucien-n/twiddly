@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type SetProfileSchema } from '$lib/schemas/profile/set-profile';
-	import * as Dialog from '&/dialog';
+	import * as Dialog from '&/ui/dialog';
 	import { toast } from 'svelte-sonner';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { SetProfileForm } from '../form';

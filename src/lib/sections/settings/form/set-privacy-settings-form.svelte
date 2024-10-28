@@ -4,8 +4,8 @@
 		setPrivacySettingsSchema,
 		type SetPrivacySettingsSchema
 	} from '$lib/schemas/settings/set-settings';
-	import * as Form from '&/form';
-	import { Switch } from '&/switch';
+	import * as Form from '&/ui/form';
+	import { Switch } from '&/ui/switch';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import SetSettingsForm from './set-settings-form.svelte';
 	import { superSettingsForm } from './super-settings-form';

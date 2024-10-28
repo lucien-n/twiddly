@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import { Button } from '&/button';
-	import * as Dialog from '&/dialog';
+	import { Button } from '&/ui/button';
+	import * as Dialog from '&/ui/dialog';
 	import { getAuthState } from '../auth-state.svelte';
 
 	const authState = getAuthState();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Tooltip from '&/tooltip';
+	import * as Tooltip from '&/ui/tooltip';
 	import type { NavItemProps } from './nav.types';
 
 	const { label, icon: Icon, hidden, action }: NavItemProps = $props();

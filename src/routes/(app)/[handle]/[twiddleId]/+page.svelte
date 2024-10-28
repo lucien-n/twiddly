@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
-	import { Button } from '&/button';
+	import { Button } from '&/ui/button';
 	import { ProfileAvatar } from '@/profile';
 	import {
 		SetTwiddleForm,
@@ -10,7 +10,7 @@
 		TwiddleFooter,
 		TwiddleList
 	} from '@/twiddle';
-	import { Separator } from '&/separator';
+	import { Separator } from '&/ui/separator';
 
 	const { data } = $props();
 </script>

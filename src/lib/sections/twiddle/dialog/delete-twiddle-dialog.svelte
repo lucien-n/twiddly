@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as AlertDialog from '&/alert-dialog';
-	import { buttonVariants } from '&/button';
+	import * as AlertDialog from '&/ui/alert-dialog';
+	import { buttonVariants } from '&/ui/button';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { getTwiddleState } from '../state/twiddle-state.svelte';
 

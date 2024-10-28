@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { route } from '$lib/ROUTES';
-	import * as AlertDialog from '&/alert-dialog';
-	import { buttonVariants } from '&/button';
+	import * as AlertDialog from '&/ui/alert-dialog';
+	import { buttonVariants } from '&/ui/button';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';

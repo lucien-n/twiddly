@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { copyToClipboard } from '$lib/utils/helpers';
-	import { Button } from '&/button';
-	import * as Dialog from '&/dialog';
+	import { Button } from '&/ui/button';
+	import * as Dialog from '&/ui/dialog';
 	import { toast } from 'svelte-sonner';
 	import { getTwiddleState } from '../state/twiddle-state.svelte';
 	import { PUBLIC_ORIGIN } from '$env/static/public';

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Dropdown } from '$lib/components/dropdown';
 	import { Scrollable } from '$lib/components/scrollable';
-	import { Separator } from '&/separator';
-	import * as Tooltip from '&/tooltip';
+	import { Separator } from '&/ui/separator';
+	import * as Tooltip from '&/ui/tooltip';
 	import { getAuthState } from '@/auth';
 	import { ProfileAvatar, SetProfileDialog } from '@/profile';
 	import { TwiddleList } from '@/twiddle/index.js';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getProfileAvatar } from '$lib/utils/avatar';
-	import * as Avatar from '&/avatar';
+	import * as Avatar from '&/ui/avatar';
 	import type { Props } from '.';
 	import { avatarVariants } from './index';
 

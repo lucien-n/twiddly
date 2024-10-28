@@ -3,8 +3,8 @@
 	import { route } from '$lib/ROUTES';
 	import { signInSchema, type SignInSchema } from '$lib/schemas/auth/sign-in';
 	import { onSuperFormError } from '$lib/utils/super-form';
-	import * as Form from '&/form';
-	import { Input } from '&/input';
+	import * as Form from '&/ui/form';
+	import { Input } from '&/ui/input';
 	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms/client';
 

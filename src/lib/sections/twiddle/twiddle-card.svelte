@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
-	import { Button } from '&/button';
-	import * as Card from '&/card';
+	import { Button } from '&/ui/button';
+	import * as Card from '&/ui/card';
 	import { ProfileAvatar } from '@/profile';
 	import TwiddleFooter from './twiddle-footer.svelte';
 	import { getTwiddleState } from './state/twiddle-state.svelte';

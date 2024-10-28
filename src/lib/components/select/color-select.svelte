@@ -1,24 +1,24 @@
 <script lang="ts" generics="T extends string">
 	import { cn } from '$lib/shadcn/utils';
-	import * as Tooltip from '&/tooltip';
+	import * as Tooltip from '&/ui/tooltip';
 	import { CircleCheckBig } from 'lucide-svelte';
 	import type { ColorSelectProps } from '.';
 
 	// eslint-disable-next-line no-undef
-	let { options, selectedOption = $bindable(), attrs }: ColorSelectProps<T> = $props();
+	let { options, value: value = $bindable(), attrs }: ColorSelectProps<T> = $props();
 </script>
 
 <div class="grid grid-flow-col justify-between">
-	{#each options as { label, value, color }}
-		{@const selected = selectedOption === value}
+	{#each options as opt}
+		{@const selected = opt.value === value}
 		<Tooltip.Root>
 			<Tooltip.Trigger
 				class={cn(
 					'relative h-9 w-9 rounded-md focus-visible:border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background',
 					selected && 'border-2 border-primary'
 				)}
-				style="background-color: {color};"
-				onclick={() => (selectedOption = value)}
+				style="background-color: {opt.color};"
+				onclick={() => (value = opt.value)}
 			>
 				{#if selected}
 					<CircleCheckBig
@@ -29,9 +29,9 @@
 				{/if}
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				{label}
+				{opt.label}
 			</Tooltip.Content>
 		</Tooltip.Root>
 	{/each}
 </div>
-<input hidden bind:value={selectedOption} name={attrs.name} />
+<input hidden bind:value name={attrs?.name} />

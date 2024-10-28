@@ -12,7 +12,7 @@ const config = {
 			out: 'build'
 		}),
 		alias: {
-			'&': './src/lib/shadcn/ui',
+			'&': './src/lib/components',
 			'@': './src/lib/sections',
 			$tests: './tests'
 		}

@@ -1,5 +1,5 @@
 import type { ControlAttrs } from 'formsnap';
-import Select from './select.svelte';
+import SingleSelect from './single-select.svelte';
 import ColorSelect from './color-select.svelte';
 
 type SelectOption<T extends string> = {
@@ -11,21 +11,22 @@ type ColorSelectOption<T extends string> = SelectOption<T> & {
 	color: string;
 };
 
-interface SelectProps<T extends string> {
-	selectedOption: T;
+interface SingleSelectProps<T extends string> {
+	value: T;
 	options: SelectOption<T>[];
-	attrs: ControlAttrs;
+	attrs?: ControlAttrs;
+	placeholder?: string;
 }
 
-type ColorSelectProps<T extends string> = SelectProps<T> & {
+type ColorSelectProps<T extends string> = SingleSelectProps<T> & {
 	options: ColorSelectOption<T>[];
 };
 
 export {
-	Select,
+	SingleSelect,
 	ColorSelect,
 	type ColorSelectOption,
 	type ColorSelectProps,
 	type SelectOption,
-	type SelectProps
+	type SingleSelectProps
 };
