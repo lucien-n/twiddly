@@ -43,7 +43,6 @@ export const setTwiddle: Action = async (event) => {
 						authorId: event.locals.session.userId,
 						parentId
 					},
-
 					select: {
 						id: true // EMPTY SELECT
 					}

@@ -39,6 +39,7 @@
 				minlength={$constraints.content?.minlength}
 				maxlength={$constraints.content?.maxlength}
 				placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
+				autofocus
 			/>
 			<p
 				class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground"

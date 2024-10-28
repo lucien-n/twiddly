@@ -4,15 +4,10 @@
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import { EllipsisVertical, Heart, MessageCircle, Pencil, Share2, Trash } from 'lucide-svelte';
 	import { getTwiddleState } from './state/twiddle-state.svelte';
+	import { route } from '$lib/ROUTES';
 
 	const authState = getAuthState();
 	const twiddle = $state(getTwiddleState());
-
-	const handleComment = async (event: Event) => {
-		event.stopPropagation();
-
-		// todo: redirect to twiddle page with comment form focused
-	};
 
 	const handleLike = async (event: Event) => {
 		event.stopPropagation();
@@ -32,7 +27,11 @@
 		variant="ghost"
 		size="icon"
 		class="flex w-auto items-center space-x-2 px-2 transition-colors duration-200 hover:text-blue-500"
-		onclick={handleComment}
+		onclick={(event) => event.stopPropagation()}
+		href={route('/[handle]/[twiddleId]', {
+			handle: twiddle.data.author.handle,
+			twiddleId: twiddle.data.id
+		})}
 	>
 		<MessageCircle class="h-4 w-4" />
 		<span>{twiddle.data.commentCount}</span>
