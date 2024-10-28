@@ -1,20 +1,56 @@
 <script lang="ts">
-	import * as Avatar from '&/ui/avatar';
+	import { route } from '$lib/ROUTES';
 	import * as DropdownMenu from '&/ui/dropdown-menu';
 	import * as Sidebar from '&/ui/sidebar';
 	import { useSidebar } from '&/ui/sidebar';
 	import { getAuthState } from '@/auth';
 	import { ProfileAvatar } from '@/profile';
-	import BadgeCheck from 'lucide-svelte/icons/badge-check';
-	import Bell from 'lucide-svelte/icons/bell';
-	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import CreditCard from 'lucide-svelte/icons/credit-card';
-	import LogOut from 'lucide-svelte/icons/log-out';
-	import Sparkles from 'lucide-svelte/icons/sparkles';
+	import { ChevronsUpDown, LogOut, Settings } from 'lucide-svelte';
+	import type { NavItemProps } from '.';
+	import { cn } from '$lib/shadcn/utils';
 
 	const authState = getAuthState();
 	const sidebar = useSidebar();
+
+	const isAuthenticated = $derived(!!authState.session);
+	const groups: NavItemProps[][] = $derived([
+		[
+			{
+				label: 'Settings',
+				action: route('/settings'),
+				icon: Settings,
+				hidden: !isAuthenticated
+			},
+			{
+				label: 'Sign Out',
+				action: () => authState.toggleOpenSignOutDialog(),
+				icon: LogOut,
+				hidden: !isAuthenticated
+			}
+		]
+	]);
 </script>
+
+{#snippet renderItemContent(item: NavItemProps)}
+	<item.icon />
+	<span>{item.label}</span>
+{/snippet}
+
+{#snippet renderItem(item: NavItemProps, props: Record<string, unknown>)}
+	{#if typeof item.action === 'function'}
+		<button
+			{...props}
+			onclick={item.action}
+			class={cn(props.class as string, 'w-full cursor-pointer')}
+		>
+			{@render renderItemContent(item)}
+		</button>
+	{:else}
+		<a {...props} href={item.action} class={cn(props.class as string, 'w-full cursor-pointer')}>
+			{@render renderItemContent(item)}
+		</a>
+	{/if}
+{/snippet}
 
 <Sidebar.Menu>
 	<Sidebar.MenuItem>
@@ -29,7 +65,7 @@
 						<ProfileAvatar size="sm" profile={authState.profile ?? undefined} />
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{authState.profile?.displayName}</span>
-							<span class="truncate text-xs">{authState.profile?.handle}</span>
+							<span class="truncate text-xs">@{authState.profile?.handle}</span>
 						</div>
 						<ChevronsUpDown class="ml-auto size-4" />
 					</Sidebar.MenuButton>
@@ -51,32 +87,20 @@
 					</div>
 				</DropdownMenu.Label>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Group>
-					<DropdownMenu.Item>
-						<Sparkles />
-						Upgrade to Pro
-					</DropdownMenu.Item>
-				</DropdownMenu.Group>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Group>
-					<DropdownMenu.Item>
-						<BadgeCheck />
-						Account
-					</DropdownMenu.Item>
-					<DropdownMenu.Item>
-						<CreditCard />
-						Billing
-					</DropdownMenu.Item>
-					<DropdownMenu.Item>
-						<Bell />
-						Notifications
-					</DropdownMenu.Item>
-				</DropdownMenu.Group>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
-					<LogOut />
-					Log out
-				</DropdownMenu.Item>
+				{#each groups as items, index}
+					<DropdownMenu.Group>
+						{#each items as item}
+							<DropdownMenu.Item>
+								{#snippet child({ props })}
+									{@render renderItem(item, props)}
+								{/snippet}
+							</DropdownMenu.Item>
+						{/each}
+					</DropdownMenu.Group>
+					{#if index !== groups.length - 1}
+						<DropdownMenu.Separator />
+					{/if}
+				{/each}
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</Sidebar.MenuItem>

@@ -1,55 +1,35 @@
 <script lang="ts">
-	import * as Sidebar from '&/ui/sidebar';
 	import { route } from '$lib/ROUTES';
+	import * as Sidebar from '&/ui/sidebar';
 	import { getAuthState } from '@/auth/auth-state.svelte';
 	import { Role } from '@prisma/client';
-	import { Home, LayoutDashboard, LogIn, LogOut, Settings } from 'lucide-svelte';
-	import * as DropdownMenu from '&/ui/dropdown-menu';
-	import NavUser from './nav-user.svelte';
+	import { User, Home, LayoutDashboard, LogIn } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
-	import TwiddlyIcon from '../../../../static/favicon.svg?raw';
+	import NavUser from './nav-user.svelte';
 
 	const authState = getAuthState();
-	const sidebar = Sidebar.useSidebar();
 
 	const isAuthenticated = $derived(!!authState.session);
 
-	let items: NavItemProps[] = $state([]);
-	let footerItems: NavItemProps[] = $state([]);
-	$effect(() => {
-		items = [
-			{
-				label: 'Home',
-				action: route('/'),
-				icon: Home
-			},
-			{
-				label: 'Admin Dashboard',
-				action: route('/'), // todo: admin page
-				icon: LayoutDashboard,
-				hidden: authState.profile?.role !== Role.ADMIN
-			}
-		];
-	});
-
-	$effect(() => {
-		footerItems = isAuthenticated
-			? []
-			: [
-					{
-						label: 'Sign Out',
-						action: () => authState.toggleOpenSignOutDialog(),
-						icon: LogOut,
-						hidden: !isAuthenticated
-					},
-					{
-						label: 'Settings',
-						action: route('/settings'),
-						icon: Settings,
-						hidden: !isAuthenticated
-					}
-				];
-	});
+	let items: NavItemProps[] = $derived([
+		{
+			label: 'Home',
+			action: route('/'),
+			icon: Home
+		},
+		{
+			label: 'Profile',
+			action: route('/[handle]', { handle: authState.profile!.handle }),
+			icon: User,
+			hidden: !isAuthenticated
+		},
+		{
+			label: 'Admin Dashboard',
+			action: route('/'), // todo: admin page
+			icon: LayoutDashboard,
+			hidden: authState.profile?.role !== Role.ADMIN
+		}
+	]);
 </script>
 
 {#snippet navItem(item: NavItemProps)}
@@ -60,28 +40,23 @@
 <Sidebar.Root collapsible="icon">
 	<Sidebar.Header>
 		<Sidebar.Menu>
-			<Sidebar.MenuItem>
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
-							<Sidebar.MenuButton
-								{...props}
-								size="lg"
-								class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-							>
-								<div
-									class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
-								>
-									<img src="/favicon.svg" alt="Twiddly logo" class="p-[.07rem]" />
-								</div>
-								<div class="grid flex-1 text-left text-sm leading-tight">
-									<span class="truncate font-semibold"> Twiddly </span>
-								</div>
-							</Sidebar.MenuButton>
-						{/snippet}
-					</DropdownMenu.Trigger>
-				</DropdownMenu.Root>
-			</Sidebar.MenuItem>
+			<Sidebar.MenuButton
+				size="lg"
+				class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+			>
+				{#snippet child({ props })}
+					<a {...props} href={route('/')}>
+						<div
+							class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
+						>
+							<img src="/twiddly.svg" alt="Twiddly logo" class="p-1" />
+						</div>
+						<div class="grid flex-1 text-left text-sm leading-tight">
+							<span class="truncate font-semibold">Twiddly</span>
+						</div>
+					</a>
+				{/snippet}
+			</Sidebar.MenuButton>
 		</Sidebar.Menu>
 	</Sidebar.Header>
 	<Sidebar.Content>
