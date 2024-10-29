@@ -62,7 +62,7 @@
 						class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 						{...props}
 					>
-						<ProfileAvatar size="sm" profile={authState.profile ?? undefined} />
+						<ProfileAvatar size="sm" profile={authState.profile} />
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{authState.profile?.displayName}</span>
 							<span class="truncate text-xs">@{authState.profile?.handle}</span>
@@ -79,7 +79,7 @@
 			>
 				<DropdownMenu.Label class="p-0 font-normal">
 					<div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-						<ProfileAvatar profile={authState.profile ?? undefined} />
+						<ProfileAvatar profile={authState.profile} />
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{authState.profile?.displayName}</span>
 							<span class="truncate text-xs">{authState.user?.email}</span>
