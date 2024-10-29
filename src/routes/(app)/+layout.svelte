@@ -16,9 +16,7 @@
 		<div class="flex min-h-screen w-full flex-col bg-muted/40">
 			<NonVerifiedBanner bind:open={bannerOpen} />
 
-			<main
-				class="mx-auto flex h-screen w-full flex-col overflow-hidden px-11 shadow-md sm:max-w-3xl sm:gap-4"
-			>
+			<main class="mx-auto flex h-screen w-full flex-col overflow-hidden sm:max-w-3xl sm:gap-4">
 				{@render children()}
 			</main>
 		</div>
