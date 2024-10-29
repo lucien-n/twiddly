@@ -8,6 +8,8 @@
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
 	import { getTwiddleState, TwiddleContentField } from '@/twiddle';
 	import { toast } from 'svelte-sonner';
+	import * as Tooltip from '&/ui/tooltip';
+	import { ProgressCircle } from '&/progress';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
@@ -24,12 +26,15 @@
 					toast.warning(result.status === 401 ? 'You must be signed-in' : 'An error occured')
 			})
 	});
-	const { enhance, submitting, errors, form: formData } = form;
+	const { enhance, submitting, errors, form: formData, constraints } = form;
 
 	const twiddleState = getTwiddleState();
 
 	const loading = $derived($submitting);
 	const isComment = $derived(!!setTwiddleForm.data.parentId);
+	const contentPercentage = $derived(
+		Math.ceil(($formData.content.length / ($constraints.content?.maxlength ?? 1)) * 100)
+	);
 </script>
 
 <form method="post" {action} use:enhance>
@@ -58,12 +63,26 @@
 
 	<Form.Errors errors={$errors._errors} />
 
-	<div class="ml-auto mt-2 w-fit">
+	<div class="ml-auto mt-2 flex w-fit flex-row-reverse gap-2">
 		<Form.LoadingButton {loading}>
 			{#if !loading}
 				<Send class="mr-2" />
 			{/if}
 			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
+
+		<Tooltip.Root>
+			<Tooltip.Trigger class="h-7 w-7 self-center">
+				<ProgressCircle
+					progress={contentPercentage}
+					stroke-width={3}
+					bg-stroke="hsl(0 0% 3.9%)"
+					stroke="hsl(0 0% 98%)"
+				/>
+			</Tooltip.Trigger>
+			<Tooltip.Content>
+				{contentPercentage}%
+			</Tooltip.Content>
+		</Tooltip.Root>
 	</div>
 </form>

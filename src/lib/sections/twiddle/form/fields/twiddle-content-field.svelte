@@ -41,11 +41,6 @@
 				placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
 				autofocus
 			/>
-			<p
-				class="pointer-events-none absolute bottom-0 right-0 self-center p-2 text-muted-foreground"
-			>
-				{content.length}/{$constraints.content?.maxlength}
-			</p>
 		{/snippet}
 	</Form.Control>
 </Form.Field>
