@@ -12,7 +12,11 @@ const getTwiddle = async (id: string, currentUserId?: string) => {
 		where: { id, ...getTwiddleWhere() },
 		select: {
 			...getTwiddleSelect(currentUserId),
-			children: { select: getTwiddleSelect(currentUserId), where: getTwiddleWhere() },
+			children: {
+				select: getTwiddleSelect(currentUserId),
+				where: getTwiddleWhere(),
+				orderBy: { createdAt: 'desc' }
+			},
 			parent: { select: getTwiddleSelect(currentUserId) }
 		}
 	});
