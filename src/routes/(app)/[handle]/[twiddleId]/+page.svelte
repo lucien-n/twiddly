@@ -18,15 +18,8 @@
 <TwiddleContext init={{ data: data.twiddle, setTwiddleForm: data.setTwiddleForm }}>
 	{#snippet children(twiddle)}
 		<div class="p-4">
-			<!-- todo: rework parent twiddle card -->
-			{#if twiddle.data.parent}
-				<TwiddleContext init={{ data: twiddle.data.parent, setTwiddleForm: data.setTwiddleForm }}>
-					<TwiddleCard />
-				</TwiddleContext>
-			{/if}
-
-			<div class="mb-2 flex items-center gap-3 p-6">
-				<ProfileAvatar profile={twiddle.data.author} />
+			<div class="mb-2 flex items-center gap-3 py-6">
+				<ProfileAvatar size="md" profile={twiddle.data.author} />
 				<div>
 					<p class="font-semibold">{twiddle.data.author.displayName}</p>
 					<Button
@@ -38,11 +31,18 @@
 					</Button>
 				</div>
 			</div>
-			<div class="p-6 pt-0">
+			<div>
 				<p class="mb-4 text-xl">
 					{twiddle.data.content}
 				</p>
-				<p class="mb-4 flex gap-1 text-sm text-muted-foreground">
+
+				{#if twiddle.data.parent}
+					<TwiddleContext init={{ data: twiddle.data.parent, setTwiddleForm: data.setTwiddleForm }}>
+						<TwiddleCard />
+					</TwiddleContext>
+				{/if}
+
+				<p class="my-3 flex gap-1 text-sm text-muted-foreground">
 					<span>
 						{formatDate(twiddle.data.createdAt)}
 					</span>
@@ -51,10 +51,10 @@
 						<span>Edited</span>
 					{/if}
 				</p>
-			</div>
 
-			<div class="flex items-center justify-between p-6 py-3 pt-0">
-				<TwiddleFooter />
+				<div class="flex items-center justify-between">
+					<TwiddleFooter />
+				</div>
 			</div>
 
 			<Separator class="mb-8 mt-4" />

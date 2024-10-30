@@ -9,6 +9,7 @@ export const avatarVariants = tv({
 		size: {
 			default: 'w-12 h-12',
 			sm: 'w-8 h-8',
+			md: 'w-16 h-16',
 			lg: 'w-36 h-36'
 		}
 	},
