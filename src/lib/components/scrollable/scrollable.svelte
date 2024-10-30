@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/shadcn/utils';
+	import { cn } from '&/utils';
 	import { Button } from '&/ui/button';
 	import { ArrowUp } from 'lucide-svelte';
 	import type { ScrollableProps } from '.';

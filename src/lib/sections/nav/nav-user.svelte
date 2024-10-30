@@ -7,7 +7,7 @@
 	import { ProfileAvatar } from '@/profile';
 	import { ChevronsUpDown, LogOut, Settings } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
-	import { cn } from '$lib/shadcn/utils';
+	import { cn } from '&/utils';
 
 	const authState = getAuthState();
 	const sidebar = useSidebar();

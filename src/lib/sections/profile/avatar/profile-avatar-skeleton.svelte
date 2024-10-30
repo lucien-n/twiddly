@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/shadcn/utils';
+	import { cn } from '&/utils';
 	import { Skeleton } from '&/ui/skeleton';
 	import type { Props } from '.';
 	import { avatarVariants } from './index';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AlertDialog as AlertDialogPrimitive } from 'bits-ui';
 	import { buttonVariants } from '&/ui/button';
-	import { cn } from '$lib/shadcn/utils.js';
+	import { cn } from '&/utils';
 
 	let {
 		ref = $bindable(null),

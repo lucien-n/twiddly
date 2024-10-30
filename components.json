@@ -7,9 +7,9 @@
 		"baseColor": "neutral"
 	},
 	"aliases": {
-		"components": "$lib/shadcn/",
-		"utils": "$lib/shadcn/utils",
-		"ui": "$lib/components/ui",
+		"components": "&/ui",
+		"utils": "&/utils",
+		"ui": "&/ui",
 		"hooks": "$lib/hooks"
 	},
 	"typescript": true,

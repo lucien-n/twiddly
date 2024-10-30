@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends string">
-	import { cn } from '$lib/shadcn/utils';
+	import { cn } from '&/utils';
 	import * as Tooltip from '&/ui/tooltip';
 	import { CircleCheckBig } from 'lucide-svelte';
 	import type { ColorSelectProps } from '.';

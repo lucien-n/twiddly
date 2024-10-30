@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Separator as SeparatorPrimitive } from 'bits-ui';
 	import { Separator } from '&/ui/separator';
-	import { cn } from '$lib/shadcn/utils.js';
+	import { cn } from '&/utils';
 
 	let {
 		ref = $bindable(null),
