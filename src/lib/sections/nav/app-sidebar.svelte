@@ -19,7 +19,7 @@
 		},
 		{
 			label: 'Profile',
-			action: route('/[handle]', { handle: authState.profile!.handle }),
+			action: authState.profile ? route('/[handle]', { handle: authState.profile.handle }) : '',
 			icon: User,
 			hidden: !isAuthenticated
 		},

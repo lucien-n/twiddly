@@ -50,7 +50,7 @@
 	<Separator class="my-5" />
 
 	<Scrollable>
-		<TwiddleList twiddles={data.twiddles} setTwiddleForm={data.setTwiddleForm} />
+		<TwiddleList twiddles={data.twiddles} />
 	</Scrollable>
 </div>
 

@@ -1,22 +1,14 @@
 import type { Twiddle } from '$lib';
 import { route } from '$lib/ROUTES';
-import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 import { AuthErrorCode } from '$lib/utils/auth-error';
 import { fetcher } from '$lib/utils/fetcher';
 import { getContext, setContext } from 'svelte';
 import { toast } from 'svelte-sonner';
-import type { Infer, SuperValidated } from 'sveltekit-superforms';
-
-type SetTwiddleForm = SuperValidated<Infer<SetTwiddlechema>>;
-
-export interface TwiddleStateInit {
-	data: Twiddle;
-	setTwiddleForm: SetTwiddleForm;
-}
 
 export class TwiddleState {
-	data: Twiddle = $state() as Twiddle;
-	setTwiddleForm: SetTwiddleForm = $state() as SetTwiddleForm;
+	data: Twiddle['data'] = $state() as Twiddle['data'];
+	setTwiddleForm: Twiddle['setTwiddleForm'] = $state() as Twiddle['setTwiddleForm'];
+	setCommentForm: Twiddle['setCommentForm'] = $state() as Twiddle['setCommentForm'];
 
 	openSetDialog: boolean = $state(false);
 	openDeleteDialog: boolean = $state(false);
@@ -24,9 +16,10 @@ export class TwiddleState {
 
 	deleted: boolean = $state(false);
 
-	constructor({ data, setTwiddleForm }: TwiddleStateInit) {
+	constructor({ data, setTwiddleForm, setCommentForm }: Twiddle) {
 		this.data = data;
 		this.setTwiddleForm = setTwiddleForm;
+		this.setCommentForm = setCommentForm;
 	}
 
 	async toggleLike() {
@@ -74,8 +67,5 @@ const CTX = Symbol('twiddle_ctx');
 
 export const getTwiddleState = () => getContext<TwiddleState>(CTX);
 
-export const setTwiddleState = (init: TwiddleStateInit): TwiddleState => {
-	const twiddleState = new TwiddleState(init);
-	setContext<TwiddleState>(CTX, twiddleState);
-	return twiddleState;
-};
+export const setTwiddleState = (twiddle: Twiddle): TwiddleState =>
+	setContext<TwiddleState>(CTX, new TwiddleState(twiddle));

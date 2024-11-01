@@ -11,5 +11,5 @@
 		setTwiddleForm={data.setTwiddleForm}
 		action={route('setTwiddle /actions/v1/twiddle')}
 	/>
-	<TwiddleList twiddles={data.twiddles} setTwiddleForm={data.setTwiddleForm} />
+	<TwiddleList twiddles={data.twiddles} />
 </Scrollable>

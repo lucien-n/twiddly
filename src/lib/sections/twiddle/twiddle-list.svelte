@@ -1,19 +1,16 @@
 <script lang="ts">
-	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import { TwiddleCard, TwiddleCardSkeleton, TwiddleContext } from '.';
-	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import type { Twiddle } from '$lib';
+	import { TwiddleCard, TwiddleCardSkeleton, TwiddleContext } from '.';
 
 	interface Props {
 		twiddles: Twiddle[] | Promise<Twiddle[]>;
-		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
 	}
-	const { twiddles, setTwiddleForm }: Props = $props();
+	const { twiddles }: Props = $props();
 </script>
 
 {#snippet twiddlesList(data: Twiddle[])}
-	{#each data as twiddle (twiddle.id)}
-		<TwiddleContext init={{ data: twiddle, setTwiddleForm }}>
+	{#each data as twiddle (twiddle.data.id)}
+		<TwiddleContext init={twiddle}>
 			{#snippet children(twiddleState)}
 				{#if !twiddleState.deleted}
 					<TwiddleCard />

@@ -1,19 +1,17 @@
 <script lang="ts">
+	import type { Twiddle } from '$lib';
 	import type { Snippet } from 'svelte';
-	import { TwiddleState, setTwiddleState, type TwiddleStateInit } from './twiddle-state.svelte';
 	import { DeleteTwiddleDialog, SetTwiddleDialog } from '../dialog';
 	import ShareTwiddleDialog from '../dialog/share-twiddle-dialog.svelte';
+	import { TwiddleState, setTwiddleState } from './twiddle-state.svelte';
 
 	interface Props {
-		init: TwiddleStateInit;
+		init: Twiddle;
 		children: Snippet<[TwiddleState]>;
 	}
 	const { init, children }: Props = $props();
 
-	const twiddle = $state(setTwiddleState(init));
-	$effect(() => {
-		twiddle.data = init.data;
-	});
+	const twiddle = $derived(setTwiddleState(init));
 </script>
 
 {@render children(twiddle)}

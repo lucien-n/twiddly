@@ -1,4 +1,4 @@
-import { formatTwiddle } from '$lib';
+import { formatTwiddles } from '$lib';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
 import { getProfileSelect } from '$lib/utils/profile';
@@ -15,7 +15,7 @@ const getTwiddles = async (profileId: string, currentUserId?: string) => {
 		where: getTwiddleWhere({ authorId: profileId })
 	});
 
-	return twiddles.map((t) => formatTwiddle(t, currentUserId));
+	return formatTwiddles(twiddles, currentUserId);
 };
 
 export const load: PageServerLoad = async (event) => {

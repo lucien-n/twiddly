@@ -2,6 +2,7 @@
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/ui/button';
+	import { Separator } from '&/ui/separator';
 	import { ProfileAvatar } from '@/profile';
 	import {
 		SetTwiddleForm,
@@ -10,12 +11,11 @@
 		TwiddleFooter,
 		TwiddleList
 	} from '@/twiddle';
-	import { Separator } from '&/ui/separator';
 
 	const { data } = $props();
 </script>
 
-<TwiddleContext init={{ data: data.twiddle, setTwiddleForm: data.setTwiddleForm }}>
+<TwiddleContext init={data.twiddle}>
 	{#snippet children(twiddle)}
 		<div class="p-4">
 			<div class="mb-2 flex items-center gap-3 py-6">
@@ -37,7 +37,7 @@
 				</p>
 
 				{#if twiddle.data.parent}
-					<TwiddleContext init={{ data: twiddle.data.parent, setTwiddleForm: data.setTwiddleForm }}>
+					<TwiddleContext init={twiddle.data.parent}>
 						<TwiddleCard />
 					</TwiddleContext>
 				{/if}
@@ -60,16 +60,18 @@
 			<Separator class="mb-8 mt-4" />
 
 			<div class="mb-8">
-				<SetTwiddleForm
-					action={route('setTwiddle /actions/v1/twiddle')}
-					setTwiddleForm={data.setCommentForm}
-				/>
+				{#key data.twiddle.setCommentForm.id}
+					<SetTwiddleForm
+						action={route('setTwiddle /actions/v1/twiddle')}
+						setTwiddleForm={data.twiddle.setCommentForm}
+					/>
+				{/key}
 			</div>
 
 			<div class="flex h-full">
 				{#if twiddle.data.comments?.length}
 					<div class="w-full space-y-3">
-						<TwiddleList twiddles={twiddle.data.comments} setTwiddleForm={data.setTwiddleForm} />
+						<TwiddleList twiddles={twiddle.data.comments} />
 					</div>
 				{:else}
 					<h1 class="mx-auto self-center text-3xl font-bold">No one commented yet</h1>

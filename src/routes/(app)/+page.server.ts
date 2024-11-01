@@ -1,6 +1,9 @@
-import { formatTwiddle } from '$lib';
+import { formatTwiddles } from '$lib';
+import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
 import { prisma } from '$lib/server/prisma';
 import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
 
 const getTwiddles = async (currentUserId?: string) => {
@@ -21,9 +24,10 @@ const getTwiddles = async (currentUserId?: string) => {
 		}
 	});
 
-	return twiddles.map((t) => formatTwiddle(t, currentUserId));
+	return formatTwiddles(twiddles, currentUserId);
 };
 
 export const load: PageServerLoad = async (event) => ({
-	twiddles: await getTwiddles(event.locals.session?.userId)
+	twiddles: await getTwiddles(event.locals.session?.userId),
+	setTwiddleForm: await superValidate(zod(setTwiddleSchema))
 });
