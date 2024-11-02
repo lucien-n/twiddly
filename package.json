@@ -12,7 +12,9 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"db:gen": "prisma generate && prisma db push --accept-data-loss && prisma db seed",
-		"test": "vitest --coverage"
+		"test": "vitest --coverage",
+		"postinstall": "prisma generate",
+		"vercel-build": "prisma generate && prisma migrate deploy && next build"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.3.1",
