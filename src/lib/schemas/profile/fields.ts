@@ -1,4 +1,4 @@
-import { AvatarBackgroundColor } from '@prisma/client';
+import { AvatarBackgroundColor } from '@prisma-app/client';
 import { z } from 'zod';
 
 export const avatarBackgroundColorField = z
