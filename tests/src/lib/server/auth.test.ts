@@ -33,7 +33,7 @@ import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
 import { baseProfileFixtureA } from '$tests/fixtures/profile';
 import { baseSessionFixtureA } from '$tests/fixtures/session';
-import { baseUserFixtureA } from '$tests/fixtures/user';
+import { baseUserFixtureA, baseUserFixtureB } from '$tests/fixtures/user';
 import type { RequestEvent } from '@sveltejs/kit';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MaintenanceMode, Role } from '@prisma/client';
@@ -58,6 +58,10 @@ describe('auth', () => {
 		mSendOTPVerificationEmail.mockResolvedValue(true);
 		mTransaction.mockResolvedValue([null, null]);
 		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Open);
+		mCreateSession.mockResolvedValue(baseSessionFixtureA);
+		mCreateSessionCookie.mockResolvedValue({
+			cookieName: mSessionCookieName
+		});
 	});
 
 	describe('hashPassword', () => {
@@ -84,10 +88,6 @@ describe('auth', () => {
 			mProfileFindFirst.mockResolvedValue(null);
 			mUserFindFirst.mockResolvedValue(null);
 			mUserCreate.mockResolvedValue(baseUserFixtureA);
-			mCreateSession.mockResolvedValue(baseSessionFixtureA);
-			mCreateSessionCookie.mockResolvedValue({
-				cookieName: mSessionCookieName
-			});
 
 			const result = await signUpWithEmailAndPassword(
 				mRequestEvent,
@@ -185,10 +185,6 @@ describe('auth', () => {
 			mProfileFindFirst.mockResolvedValue(null);
 			mUserFindFirst.mockResolvedValue(null);
 			mUserCreate.mockResolvedValue(baseUserFixtureA);
-			mCreateSession.mockResolvedValue(baseSessionFixtureA);
-			mCreateSessionCookie.mockResolvedValue({
-				cookieName: mSessionCookieName
-			});
 			mSendOTPVerificationEmail.mockResolvedValue(false);
 
 			await expect(
@@ -214,10 +210,6 @@ describe('auth', () => {
 	describe('signInWithEmailAndPassword', () => {
 		it('should sign in an existing user with valid credentials', async () => {
 			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
-			mCreateSession.mockResolvedValue(baseSessionFixtureA);
-			mCreateSessionCookie.mockResolvedValue({
-				cookieName: mSessionCookieName
-			});
 
 			await signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword);
 
@@ -258,12 +250,35 @@ describe('auth', () => {
 				}
 			});
 			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.AdminOnly);
-			mCreateSession.mockResolvedValue(baseSessionFixtureA);
-			mCreateSessionCookie.mockResolvedValue({
-				cookieName: mSessionCookieName
-			});
 
 			await signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword);
+		});
+
+		it('should throw error if maintenance mode is verified and user is not verified', async () => {
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+			mUserFindFirst.mockResolvedValue(baseUserFixtureB);
+
+			await expect(
+				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
+			).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		});
+
+		it('should sign in if maintenance mode is verified and user is verified', async () => {
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
+
+			await expect(
+				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
+			).resolves.not.toThrow();
+		});
+
+		it('should throw error if maintenance mode is locked', async () => {
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Locked);
+			mUserFindFirst.mockResolvedValue(baseUserFixtureB);
+
+			await expect(
+				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
+			).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
 		});
 	});
 
@@ -380,7 +395,7 @@ describe('auth', () => {
 			});
 		});
 
-		it("should return false if provided code's email isn't the same as the currnet user's email", async () => {
+		it("should return false if provided code's email is not the same as the currnet user's email", async () => {
 			mEmailVerificationCodeFindFirst.mockResolvedValue({
 				...relationalEmailVerificationCodeFixtureA,
 				email: 'different@mail.com'
