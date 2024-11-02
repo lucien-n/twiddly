@@ -70,11 +70,7 @@ export const signUpWithEmailAndPassword = async (
 		name: meta.displayName
 	});
 
-	if (!success) {
-		throw new Error('Could not send verification code email');
-	} else if (dev) {
-		console.log(`Verification code sent for "${email}":`, verificationCode);
-	}
+	if (!success) throw new Error('Could not send verification code email');
 
 	return user;
 };
