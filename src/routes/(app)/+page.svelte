@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Scrollable } from '&/scrollable';
 	import { route } from '$lib/ROUTES';
-	import { SetTwiddleForm, TwiddleList } from '@/twiddle';
+	import { SetTwiddleForm, TwiddleList } from '#/twiddle';
 
 	const { data } = $props();
 </script>

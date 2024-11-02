@@ -21,6 +21,7 @@ import {
 import {
 	checkHandle,
 	hashPassword,
+	isAdmin,
 	isAuthenticated,
 	isVerified,
 	refreshSession,
@@ -502,6 +503,37 @@ describe('auth', () => {
 			}
 		])('should return expected return %o', ({ locals, expectedReturn }) => {
 			const result = isVerified({ locals } as unknown as RequestEvent);
+
+			expect(result).toEqual(expectedReturn);
+		});
+	});
+
+	describe('isAdmin', () => {
+		it.each([
+			{
+				locals: {
+					profile: {
+						role: Role.ADMIN
+					}
+				},
+				expectedReturn: true
+			},
+			{
+				locals: {
+					profile: {
+						role: Role.USER
+					}
+				},
+				expectedReturn: false
+			},
+			{
+				locals: {
+					profile: null
+				},
+				expectedReturn: false
+			}
+		])('should return expected return %o', ({ locals, expectedReturn }) => {
+			const result = isAdmin({ locals } as unknown as RequestEvent);
 
 			expect(result).toEqual(expectedReturn);
 		});

@@ -223,3 +223,9 @@ export const isVerified = (
 	event: RequestEvent
 ): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
 	!!event.locals.user?.emailVerified;
+
+export const isAdmin = (
+	event: RequestEvent
+): event is RequestEvent & {
+	locals: { user: User; session: Session; profile: Profile & { role: typeof Role.ADMIN } };
+} => event.locals.profile?.role === Role.ADMIN;

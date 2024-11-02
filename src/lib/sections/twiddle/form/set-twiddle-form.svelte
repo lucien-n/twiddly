@@ -6,7 +6,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
-	import { getTwiddleState, TwiddleContentField } from '@/twiddle';
+	import { getTwiddleState, TwiddleContentField } from '#/twiddle';
 	import { toast } from 'svelte-sonner';
 	import * as Tooltip from '&/ui/tooltip';
 	import { ProgressCircle } from '&/progress';

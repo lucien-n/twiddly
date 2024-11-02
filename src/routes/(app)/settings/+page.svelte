@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { Button } from '&/ui/button';
-	import { DeleteAccountDialog } from '@/auth';
+	import { DeleteAccountDialog } from '#/auth';
 	import { ChevronRight } from 'lucide-svelte';
 
 	const paths: { label: string; href: string }[] = [

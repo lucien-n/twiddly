@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SetPrivacySettingsForm } from '@/settings';
+	import { SetPrivacySettingsForm } from '#/settings';
 
 	const { data } = $props();
 </script>

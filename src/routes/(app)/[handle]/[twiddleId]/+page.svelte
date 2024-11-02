@@ -3,14 +3,14 @@
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/ui/button';
 	import { Separator } from '&/ui/separator';
-	import { ProfileAvatar } from '@/profile';
+	import { ProfileAvatar } from '#/profile';
 	import {
 		SetTwiddleForm,
 		TwiddleCard,
 		TwiddleContext,
 		TwiddleFooter,
 		TwiddleList
-	} from '@/twiddle';
+	} from '#/twiddle';
 
 	const { data } = $props();
 </script>

@@ -1,6 +1,6 @@
 <script>
 	import { route } from '$lib/ROUTES';
-	import { AuthLayout, SignUpForm } from '@/auth';
+	import { AuthLayout, SignUpForm } from '#/auth';
 
 	const { data } = $props();
 </script>

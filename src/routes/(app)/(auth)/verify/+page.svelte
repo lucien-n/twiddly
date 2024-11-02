@@ -5,7 +5,7 @@
 	import { onSuperFormError } from '$lib/utils/super-form';
 	import { Button } from '&/ui/button';
 	import * as Form from '&/ui/form';
-	import { AuthLayout } from '@/auth';
+	import { AuthLayout } from '#/auth';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';

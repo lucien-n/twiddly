@@ -19,6 +19,7 @@ const PAGES = {
   "/[handle]/[twiddleId]": (params: { handle: (string | number), twiddleId: (string | number) }) => {
     return `/${params.handle}/${params.twiddleId}`
   },
+  "/admin": `/admin`,
   "/settings": `/settings`,
   "/settings/interface": `/settings/interface`,
   "/settings/privacy": `/settings/privacy`
@@ -46,6 +47,7 @@ const SERVERS = {
  * ACTIONS
  */
 const ACTIONS = {
+  "setSiteSettings /admin": `/admin?/setSiteSettings`,
   "signIn /actions/v1/auth": `/actions/v1/auth?/signIn`,
   "signUp /actions/v1/auth": `/actions/v1/auth?/signUp`,
   "signOut /actions/v1/auth": `/actions/v1/auth?/signOut`,
@@ -162,9 +164,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/settings': never, '/settings/interface': never, '/settings/privacy': never }
+  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/admin': never, '/settings': never, '/settings/interface': never, '/settings/privacy': never }
   SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemaps.xml': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
-  ACTIONS: { 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
+  ACTIONS: { 'setSiteSettings /admin': never, 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
   Params: { handle: never, twiddleId: never, id: never }
 }

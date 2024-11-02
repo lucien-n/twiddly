@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import { AuthLayout, SignInForm } from '@/auth';
+	import { AuthLayout, SignInForm } from '#/auth';
 
 	const { data } = $props();
 </script>

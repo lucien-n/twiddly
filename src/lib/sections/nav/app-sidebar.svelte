@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
-	import { getAuthState } from '@/auth/auth-state.svelte';
+	import { getAuthState } from '#/auth/auth-state.svelte';
 	import { Role } from '@prisma/client';
 	import { User, Home, LayoutDashboard, LogIn } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
@@ -25,7 +25,7 @@
 		},
 		{
 			label: 'Admin Dashboard',
-			action: route('/'), // todo: admin page
+			action: route('/admin'),
 			icon: LayoutDashboard,
 			hidden: authState.profile?.role !== Role.ADMIN
 		}

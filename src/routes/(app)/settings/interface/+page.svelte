@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SetInterfaceSettingsForm } from '@/settings';
+	import { SetInterfaceSettingsForm } from '#/settings';
 
 	const { data } = $props();
 </script>

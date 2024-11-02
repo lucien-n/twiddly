@@ -1,7 +1,7 @@
 <script>
-	import { AuthContext, NonVerifiedBanner } from '@/auth';
+	import { AuthContext, NonVerifiedBanner } from '#/auth';
 	import * as Sidebar from '&/ui/sidebar';
-	import { AppSidebar } from '@/nav';
+	import { AppSidebar } from '#/nav';
 	import '../../app.css';
 
 	const { children, data } = $props();

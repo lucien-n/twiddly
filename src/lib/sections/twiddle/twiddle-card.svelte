@@ -3,7 +3,7 @@
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/ui/button';
 	import * as Card from '&/ui/card';
-	import { ProfileAvatar } from '@/profile';
+	import { ProfileAvatar } from '#/profile';
 	import { getTwiddleState } from './state/twiddle-state.svelte';
 	import TwiddleFooter from './twiddle-footer.svelte';
 

@@ -2,7 +2,7 @@
 	import { Button } from '&/ui/button';
 	import * as Card from '&/ui/card';
 	import { Skeleton } from '&/ui/skeleton';
-	import { ProfileAvatarSkeleton } from '@/profile';
+	import { ProfileAvatarSkeleton } from '#/profile';
 	import { Heart, MessageCircle, Repeat2, Share2 } from 'lucide-svelte';
 </script>
 

@@ -11,7 +11,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'&': './src/lib/components',
-			'@': './src/lib/sections',
+			'#': './src/lib/sections',
+			'@': './src/',
 			$tests: './tests'
 		}
 	}
