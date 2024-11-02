@@ -1,7 +1,7 @@
 import { route } from '$lib/ROUTES';
 import { isVerified } from '$lib/server/auth';
 import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
-import { MaintenanceMode, Role } from '@prisma/client';
+import { MaintenanceMode, Role } from '@prisma-app/client';
 import { error, type Handle, type RequestEvent } from '@sveltejs/kit';
 
 const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];

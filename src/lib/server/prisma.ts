@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma-app/client';
 
 export const prisma = new PrismaClient(
 	process.env.NODE_ENV === 'test'

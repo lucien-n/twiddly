@@ -1,4 +1,4 @@
-import type { Like, Prisma } from '@prisma/client';
+import type { Like, Prisma } from '@prisma-app/client';
 import { getProfileSelect } from './profile';
 
 export const isLiked = (
