@@ -33,8 +33,10 @@
 		</Dialog.Header>
 
 		<Button variant="link" href={url} class="p-0 text-lg">
-			<span class="text-muted-foreground">{url.slice(0, PUBLIC_ORIGIN.length)}</span>
-			<strong>{url.slice(PUBLIC_ORIGIN.length)}</strong>
+			<p class="flex">
+				<span class="text-muted-foreground">{url.slice(0, PUBLIC_ORIGIN.length)}</span>
+				<strong>{url.slice(PUBLIC_ORIGIN.length)}</strong>
+			</p>
 		</Button>
 
 		<Dialog.Footer>
