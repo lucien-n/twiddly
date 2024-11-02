@@ -65,17 +65,17 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 	});
 	users.push(demoUser);
 
-	const adminUser = await db.user.create({
+	const lucienUser = await db.user.create({
 		data: {
 			id: generateIdFromEntropySize(10),
-			email: 'admin@mail.com',
+			email: 'lucien@mail.com',
 			passwordHash:
 				'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
 			emailVerified: true,
 			profile: {
 				create: {
-					displayName: 'Admin',
-					handle: 'admin',
+					displayName: 'Lucien',
+					handle: 'lucien',
 					avatarBackgroundColor: AvatarBackgroundColor.LIME,
 					role: Role.ADMIN,
 					interfaceSettings: { create: {} },
@@ -84,7 +84,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 			}
 		}
 	});
-	users.push(adminUser);
+	users.push(lucienUser);
 
 	for (let i = 0; i < 5; i++) {
 		const firstName = getRandomInArray(mock['firstNames']);
