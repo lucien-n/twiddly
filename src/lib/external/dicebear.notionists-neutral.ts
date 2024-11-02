@@ -1,4 +1,4 @@
-import { AvatarBackgroundColor } from '@prisma-app/client';
+import { AvatarBackgroundColor } from '@prisma/client';
 
 export const AVATAR_BACKGROUND_COLORS = {
 	[AvatarBackgroundColor.LIGTH_BLUE]: '#86c9e1',

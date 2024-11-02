@@ -1,5 +1,5 @@
 import { route } from '$lib/ROUTES';
-import { MaintenanceMode } from '@prisma-app/client';
+import { MaintenanceMode } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export const handlerRedirect = (status: number, key: Parameters<typeof route>[0]) =>

@@ -7,7 +7,7 @@
 		type SetInterfaceSettingsSchema
 	} from '$lib/schemas/settings/set-settings';
 	import * as Form from '&/ui/form';
-	import { Theme } from '@prisma-app/client';
+	import { Theme } from '@prisma/client';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import SetSettingsForm from './set-settings-form.svelte';
 	import { superSettingsForm } from './super-settings-form';

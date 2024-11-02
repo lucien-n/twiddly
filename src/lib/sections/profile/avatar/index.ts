@@ -1,4 +1,4 @@
-import type { Profile } from '@prisma-app/client';
+import type { Profile } from '@prisma/client';
 import { type VariantProps, tv } from 'tailwind-variants';
 import ProfileAvatar from './profile-avatar.svelte';
 import ProfileAvatarSkeleton from './profile-avatar-skeleton.svelte';

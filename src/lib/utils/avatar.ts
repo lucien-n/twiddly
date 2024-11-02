@@ -2,7 +2,7 @@ import {
 	AVATAR_BACKGROUND_COLORS,
 	getAvatarURLParams
 } from '$lib/external/dicebear.notionists-neutral';
-import { AvatarBackgroundColor, type Profile } from '@prisma-app/client';
+import { AvatarBackgroundColor, type Profile } from '@prisma/client';
 
 const getAvatarBgColor = (bg: AvatarBackgroundColor | null) =>
 	AVATAR_BACKGROUND_COLORS[bg ?? AvatarBackgroundColor.LAVENDER].replace('#', '');

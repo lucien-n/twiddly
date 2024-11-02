@@ -8,7 +8,7 @@
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import * as Form from '&/ui/form';
 	import { Input } from '&/ui/input';
-	import { AvatarBackgroundColor } from '@prisma-app/client';
+	import { AvatarBackgroundColor } from '@prisma/client';
 	import type { ActionResult } from '@sveltejs/kit';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
