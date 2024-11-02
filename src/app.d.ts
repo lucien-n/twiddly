@@ -1,9 +1,9 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
-	type ProfileWithSettings = import('@prisma-app/client').Profile & {
-		interfaceSettings: import('@prisma-app/client').InterfaceSettings | null;
-		privacySettings: import('@prisma-app/client').PrivacySettings | null;
+	type ProfileWithSettings = import('@prisma/client').Profile & {
+		interfaceSettings: import('@prisma/client').InterfaceSettings | null;
+		privacySettings: import('@prisma/client').PrivacySettings | null;
 	};
 
 	namespace App {
@@ -12,7 +12,7 @@ declare global {
 			user: import('lucia').User | null;
 			session: import('lucia').Session | null;
 			profile: ProfileWithSettings | null;
-			siteSettings: import('@prisma-app/client').SiteSettings | null;
+			siteSettings: import('@prisma/client').SiteSettings | null;
 		}
 		interface PageData {
 			infos: {

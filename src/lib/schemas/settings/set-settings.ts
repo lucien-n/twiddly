@@ -1,4 +1,4 @@
-import { Theme } from '@prisma-app/client';
+import { Theme } from '@prisma/client';
 import { z } from 'zod';
 
 export const setInterfaceSettingsSchema = z.object({

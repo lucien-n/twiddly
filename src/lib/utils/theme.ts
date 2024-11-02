@@ -1,4 +1,4 @@
-import { Theme } from '@prisma-app/client';
+import { Theme } from '@prisma/client';
 
 export const getModeWatcherTheme = (theme?: Theme): 'dark' | 'light' | 'system' => {
 	switch (theme) {

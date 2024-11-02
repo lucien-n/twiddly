@@ -1,4 +1,4 @@
-import { AvatarBackgroundColor, type Role } from '@prisma-app/client';
+import { AvatarBackgroundColor, type Role } from '@prisma/client';
 import { superValidate, type Infer, type SuperValidated } from 'sveltekit-superforms';
 import { setTwiddleSchema, type SetTwiddlechema } from './schemas/twiddle/set-twiddle';
 import { zod } from 'sveltekit-superforms/adapters';
