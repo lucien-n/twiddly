@@ -49,6 +49,8 @@ const mRequestEvent = {
 	locals: {}
 } as unknown as RequestEvent;
 
+vi.mock('$app/environment', () => ({ dev: false }));
+
 describe('auth', () => {
 	beforeEach(() => {
 		vi.resetAllMocks();
