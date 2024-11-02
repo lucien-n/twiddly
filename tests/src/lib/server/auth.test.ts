@@ -198,6 +198,17 @@ describe('auth', () => {
 				})
 			).rejects.toThrowError(new Error('Could not send verification code email'));
 		});
+
+		it('should not be able to sign up if maintenance mode is not open', async () => {
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+
+			await expect(
+				signUpWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword, {
+					displayName: baseProfileFixtureA.displayName,
+					handle: baseProfileFixtureA.handle
+				})
+			).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		});
 	});
 
 	describe('signInWithEmailAndPassword', () => {

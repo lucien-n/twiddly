@@ -32,12 +32,8 @@ export const signUpWithEmailAndPassword = async (
 	password: string,
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
-	switch (getMaintenanceMode(event)) {
-		case MaintenanceMode.Verified:
-		case MaintenanceMode.AdminOnly:
-		case MaintenanceMode.Locked:
-			throw new AuthError(AuthErrorCode.Unauthorized);
-	}
+	if (getMaintenanceMode(event) !== MaintenanceMode.Open)
+		throw new AuthError(AuthErrorCode.Unauthorized);
 
 	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
 
