@@ -11,9 +11,13 @@ type ColorSelectOption<T extends string> = SelectOption<T> & {
 	color: string;
 };
 
+type SingleSelectOption<T extends string> = SelectOption<T> & {
+	description?: string;
+};
+
 type SingleSelectProps<T extends string> = ControlAttrs & {
 	value: T;
-	options: SelectOption<T>[];
+	options: SingleSelectOption<T>[];
 	placeholder?: string;
 };
 
@@ -27,5 +31,6 @@ export {
 	type ColorSelectOption,
 	type ColorSelectProps,
 	type SelectOption,
+	type SingleSelectOption,
 	type SingleSelectProps
 };

@@ -32,7 +32,7 @@ export const signUpWithEmailAndPassword = async (
 	password: string,
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
-	if (getMaintenanceMode(event) !== MaintenanceMode.Open)
+	if (getMaintenanceMode(event) !== MaintenanceMode.OPEN)
 		throw new AuthError(AuthErrorCode.Unauthorized);
 
 	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
@@ -94,16 +94,16 @@ export const signInWithEmailAndPassword = async (
 	}
 
 	switch (getMaintenanceMode(event)) {
-		case MaintenanceMode.Verified: {
+		case MaintenanceMode.VERIFIED: {
 			if (!existingUser.emailVerified) throw new AuthError(AuthErrorCode.Unauthorized);
 			break;
 		}
-		case MaintenanceMode.AdminOnly: {
+		case MaintenanceMode.ADMIN: {
 			if (existingUser.profile?.role !== Role.ADMIN)
 				throw new AuthError(AuthErrorCode.Unauthorized);
 			break;
 		}
-		case MaintenanceMode.Locked: {
+		case MaintenanceMode.LOCKED: {
 			throw new AuthError(AuthErrorCode.Unauthorized);
 		}
 	}
