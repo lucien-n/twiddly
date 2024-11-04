@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Ellipsis } from 'lucide-svelte';
+	import { Ellipsis, ExternalLink } from 'lucide-svelte';
 	import { Button } from '&/ui/button';
 	import * as DropdownMenu from '&/ui/dropdown-menu';
 	import { route } from '$lib/ROUTES';
@@ -29,7 +29,10 @@
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<a href={route('/[handle]', { handle })}>
-			<DropdownMenu.Item>View profile</DropdownMenu.Item>
+			<DropdownMenu.Item>
+				<ExternalLink />
+				<p>View profile</p>
+			</DropdownMenu.Item>
 		</a>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

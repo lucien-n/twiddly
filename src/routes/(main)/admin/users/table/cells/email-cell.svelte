@@ -7,8 +7,6 @@
 		emailVerified: boolean;
 	}
 	const { email, emailVerified }: Props = $props();
-
-	const [username, domain] = $derived(email.split('@'));
 </script>
 
 <div class="flex items-center gap-1">
@@ -17,7 +15,7 @@
 			{#if emailVerified}
 				<BadgeCheck class="size-4" />
 			{:else}
-				<BadgeAlert class="size-4" />
+				<BadgeAlert class="size-4 text-destructive" />
 			{/if}
 		</Tooltip.Trigger>
 		<Tooltip.Content>{emailVerified ? 'Verified' : 'Non Verified'}</Tooltip.Content>
@@ -25,12 +23,7 @@
 
 	<Tooltip.Root>
 		<Tooltip.Trigger class="flex">
-			<p class="max-w-[12ch] overflow-hidden text-ellipsis whitespace-nowrap">
-				{username}
-			</p>
-			<p>
-				@{domain}
-			</p>
+			{email}
 		</Tooltip.Trigger>
 		<Tooltip.Content>
 			{email}

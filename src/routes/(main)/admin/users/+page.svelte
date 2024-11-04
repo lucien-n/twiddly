@@ -5,6 +5,4 @@
 	const { data } = $props();
 </script>
 
-<div class="h-screen w-full overflow-y-hidden p-6">
-	<UsersTable data={data.users} {columns} />
-</div>
+<UsersTable data={[...data.users, ...data.users, ...data.users]} {columns} />

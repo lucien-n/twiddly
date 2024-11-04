@@ -1,6 +1,7 @@
 import type { ControlAttrs } from 'formsnap';
 import SingleSelect from './single-select.svelte';
 import ColorSelect from './color-select.svelte';
+import type { SelectTriggerProps } from 'bits-ui';
 
 type SelectOption<T extends string> = {
 	label: string;
@@ -15,11 +16,13 @@ type SingleSelectOption<T extends string> = SelectOption<T> & {
 	description?: string;
 };
 
-type SingleSelectProps<T extends string> = ControlAttrs & {
-	value: T;
-	options: SingleSelectOption<T>[];
-	placeholder?: string;
-};
+type SingleSelectProps<T extends string> = Partial<ControlAttrs> &
+	SelectTriggerProps & {
+		value: T;
+		options: SingleSelectOption<T>[];
+		placeholder?: string;
+		onValueChange?: (value: string) => void;
+	};
 
 type ColorSelectProps<T extends string> = SingleSelectProps<T> & {
 	options: ColorSelectOption<T>[];
