@@ -20,5 +20,8 @@ export default defineConfig({
 		alias: {
 			'.prisma/client/index-browser': prismaIndexBrowserPath
 		}
+	},
+	optimizeDeps: {
+		exclude: ['@node-rs/argon2', '@node-rs/bcrypt']
 	}
 });

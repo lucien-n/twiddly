@@ -11,7 +11,7 @@
 </script>
 
 {#if open}
-	<section
+	<footer
 		class="absolute bottom-0 z-20 flex h-14 w-full border-t bg-background"
 		transition:fly={{ y: -20, duration: 150 }}
 	>
@@ -25,5 +25,5 @@
 		<Button variant="ghost" size="icon" onclick={() => (open = false)} class="my-auto ml-auto mr-2">
 			<X />
 		</Button>
-	</section>
+	</footer>
 {/if}
