@@ -13,7 +13,7 @@
 	<Sidebar.Provider>
 		<AppSidebar />
 
-		<div class="flex min-h-screen w-full flex-col bg-muted/40">
+		<div class="relative flex min-h-screen w-full flex-col bg-muted/40">
 			<NonVerifiedBanner bind:open={bannerOpen} />
 
 			<main class="mx-auto flex h-screen w-full flex-col overflow-hidden sm:max-w-3xl sm:gap-4">
