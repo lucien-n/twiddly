@@ -81,7 +81,7 @@
 				/>
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				{contentPercentage}%
+				{$formData.content.length} / {$constraints.content?.maxlength ?? 0}
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</div>
