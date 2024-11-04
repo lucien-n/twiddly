@@ -214,15 +214,25 @@ export const checkHandle = async (handle: string): Promise<AuthErrorCode | undef
 	}
 };
 
+export const isRestricted = (
+	event: RequestEvent
+): event is RequestEvent & {
+	locals: {
+		user: User;
+		session: Session;
+		profile: Profile;
+	};
+} => event.locals.profile?.role === Role.RESTRICTED;
+
 export const isAuthenticated = (
 	event: RequestEvent
 ): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
-	!!event.locals.session;
+	!isRestricted(event) && !!event.locals.session;
 
 export const isVerified = (
 	event: RequestEvent
 ): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
-	!!event.locals.user?.emailVerified;
+	!isRestricted(event) && !!event.locals.user?.emailVerified;
 
 export const isAdmin = (
 	event: RequestEvent

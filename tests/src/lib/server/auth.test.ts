@@ -23,6 +23,7 @@ import {
 	hashPassword,
 	isAdmin,
 	isAuthenticated,
+	isRestricted,
 	isVerified,
 	refreshSession,
 	signInWithEmailAndPassword,
@@ -534,6 +535,37 @@ describe('auth', () => {
 			}
 		])('should return expected return %o', ({ locals, expectedReturn }) => {
 			const result = isAdmin({ locals } as unknown as RequestEvent);
+
+			expect(result).toEqual(expectedReturn);
+		});
+	});
+
+	describe('isRestricted', () => {
+		it.each([
+			{
+				locals: {
+					profile: {
+						role: Role.RESTRICTED
+					}
+				},
+				expectedReturn: true
+			},
+			{
+				locals: {
+					profile: {
+						role: Role.USER
+					}
+				},
+				expectedReturn: false
+			},
+			{
+				locals: {
+					profile: null
+				},
+				expectedReturn: false
+			}
+		])('should return expected return %o', ({ locals, expectedReturn }) => {
+			const result = isRestricted({ locals } as unknown as RequestEvent);
 
 			expect(result).toEqual(expectedReturn);
 		});
