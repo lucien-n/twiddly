@@ -45,7 +45,7 @@
 	<SuperDebug data={$formData} />
 {/if}
 
-<form method="post" action={route('setSiteSettings /admin')} use:enhance>
+<form method="post" action={route('setSiteSettings /admin/settings')} use:enhance>
 	<Form.Field {form} name="maintenanceMode">
 		<Form.Control>
 			{#snippet children({ props })}

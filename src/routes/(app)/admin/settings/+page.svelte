@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SetSiteSettingsForm from './set-site-settings-form.svelte';
+	import { SetSiteSettingsForm } from '#/admin';
 
 	const { data } = $props();
 </script>

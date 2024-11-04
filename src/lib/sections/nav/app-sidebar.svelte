@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
-	import { getAuthState } from '#/auth/auth-state.svelte';
+	import { getAuthState } from '#/auth';
 	import { Role } from '@prisma/client';
-	import { User, Home, LayoutDashboard, LogIn } from 'lucide-svelte';
+	import { User, Home, LayoutDashboard, LogIn, Users, Settings2 } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
 	import NavUser from './nav-user.svelte';
 
 	const authState = getAuthState();
 
 	const isAuthenticated = $derived(!!authState.session);
+	const isAdmin = $derived(authState.profile?.role === Role.ADMIN);
 
 	let items: NavItemProps[] = $derived([
 		{
@@ -22,19 +23,50 @@
 			action: authState.profile ? route('/[handle]', { handle: authState.profile.handle }) : '',
 			icon: User,
 			hidden: !isAuthenticated
+		}
+	]);
+
+	let adminItems: NavItemProps[] = $derived([
+		{
+			label: 'Settings',
+			action: route('/admin/settings'),
+			icon: Settings2
 		},
 		{
-			label: 'Admin Dashboard',
-			action: route('/admin'),
-			icon: LayoutDashboard,
-			hidden: authState.profile?.role !== Role.ADMIN
+			label: 'Users',
+			action: route('/admin/users'),
+			icon: Users
 		}
+	]);
+
+	let footerItems: NavItemProps[] = $derived([
+		{ label: 'Sign In', action: route('/sign-in'), icon: LogIn, hidden: isAuthenticated }
 	]);
 </script>
 
-{#snippet navItem(item: NavItemProps)}
+{#snippet navItemContent(item: NavItemProps)}
 	<item.icon />
 	<span>{item.label}</span>
+{/snippet}
+
+{#snippet navItem(item: NavItemProps)}
+	{#if !item.hidden}
+		<Sidebar.MenuItem>
+			<Sidebar.MenuButton>
+				{#snippet child({ props })}
+					{#if typeof item.action === 'string'}
+						<a href={item.action} {...props}>
+							{@render navItemContent(item)}
+						</a>
+					{:else}
+						<button onclick={item.action} {...props}>
+							{@render navItemContent(item)}
+						</button>
+					{/if}
+				{/snippet}
+			</Sidebar.MenuButton>
+		</Sidebar.MenuItem>
+	{/if}
 {/snippet}
 
 <Sidebar.Root collapsible="icon">
@@ -64,27 +96,23 @@
 			<Sidebar.GroupContent>
 				<Sidebar.Menu>
 					{#each items as item (item.label)}
-						{#if !item.hidden}
-							<Sidebar.MenuItem>
-								<Sidebar.MenuButton>
-									{#snippet child({ props })}
-										{#if typeof item.action === 'string'}
-											<a href={item.action} {...props}>
-												{@render navItem(item)}
-											</a>
-										{:else}
-											<button onclick={item.action} {...props}>
-												{@render navItem(item)}
-											</button>
-										{/if}
-									{/snippet}
-								</Sidebar.MenuButton>
-							</Sidebar.MenuItem>
-						{/if}
+						{@render navItem(item)}
 					{/each}
 				</Sidebar.Menu>
 			</Sidebar.GroupContent>
 		</Sidebar.Group>
+		{#if isAdmin}
+			<Sidebar.Group>
+				<Sidebar.GroupLabel>Admin</Sidebar.GroupLabel>
+				<Sidebar.GroupContent>
+					<Sidebar.Menu>
+						{#each adminItems as item (item.label)}
+							{@render navItem(item)}
+						{/each}
+					</Sidebar.Menu>
+				</Sidebar.GroupContent>
+			</Sidebar.Group>
+		{/if}
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		{#if isAuthenticated}
@@ -93,24 +121,8 @@
 			<Sidebar.Group>
 				<Sidebar.GroupContent>
 					<Sidebar.Menu>
-						{#each [{ label: 'Sign In', action: route('/sign-in'), icon: LogIn, hidden: isAuthenticated }] as item (item.label)}
-							{#if !item.hidden}
-								<Sidebar.MenuItem>
-									<Sidebar.MenuButton>
-										{#snippet child({ props })}
-											{#if typeof item.action === 'string'}
-												<a href={item.action} {...props}>
-													{@render navItem(item)}
-												</a>
-											{:else}
-												<button onclick={item.action} {...props}>
-													{@render navItem(item)}
-												</button>
-											{/if}
-										{/snippet}
-									</Sidebar.MenuButton>
-								</Sidebar.MenuItem>
-							{/if}
+						{#each footerItems as item (item.label)}
+							{@render navItem(item)}
 						{/each}
 					</Sidebar.Menu>
 				</Sidebar.GroupContent>
