@@ -10,7 +10,8 @@
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { OTPInput } from '&/input';
+	import * as InputOTP from '&/ui/input-otp';
+	import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'bits-ui';
 
 	const { data } = $props();
 
@@ -42,7 +43,10 @@
 	};
 </script>
 
-<AuthLayout title="Enter your 6-digit OTP" description="Fill in the code you've received by email">
+<AuthLayout
+	title="Enter your 6-digit OTP"
+	description="Fill in the code you've received by email at {data.user?.email ?? ''}"
+>
 	{#snippet children()}
 		<form
 			method="post"
@@ -54,7 +58,27 @@
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>Code</Form.Label>
-						<OTPInput {...props} bind:value={$formData.otp} />
+						<InputOTP.Root
+							{...props}
+							maxlength={6}
+							pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+							bind:value={$formData.otp}
+							class="justify-center"
+						>
+							{#snippet children({ cells })}
+								<InputOTP.Group>
+									{#each cells.slice(0, 3) as cell}
+										<InputOTP.Slot {cell} />
+									{/each}
+								</InputOTP.Group>
+								<InputOTP.Separator />
+								<InputOTP.Group>
+									{#each cells.slice(3, 6) as cell}
+										<InputOTP.Slot {cell} />
+									{/each}
+								</InputOTP.Group>
+							{/snippet}
+						</InputOTP.Root>
 					{/snippet}
 				</Form.Control>
 			</Form.Field>
