@@ -1,16 +1,14 @@
 <script lang="ts">
+	import { getAuthState } from '#/auth';
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
-	import { getAuthState } from '#/auth';
-	import { Role } from '@prisma/client';
-	import { User, Home, LayoutDashboard, LogIn, Users, Settings2 } from 'lucide-svelte';
+	import { Home, LogIn, Settings2, User, Users } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
 	import NavUser from './nav-user.svelte';
 
 	const authState = getAuthState();
 
 	const isAuthenticated = $derived(!!authState.session);
-	const isAdmin = $derived(authState.profile?.role === Role.ADMIN);
 
 	let items: NavItemProps[] = $derived([
 		{
@@ -101,7 +99,7 @@
 				</Sidebar.Menu>
 			</Sidebar.GroupContent>
 		</Sidebar.Group>
-		{#if isAdmin}
+		{#if authState.isAdmin}
 			<Sidebar.Group>
 				<Sidebar.GroupLabel>Admin</Sidebar.GroupLabel>
 				<Sidebar.GroupContent>

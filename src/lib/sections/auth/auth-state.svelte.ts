@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import type { Session, User } from 'lucia';
 import { getContext, setContext } from 'svelte';
 
@@ -11,6 +12,7 @@ export class AuthState {
 	user: User | null = $state(null);
 	session: Session | null = $state(null);
 	profile: ProfileWithSettings | null = $state(null);
+	isAdmin: boolean = $derived(this.profile?.role === Role.ADMIN);
 
 	openSignOutDialog: boolean = $state(false);
 
