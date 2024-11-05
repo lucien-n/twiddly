@@ -57,6 +57,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 					displayName: 'Demo',
 					handle: 'demo',
 					avatarBackgroundColor: AvatarBackgroundColor.MISTYROSE,
+					bio: "I'm just a demo :sadface:",
 					interfaceSettings: { create: {} },
 					privacySettings: { create: {} }
 				}
@@ -77,6 +78,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 					displayName: 'Lucien',
 					handle: 'lucien',
 					avatarBackgroundColor: AvatarBackgroundColor.LIME,
+					bio: 'I made this',
 					role: Role.ADMIN,
 					interfaceSettings: { create: {} },
 					privacySettings: { create: {} }
@@ -106,6 +108,7 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 						displayName: firstName + Math.floor(Math.random() * 99).toString(),
 						handle: firstName.charAt(0).toLowerCase() + lastName.toLowerCase(),
 						avatarBackgroundColor: getRandomInEnum(AvatarBackgroundColor),
+						bio: `I'm ${firstName} and I use Twiddly cause it's the shit`,
 						role: restricted ? Role.RESTRICTED : Role.USER,
 						interfaceSettings: { create: {} },
 						privacySettings: { create: {} }

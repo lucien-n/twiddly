@@ -55,6 +55,7 @@ export const signUpWithEmailAndPassword = async (
 			profile: {
 				create: {
 					...meta,
+					bio: "Hi, I'm using Twiddly",
 					interfaceSettings: { create: {} },
 					privacySettings: { create: {} }
 				}
