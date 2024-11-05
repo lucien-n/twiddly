@@ -32,7 +32,7 @@ export const signUpWithEmailAndPassword = async (
 	password: string,
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
-	if (getMaintenanceMode(event) !== MaintenanceMode.Open)
+	if (getMaintenanceMode(event) !== MaintenanceMode.OPEN)
 		throw new AuthError(AuthErrorCode.Unauthorized);
 
 	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
@@ -94,16 +94,16 @@ export const signInWithEmailAndPassword = async (
 	}
 
 	switch (getMaintenanceMode(event)) {
-		case MaintenanceMode.Verified: {
+		case MaintenanceMode.VERIFIED: {
 			if (!existingUser.emailVerified) throw new AuthError(AuthErrorCode.Unauthorized);
 			break;
 		}
-		case MaintenanceMode.AdminOnly: {
+		case MaintenanceMode.ADMIN: {
 			if (existingUser.profile?.role !== Role.ADMIN)
 				throw new AuthError(AuthErrorCode.Unauthorized);
 			break;
 		}
-		case MaintenanceMode.Locked: {
+		case MaintenanceMode.LOCKED: {
 			throw new AuthError(AuthErrorCode.Unauthorized);
 		}
 	}
@@ -214,12 +214,28 @@ export const checkHandle = async (handle: string): Promise<AuthErrorCode | undef
 	}
 };
 
+export const isRestricted = (
+	event: RequestEvent
+): event is RequestEvent & {
+	locals: {
+		user: User;
+		session: Session;
+		profile: Profile;
+	};
+} => event.locals.profile?.role === Role.RESTRICTED;
+
 export const isAuthenticated = (
 	event: RequestEvent
 ): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
-	!!event.locals.session;
+	!isRestricted(event) && !!event.locals.session;
 
 export const isVerified = (
 	event: RequestEvent
 ): event is RequestEvent & { locals: { user: User; session: Session; profile: Profile } } =>
-	!!event.locals.user?.emailVerified;
+	!isRestricted(event) && !!event.locals.user?.emailVerified;
+
+export const isAdmin = (
+	event: RequestEvent
+): event is RequestEvent & {
+	locals: { user: User; session: Session; profile: Profile & { role: typeof Role.ADMIN } };
+} => event.locals.profile?.role === Role.ADMIN;

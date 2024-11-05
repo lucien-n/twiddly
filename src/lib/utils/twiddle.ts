@@ -1,4 +1,4 @@
-import type { Like, Prisma } from '@prisma/client';
+import { Role, type Like, type Prisma } from '@prisma/client';
 import { getProfileSelect } from './profile';
 
 export const isLiked = (
@@ -26,6 +26,6 @@ export const getTwiddleOrderBy = (
 
 export const getTwiddleWhere = (where?: Prisma.TwiddleWhereInput): Prisma.TwiddleWhereInput => ({
 	deletedAt: null,
-	author: { user: { deletedAt: null } },
+	author: { user: { deletedAt: null }, role: { not: Role.RESTRICTED } },
 	...where
 });

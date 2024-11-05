@@ -14,7 +14,7 @@ export const handleRouting: {
 	afterAuth: Handle;
 } = {
 	beforeAuth: ({ event, resolve }) => {
-		if (getMaintenanceMode(event) === MaintenanceMode.Locked) {
+		if (getMaintenanceMode(event) === MaintenanceMode.LOCKED) {
 			error(503, 'Twiddly is under maintenance.');
 		}
 
@@ -25,13 +25,13 @@ export const handleRouting: {
 		const isAdmin = event.locals.profile?.role === Role.ADMIN;
 
 		switch (maintenanceMode) {
-			case MaintenanceMode.Verified: {
+			case MaintenanceMode.VERIFIED: {
 				if (isVerified(event) || isInRoute(event, signInRoutes)) break;
 
 				error(503, 'Twiddly access is locked (Verified users only).');
 				break;
 			}
-			case MaintenanceMode.AdminOnly: {
+			case MaintenanceMode.ADMIN: {
 				if (isAdmin || isInRoute(event, signInRoutes)) break;
 
 				error(503, 'Twiddly access is locked (Admin only).');

@@ -6,7 +6,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
-	import { getTwiddleState, TwiddleContentField } from '@/twiddle';
+	import { getTwiddleState, TwiddleContentField } from '#/twiddle';
 	import { toast } from 'svelte-sonner';
 	import * as Tooltip from '&/ui/tooltip';
 	import { ProgressCircle } from '&/progress';
@@ -81,7 +81,7 @@
 				/>
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				{contentPercentage}%
+				{$formData.content.length} / {$constraints.content?.maxlength ?? 0}
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</div>

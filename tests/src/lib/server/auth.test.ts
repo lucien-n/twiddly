@@ -21,7 +21,9 @@ import {
 import {
 	checkHandle,
 	hashPassword,
+	isAdmin,
 	isAuthenticated,
+	isRestricted,
 	isVerified,
 	refreshSession,
 	signInWithEmailAndPassword,
@@ -57,7 +59,7 @@ describe('auth', () => {
 
 		mSendOTPVerificationEmail.mockResolvedValue(true);
 		mTransaction.mockResolvedValue([null, null]);
-		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Open);
+		mGetMaintenanceMode.mockReturnValue(MaintenanceMode.OPEN);
 		mCreateSession.mockResolvedValue(baseSessionFixtureA);
 		mCreateSessionCookie.mockResolvedValue({
 			cookieName: mSessionCookieName
@@ -196,7 +198,7 @@ describe('auth', () => {
 		});
 
 		it('should not be able to sign up if maintenance mode is not open', async () => {
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.VERIFIED);
 
 			await expect(
 				signUpWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword, {
@@ -235,7 +237,7 @@ describe('auth', () => {
 
 		it('should throw error if site is under admin access only and user is unauthorized', async () => {
 			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.AdminOnly);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN);
 
 			await expect(
 				signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
@@ -249,13 +251,13 @@ describe('auth', () => {
 					role: Role.ADMIN
 				}
 			});
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.AdminOnly);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.ADMIN);
 
 			await signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword);
 		});
 
 		it('should throw error if maintenance mode is verified and user is not verified', async () => {
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.VERIFIED);
 			mUserFindFirst.mockResolvedValue(baseUserFixtureB);
 
 			await expect(
@@ -264,7 +266,7 @@ describe('auth', () => {
 		});
 
 		it('should sign in if maintenance mode is verified and user is verified', async () => {
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Verified);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.VERIFIED);
 			mUserFindFirst.mockResolvedValue(baseUserFixtureA);
 
 			await expect(
@@ -273,7 +275,7 @@ describe('auth', () => {
 		});
 
 		it('should throw error if maintenance mode is locked', async () => {
-			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.Locked);
+			mGetMaintenanceMode.mockReturnValue(MaintenanceMode.LOCKED);
 			mUserFindFirst.mockResolvedValue(baseUserFixtureB);
 
 			await expect(
@@ -502,6 +504,68 @@ describe('auth', () => {
 			}
 		])('should return expected return %o', ({ locals, expectedReturn }) => {
 			const result = isVerified({ locals } as unknown as RequestEvent);
+
+			expect(result).toEqual(expectedReturn);
+		});
+	});
+
+	describe('isAdmin', () => {
+		it.each([
+			{
+				locals: {
+					profile: {
+						role: Role.ADMIN
+					}
+				},
+				expectedReturn: true
+			},
+			{
+				locals: {
+					profile: {
+						role: Role.USER
+					}
+				},
+				expectedReturn: false
+			},
+			{
+				locals: {
+					profile: null
+				},
+				expectedReturn: false
+			}
+		])('should return expected return %o', ({ locals, expectedReturn }) => {
+			const result = isAdmin({ locals } as unknown as RequestEvent);
+
+			expect(result).toEqual(expectedReturn);
+		});
+	});
+
+	describe('isRestricted', () => {
+		it.each([
+			{
+				locals: {
+					profile: {
+						role: Role.RESTRICTED
+					}
+				},
+				expectedReturn: true
+			},
+			{
+				locals: {
+					profile: {
+						role: Role.USER
+					}
+				},
+				expectedReturn: false
+			},
+			{
+				locals: {
+					profile: null
+				},
+				expectedReturn: false
+			}
+		])('should return expected return %o', ({ locals, expectedReturn }) => {
+			const result = isRestricted({ locals } as unknown as RequestEvent);
 
 			expect(result).toEqual(expectedReturn);
 		});

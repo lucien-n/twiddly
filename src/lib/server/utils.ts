@@ -9,4 +9,4 @@ export const handlerRedirect = (status: number, key: Parameters<typeof route>[0]
 	});
 
 export const getMaintenanceMode = (event: RequestEvent): MaintenanceMode =>
-	event.locals.siteSettings?.maintenanceMode ?? MaintenanceMode.AdminOnly;
+	event.locals.siteSettings?.maintenanceMode ?? MaintenanceMode.ADMIN;

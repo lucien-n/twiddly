@@ -3,8 +3,8 @@
 	import * as DropdownMenu from '&/ui/dropdown-menu';
 	import * as Sidebar from '&/ui/sidebar';
 	import { useSidebar } from '&/ui/sidebar';
-	import { getAuthState } from '@/auth';
-	import { ProfileAvatar } from '@/profile';
+	import { getAuthState } from '#/auth';
+	import { ProfileAvatar } from '#/profile';
 	import { ChevronsUpDown, LogOut, Settings } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
 	import { cn } from '&/utils';

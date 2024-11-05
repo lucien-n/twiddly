@@ -65,17 +65,17 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 	});
 	users.push(demoUser);
 
-	const adminUser = await db.user.create({
+	const lucienUser = await db.user.create({
 		data: {
 			id: generateIdFromEntropySize(10),
-			email: 'admin@mail.com',
+			email: 'lucien@mail.com',
 			passwordHash:
 				'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
 			emailVerified: true,
 			profile: {
 				create: {
-					displayName: 'Admin',
-					handle: 'admin',
+					displayName: 'Lucien',
+					handle: 'lucien',
 					avatarBackgroundColor: AvatarBackgroundColor.LIME,
 					role: Role.ADMIN,
 					interfaceSettings: { create: {} },
@@ -84,13 +84,15 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 			}
 		}
 	});
-	users.push(adminUser);
+	users.push(lucienUser);
 
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < 6; i++) {
 		const firstName = getRandomInArray(mock['firstNames']);
 		const lastName = getRandomInArray(mock['lastNames']);
 		const domain = getRandomInArray(mock['domains']);
 		const email = `${firstName.toLocaleLowerCase()}.${lastName.toLocaleLowerCase()}-${nanoid(3)}@${domain}`;
+		const emailVerified = i > 0;
+		const restricted = i === 1;
 
 		const user = await db.user.create({
 			data: {
@@ -98,12 +100,13 @@ const createUsers = async (db: PrismaClient): Promise<User[]> => {
 				email,
 				passwordHash:
 					'$argon2id$v=19$m=19456,t=2,p=1$3AbDA2BCtmZObHC+VFCukQ$PoRi2/772vZ6vOT4b6daKMBom+AXp3z7Xa5LVIESRbw',
-				emailVerified: true,
+				emailVerified,
 				profile: {
 					create: {
 						displayName: firstName + Math.floor(Math.random() * 99).toString(),
 						handle: firstName.charAt(0).toLowerCase() + lastName.toLowerCase(),
 						avatarBackgroundColor: getRandomInEnum(AvatarBackgroundColor),
+						role: restricted ? Role.RESTRICTED : Role.USER,
 						interfaceSettings: { create: {} },
 						privacySettings: { create: {} }
 					}
@@ -128,6 +131,8 @@ const seedTwiddles = async (db: PrismaClient, users: User[]): Promise<Twiddle[]>
 	};
 
 	for (const user of users) {
+		if (!user.emailVerified) continue;
+
 		const numberOfTwiddles = Math.floor(Math.random() * 8) + 3; // between 3 and 9 twiddles
 		for (let i = 0; i < numberOfTwiddles; i++) {
 			const content = getContent();

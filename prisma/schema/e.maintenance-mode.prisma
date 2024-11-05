@@ -1,6 +1,6 @@
 enum MaintenanceMode {
-    Open
-    Verified
-    AdminOnly
-    Locked
+    OPEN
+    VERIFIED
+    ADMIN
+    LOCKED
 }
