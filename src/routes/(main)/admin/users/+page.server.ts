@@ -2,7 +2,9 @@ import { prisma } from '@/lib/server/prisma';
 import type { PageServerLoad } from './$types';
 import type { DataUser } from './types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ depends }) => {
+	depends('admin:users');
+
 	const users = await prisma.user.findMany({
 		select: {
 			id: true,

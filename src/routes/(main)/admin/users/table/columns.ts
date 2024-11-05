@@ -26,10 +26,6 @@ export const columns: ColumnDef<DataUser>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) =>
-			renderComponent(ActionsCell, {
-				id: row.original.id,
-				handle: row.original.handle
-			})
+		cell: ({ row }) => renderComponent(ActionsCell, row.original)
 	}
 ];
