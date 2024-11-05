@@ -5,16 +5,13 @@ model Twiddle {
     commentCount Int       @default(0)
     deletedAt    DateTime?
     editedAt     DateTime?
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt()
+    authorId     String
+    parentId     String?
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
-
-    authorId String
-    author   Profile @relation(references: [id], fields: [authorId], onDelete: Cascade)
-
-    parentId String?
+    author   Profile   @relation(references: [id], fields: [authorId], onDelete: Cascade)
     parent   Twiddle?  @relation("TwiddleToTwiddle", references: [id], fields: [parentId], onDelete: Cascade)
     children Twiddle[] @relation("TwiddleToTwiddle")
-
-    likes Like[]
+    likes    Like[]
 }
