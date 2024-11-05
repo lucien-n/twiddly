@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
 	import { Button } from '&/ui/button';
-	import { DeleteAccountDialog } from '#/auth';
 	import { ChevronRight } from 'lucide-svelte';
 
 	const paths: { label: string; href: string }[] = [
@@ -14,8 +13,6 @@
 			href: route('/settings/privacy')
 		}
 	];
-
-	let openDeleteAccountDialog = $state(false);
 </script>
 
 <div class="flex h-screen flex-col">
@@ -30,14 +27,4 @@
 			<ChevronRight class="self-center text-muted-foreground group-hover:text-foreground" />
 		</Button>
 	{/each}
-
-	<Button
-		variant="destructive"
-		class="mb-5 mt-auto"
-		onclick={() => (openDeleteAccountDialog = true)}
-	>
-		Delete account
-	</Button>
 </div>
-
-<DeleteAccountDialog bind:open={openDeleteAccountDialog} />
