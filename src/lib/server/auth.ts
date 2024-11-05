@@ -21,7 +21,7 @@ export const hashOptions = {
 
 export const emailVerificationCodeExpiryMinutes = 15;
 
-export const hashPassword = async (password: string) => hash(password, hashOptions);
+export const hashPassword = async (password: string) => hash(password);
 
 export const verifyPassword = async (password: string, hashed: string) =>
 	verify(hashed, password, hashOptions);
@@ -91,6 +91,7 @@ export const signInWithEmailAndPassword = async (
 		}
 	});
 	if (!existingUser) {
+		await hash(password);
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}
 
