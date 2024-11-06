@@ -35,7 +35,11 @@
 				twiddleId: twiddle.data.id
 			})}
 		>
-			<p class="text-foreground">{twiddle.data.content}</p>
+			<div class="text-foreground">
+				{#each twiddle.data.content.split('\n') as line}
+					<p>{line}</p>
+				{/each}
+			</div>
 			<p class="mt-2 flex gap-1 text-sm text-muted-foreground">
 				<span>
 					{formatDate(twiddle.data.createdAt)}
