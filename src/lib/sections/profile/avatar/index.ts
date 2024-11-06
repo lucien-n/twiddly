@@ -1,4 +1,4 @@
-import type { Profile } from '@prisma/client';
+import type { PrivacySettings, Profile } from '@prisma/client';
 import { type VariantProps, tv } from 'tailwind-variants';
 import ProfileAvatar from './profile-avatar.svelte';
 import ProfileAvatarSkeleton from './profile-avatar-skeleton.svelte';
@@ -19,7 +19,11 @@ export const avatarVariants = tv({
 });
 
 export interface Props {
-	profile?: Pick<Profile, 'id' | 'handle' | 'avatarBackgroundColor' | 'role'> | null;
+	profile?:
+		| (Pick<Profile, 'id' | 'handle' | 'displayName' | 'avatarBackgroundColor' | 'role'> & {
+				privacySettings?: Pick<PrivacySettings, 'private'> | null;
+		  })
+		| null;
 	size?: VariantProps<typeof avatarVariants>['size'];
 	class?: string;
 }
