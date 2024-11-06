@@ -20,8 +20,8 @@
 	<TwiddleContext init={data.twiddle}>
 		{#snippet children(twiddle)}
 			<Scrollable>
-				<div class="p-4">
-					<div class="mb-2 flex items-center gap-3 py-6">
+				<div class="pb-4">
+					<div class="mb-2 flex items-center gap-3 pb-6">
 						<ProfileAvatar size="md" profile={twiddle.data.author} />
 						<div>
 							<p class="font-semibold">{twiddle.data.author.displayName}</p>
