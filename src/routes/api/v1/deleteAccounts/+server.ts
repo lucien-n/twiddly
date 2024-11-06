@@ -10,10 +10,10 @@ export const GET: RequestHandler = async (event) => {
 	}
 
 	try {
-		const onMonthAgo = new Date();
-		onMonthAgo.setDate(onMonthAgo.getDate() - 30);
+		const oneMonthAgo = new Date();
+		oneMonthAgo.setDate(oneMonthAgo.getDate() - 30);
 
-		await prisma.user.deleteMany({ where: { deletedAt: { lte: onMonthAgo } } });
+		await prisma.user.deleteMany({ where: { deletedAt: { lte: oneMonthAgo } } });
 	} catch (e) {
 		console.error(e);
 
