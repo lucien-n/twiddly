@@ -23,6 +23,8 @@ export class TwiddleState {
 	}
 
 	async toggleLike() {
+		const initialState = this.data.isLiked;
+		this.data.isLiked = !initialState;
 		const url = this.data.isLiked
 			? route('POST /api/v1/twiddle/[id]/unlike', { id: this.data.id })
 			: route('POST /api/v1/twiddle/[id]/like', { id: this.data.id });
@@ -37,13 +39,13 @@ export class TwiddleState {
 		}
 
 		if (error) {
+			this.data.isLiked = initialState;
 			toast.error(error);
 			return;
 		}
 
 		if (data !== undefined) {
 			this.data.likeCount = data;
-			this.data.isLiked = !this.data.isLiked;
 		}
 	}
 

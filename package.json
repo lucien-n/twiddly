@@ -14,7 +14,7 @@
 		"db:gen": "prisma generate && prisma db push --accept-data-loss && prisma db seed",
 		"test": "vitest --coverage",
 		"postinstall": "prisma generate",
-		"afterbuild": "tsx prisma/seed-prod.ts"
+		"afterbuild": "prisma generate && prisma db push && tsx prisma/seed-prod.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.3.1",
