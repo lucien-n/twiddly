@@ -13,6 +13,12 @@
 	const authState = setAuthState(init);
 
 	$effect(() => {
+		authState.user = init.user;
+		authState.session = init.session;
+		authState.profile = init.profile;
+	});
+
+	$effect(() => {
 		setMode(getModeWatcherTheme(init.profile?.interfaceSettings?.theme));
 	});
 </script>

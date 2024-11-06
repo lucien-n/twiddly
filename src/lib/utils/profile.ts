@@ -1,5 +1,6 @@
 export const getProfileSelect = () => ({
 	id: true,
+	bio: true,
 	role: true,
 	handle: true,
 	displayName: true,

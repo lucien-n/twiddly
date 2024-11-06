@@ -7,11 +7,15 @@ import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
+import { isAdmin } from '$lib/server/auth';
 
 const getTwiddles = async (profileId: string, currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getTwiddleSelect(currentUserId),
+		select: {
+			...getTwiddleSelect(currentUserId),
+			parent: { select: getTwiddleSelect(currentUserId) }
+		},
 		where: getTwiddleWhere({ authorId: profileId })
 	});
 
@@ -26,7 +30,11 @@ export const load: PageServerLoad = async (event) => {
 		select: getProfileSelect()
 	});
 	if (!profile) error(404, `Profile @${handle} not found`);
-	if (profile.privacySettings?.private && profile.id !== event.locals.session?.userId)
+	if (
+		!isAdmin(event) &&
+		profile.privacySettings?.private &&
+		profile.id !== event.locals.session?.userId
+	)
 		error(401, `@${handle}'s profile is private`);
 
 	return {

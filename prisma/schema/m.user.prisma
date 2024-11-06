@@ -1,9 +1,10 @@
 model User {
-    id            String    @id
-    email         String    @unique
-    emailVerified Boolean   @default(false)
-    passwordHash  String
-    deletedAt     DateTime?
+    id                  String    @id
+    email               String    @unique
+    emailVerified       Boolean   @default(false)
+    passwordHash        String
+    deletedAt           DateTime?
+    dataLastRetrievedAt DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()

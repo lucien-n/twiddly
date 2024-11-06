@@ -49,7 +49,7 @@ export const signIn: Action = async (event) => {
 		}
 	}
 
-	return { signInForm };
+	redirect(303, route('/'));
 };
 
 export const signUp: Action = async (event) => {

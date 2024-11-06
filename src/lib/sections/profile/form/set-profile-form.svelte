@@ -1,13 +1,15 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { ColorSelect } from '&/select';
+	import { browser, dev } from '$app/environment';
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear.notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
+	import { TooltippedProgressCircle } from '&/progress';
+	import { ColorSelect } from '&/select';
 	import * as Form from '&/ui/form';
 	import { Input } from '&/ui/input';
+	import { Textarea } from '&/ui/textarea';
 	import { AvatarBackgroundColor } from '@prisma/client';
 	import type { ActionResult } from '@sveltejs/kit';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -24,7 +26,7 @@
 		onError: onSuperFormError,
 		onResult: (event) => handleSuperResult(event, { onSuccess })
 	});
-	const { form: formData, enhance, errors, submitting, tainted } = form;
+	const { form: formData, enhance, errors, submitting, tainted, constraints } = form;
 
 	const loading = $derived($submitting);
 </script>
@@ -36,6 +38,25 @@
 				<Form.Label>Name</Form.Label>
 				<Form.Description>Your handle will be left unchanged</Form.Description>
 				<Input {...props} bind:value={$formData.displayName} />
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field {form} name="bio" class="relative">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Bio</Form.Label>
+				<Form.Description>Express yourself !</Form.Description>
+				<Textarea {...props} bind:value={$formData.bio} />
+
+				<div class="absolute bottom-2 right-2">
+					<TooltippedProgressCircle
+						current={$formData.bio?.length ?? 0}
+						max={$constraints.bio?.maxlength ?? 1}
+						bg-stroke="hsl(0 0% 25%)"
+					/>
+				</div>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
@@ -93,7 +114,7 @@
 		{loading ? 'Saving' : 'Save'}
 	</Form.LoadingButton>
 
-	{#if browser}
+	{#if dev && browser}
 		<SuperDebug data={$formData} />
 	{/if}
 </form>

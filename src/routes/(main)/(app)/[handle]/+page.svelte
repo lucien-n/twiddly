@@ -2,11 +2,10 @@
 	import { Dropdown } from '&/dropdown';
 	import { Scrollable } from '&/scrollable';
 	import { Separator } from '&/ui/separator';
-	import * as Tooltip from '&/ui/tooltip';
 	import { getAuthState } from '#/auth';
 	import { ProfileAvatar, SetProfileDialog } from '#/profile';
 	import { TwiddleList } from '#/twiddle';
-	import { EllipsisVertical, Lock } from 'lucide-svelte';
+	import { EllipsisVertical } from 'lucide-svelte';
 
 	const { data } = $props();
 	const profile = $derived(data.profile);
@@ -14,27 +13,20 @@
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
 
-	let openEditProfileDialog: boolean = $state(false);
+	let openEditProfileDialog = $state(false);
 </script>
 
 <div class="flex h-screen max-h-screen flex-col">
-	<div class="flex py-4">
-		<div class="relative">
-			<ProfileAvatar {profile} size="lg" />
-			{#if profile.privacySettings?.private}
-				<Tooltip.Root>
-					<Tooltip.Trigger class="absolute bottom-2 right-2 rounded-full border bg-background">
-						<Lock class="h-8 w-8 p-2" />
-					</Tooltip.Trigger>
-					<Tooltip.Content>
-						{profile.id === authState.user?.id ? 'Your' : `${profile.displayName}'s`} profile is private
-					</Tooltip.Content>
-				</Tooltip.Root>
-			{/if}
-		</div>
-		<div class="flex flex-col gap-1 py-6 pl-5">
+	<header class="flex py-4">
+		<ProfileAvatar {profile} size="lg" />
+		<div class="flex flex-col gap-1 pl-5 pt-6">
 			<h1 class="text-4xl">{profile.displayName}</h1>
 			<p class="text-muted-foreground">@{profile.handle}</p>
+			<div class="mt-2 text-base">
+				{#each profile.bio.split('\n') as line}
+					<p>{line}</p>
+				{/each}
+			</div>
 		</div>
 
 		{#if isSelf}
@@ -45,13 +37,15 @@
 				<EllipsisVertical />
 			</Dropdown>
 		{/if}
-	</div>
+	</header>
 
 	<Separator class="my-5" />
 
-	<Scrollable>
-		<TwiddleList twiddles={data.twiddles} />
-	</Scrollable>
+	{#key profile}
+		<Scrollable>
+			<TwiddleList twiddles={data.twiddles} />
+		</Scrollable>
+	{/key}
 </div>
 
 <SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} />

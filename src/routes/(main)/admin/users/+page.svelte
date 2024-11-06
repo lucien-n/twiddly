@@ -5,4 +5,4 @@
 	const { data } = $props();
 </script>
 
-<UsersTable data={[...data.users, ...data.users, ...data.users]} {columns} />
+<UsersTable data={data.users} {columns} />

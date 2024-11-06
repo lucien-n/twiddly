@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
 import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
-import { isVerified } from '$lib/server/auth';
+import { isAdmin, isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
@@ -25,7 +25,7 @@ export const setTwiddle: Action = async (event) => {
 		if (id) {
 			await prisma.twiddle.update({
 				data: { content },
-				where: { id, authorId: event.locals.session.userId },
+				where: { id, ...(isAdmin(event) ? {} : { authorId: event.locals.session.userId }) },
 				select: {
 					id: true // EMPTY SELECT
 				}

@@ -39,7 +39,10 @@ export const handleRouting: {
 			}
 		}
 
-		if (event.url.pathname.startsWith('/admin') && !isAdmin) {
+		if (
+			['/admin', '/api/v1/admin'].some((pathname) => event.url.pathname.startsWith(pathname)) &&
+			!isAdmin
+		) {
 			return handlerRedirect(303, '/');
 		}
 

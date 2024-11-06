@@ -3,6 +3,7 @@ import { AuthErrorCode } from '$lib/utils/auth-error';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { isVerified } from '$lib/server/auth';
+import { dev } from '$app/environment';
 
 export const POST: RequestHandler = async (event) => {
 	if (!isVerified(event)) error(401, AuthErrorCode.AuthRequired);
@@ -34,7 +35,11 @@ export const POST: RequestHandler = async (event) => {
 		]);
 
 		return json({ data: result[1].likeCount });
-	} catch {
+	} catch (e) {
+		if (dev) {
+			console.error(e);
+		}
+
 		error(500, 'Could not like twiddle');
 	}
 };

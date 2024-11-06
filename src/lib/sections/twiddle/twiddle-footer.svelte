@@ -8,6 +8,7 @@
 
 	const authState = getAuthState();
 	const twiddle = $state(getTwiddleState());
+	const isAuthor = $derived(authState.profile?.id === twiddle.data.author.id);
 
 	const handleLike = async (event: Event) => {
 		event.stopPropagation();
@@ -58,7 +59,7 @@
 	>
 		<Share2 class="h-4 w-4" />
 	</Button>
-	{#if authState.session?.userId === twiddle.data.author.id}
+	{#if isAuthor || authState.isAdmin}
 		<Dropdown
 			class={buttonVariants({ variant: 'ghost', size: 'icon' })}
 			items={[

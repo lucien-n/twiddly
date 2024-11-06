@@ -12,6 +12,7 @@ export interface Twiddle {
 		author: {
 			id: string;
 			role: Role;
+			bio: string;
 			handle: string;
 			displayName: string;
 			avatarBackgroundColor: AvatarBackgroundColor;
@@ -45,6 +46,7 @@ export const formatTwiddle = async (
 			? t.likes.some(({ profileId }: { profileId: string }) => profileId === currentUserId)
 			: false,
 		author: {
+			bio: t.bio,
 			id: t.author.id,
 			role: t.author.role,
 			handle: t.author.handle,

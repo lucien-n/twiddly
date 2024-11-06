@@ -3,6 +3,7 @@ model Profile {
 
     handle                String                 @unique
     displayName           String                 @unique
+    bio                   String
     avatarBackgroundColor AvatarBackgroundColor?
     role                  Role                   @default(USER)
 

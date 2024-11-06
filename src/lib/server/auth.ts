@@ -21,7 +21,7 @@ export const hashOptions = {
 
 export const emailVerificationCodeExpiryMinutes = 15;
 
-export const hashPassword = async (password: string) => hash(password, hashOptions);
+export const hashPassword = async (password: string) => hash(password);
 
 export const verifyPassword = async (password: string, hashed: string) =>
 	verify(hashed, password, hashOptions);
@@ -55,6 +55,7 @@ export const signUpWithEmailAndPassword = async (
 			profile: {
 				create: {
 					...meta,
+					bio: "Hi, I'm using Twiddly",
 					interfaceSettings: { create: {} },
 					privacySettings: { create: {} }
 				}
@@ -90,6 +91,7 @@ export const signInWithEmailAndPassword = async (
 		}
 	});
 	if (!existingUser) {
+		await hash(password);
 		throw new AuthError(AuthErrorCode.InvalidCredentials);
 	}
 
@@ -123,6 +125,7 @@ export const refreshSession = async (event: RequestEvent) => {
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
+		event.locals.profile = null;
 		return;
 	}
 
@@ -143,6 +146,14 @@ export const refreshSession = async (event: RequestEvent) => {
 		});
 	}
 
+	const profile = session
+		? await prisma.profile.findFirst({
+				where: { id: session.userId },
+				include: { interfaceSettings: true, privacySettings: true }
+			})
+		: null;
+
+	event.locals.profile = profile;
 	event.locals.user = user;
 	event.locals.session = session;
 };

@@ -1,14 +1,55 @@
 <script lang="ts">
-	import { Ellipsis, ExternalLink } from 'lucide-svelte';
+	import { route } from '$lib/ROUTES';
 	import { Button } from '&/ui/button';
 	import * as DropdownMenu from '&/ui/dropdown-menu';
-	import { route } from '$lib/ROUTES';
+	import { Ellipsis, ExternalLink, Ban } from 'lucide-svelte';
+	import type { DataUser } from '../../types';
+	import { Role } from '@prisma/client';
+	import { dev } from '$app/environment';
+	import { toast } from 'svelte-sonner';
+	import { invalidate } from '$app/navigation';
 
-	interface Props {
-		id: string;
-		handle: string;
-	}
-	const { id, handle }: Props = $props();
+	const { id, handle, role }: DataUser = $props();
+
+	const handleRestrict = async () => {
+		try {
+			const res = await fetch(route('GET /api/v1/admin/users/[id]/restrict', { id }));
+
+			if (!res.ok) {
+				toast.warning('Please try again later');
+				return;
+			}
+
+			toast.success(`@${handle} is now restricted`);
+			await invalidate('admin:users');
+		} catch (e) {
+			if (dev) {
+				console.error(e);
+			}
+
+			toast.error('An unexpected error occured');
+		}
+	};
+
+	const handleUnrestrict = async () => {
+		try {
+			const res = await fetch(route('GET /api/v1/admin/users/[id]/unrestrict', { id }));
+
+			if (!res.ok) {
+				toast.warning('Please try again later');
+				return;
+			}
+
+			toast.success(`@${handle} is now unrestricted`);
+			await invalidate('admin:users');
+		} catch (e) {
+			if (dev) {
+				console.error(e);
+			}
+
+			toast.error('An unexpected error occured');
+		}
+	};
 </script>
 
 <DropdownMenu.Root>
@@ -34,5 +75,15 @@
 				<p>View profile</p>
 			</DropdownMenu.Item>
 		</a>
+		{#if role === Role.RESTRICTED}
+			<DropdownMenu.Item onclick={handleUnrestrict}>
+				<p>Unrestrict</p>
+			</DropdownMenu.Item>
+		{:else if role === Role.USER}
+			<DropdownMenu.Item onclick={handleRestrict}>
+				<Ban class="size-4" />
+				<p>Restrict</p>
+			</DropdownMenu.Item>
+		{/if}
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
