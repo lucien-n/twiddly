@@ -12,7 +12,10 @@ import { isAdmin } from '@/lib/server/auth';
 const getTwiddles = async (profileId: string, currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getTwiddleSelect(currentUserId),
+		select: {
+			...getTwiddleSelect(currentUserId),
+			parent: { select: getTwiddleSelect(currentUserId) }
+		},
 		where: getTwiddleWhere({ authorId: profileId })
 	});
 

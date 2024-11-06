@@ -4,10 +4,15 @@
 	import { Button } from '&/ui/button';
 	import * as Card from '&/ui/card';
 	import { ProfileAvatar } from '#/profile';
-	import { getTwiddleState } from './state/twiddle-state.svelte';
 	import TwiddleFooter from './twiddle-footer.svelte';
+	import { TwiddleContext } from './state';
+	import { TwiddleCard } from '.';
+	import type { Twiddle } from '$lib';
 
-	const twiddle = getTwiddleState();
+	interface Props {
+		twiddle: Twiddle;
+	}
+	const { twiddle }: Props = $props();
 </script>
 
 <Card.Root class="mx-auto transition-shadow duration-300 hover:shadow-lg">
@@ -40,16 +45,27 @@
 					<p>{line}</p>
 				{/each}
 			</div>
-			<p class="mt-2 flex gap-1 text-sm text-muted-foreground">
-				<span>
-					{formatDate(twiddle.data.createdAt)}
-				</span>
-				{#if twiddle.data.isEdited}
-					<span>·</span>
-					<span>Edited</span>
-				{/if}
-			</p>
 		</a>
+
+		{#if twiddle.data.parent}
+			<div class="py-2">
+				<TwiddleContext init={twiddle.data.parent}>
+					{#snippet children(twiddleState)}
+						<TwiddleCard twiddle={twiddleState} />
+					{/snippet}
+				</TwiddleContext>
+			</div>
+		{/if}
+
+		<p class="mt-2 flex gap-1 text-sm text-muted-foreground">
+			<span>
+				{formatDate(twiddle.data.createdAt)}
+			</span>
+			{#if twiddle.data.isEdited}
+				<span>·</span>
+				<span>Edited</span>
+			{/if}
+		</p>
 	</Card.Content>
 	<Card.Footer class="justify-between py-3">
 		<TwiddleFooter />

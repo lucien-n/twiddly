@@ -13,7 +13,7 @@
 		<TwiddleContext init={twiddle}>
 			{#snippet children(twiddleState)}
 				{#if !twiddleState.deleted}
-					<TwiddleCard />
+					<TwiddleCard twiddle={twiddleState} />
 				{/if}
 			{/snippet}
 		</TwiddleContext>

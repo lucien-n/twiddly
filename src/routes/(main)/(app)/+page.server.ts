@@ -9,10 +9,12 @@ import type { PageServerLoad } from './$types';
 const getTwiddles = async (currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
-		select: getTwiddleSelect(currentUserId),
+		select: {
+			...getTwiddleSelect(currentUserId),
+			parent: { select: getTwiddleSelect(currentUserId) }
+		},
 		where: {
 			author: { user: { deletedAt: null } },
-			parent: null,
 			OR: [
 				{
 					AND: [{ author: { privacySettings: { private: false } } }, getTwiddleWhere()]
