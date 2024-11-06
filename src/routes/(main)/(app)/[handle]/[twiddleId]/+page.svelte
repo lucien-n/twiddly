@@ -35,9 +35,11 @@
 						</div>
 					</div>
 					<div>
-						<p class="mb-4 text-xl">
-							{twiddle.data.content}
-						</p>
+						<div class="mb-4 text-xl">
+							{#each twiddle.data.content.split('\n') as line}
+								<p>{line}</p>
+							{/each}
+						</div>
 
 						{#if twiddle.data.parent}
 							<TwiddleContext init={twiddle.data.parent}>
