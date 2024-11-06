@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex h-screen max-h-screen flex-col">
-	<div class="flex py-4">
+	<header class="flex py-4">
 		<ProfileAvatar {profile} size="lg" />
 		<div class="flex flex-col gap-1 pl-5 pt-6">
 			<h1 class="text-4xl">{profile.displayName}</h1>
@@ -37,7 +37,7 @@
 				<EllipsisVertical />
 			</Dropdown>
 		{/if}
-	</div>
+	</header>
 
 	<Separator class="my-5" />
 
