@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
-import { route } from '@/lib/ROUTES';
-import { isVerified } from '@/lib/server/auth';
-import { prisma } from '@/lib/server/prisma';
+import { route } from '$lib/ROUTES';
+import { isVerified } from '$lib/server/auth';
+import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 
 // todo: check when the user last retrieved their data/send an email with said data instead of direct download

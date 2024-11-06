@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Tooltip from '&/ui/tooltip';
-	import { percentage } from '@/lib/utils/percentage';
+	import { percentage } from '$lib/utils/percentage';
 	import type { TooltippedProgressCircleProps } from '.';
 	import ProgressCircle from './progress-circle.svelte';
 

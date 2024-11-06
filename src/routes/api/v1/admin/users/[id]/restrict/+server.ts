@@ -1,6 +1,6 @@
 import { dev } from '$app/environment';
-import { isAdmin } from '@/lib/server/auth';
-import { prisma } from '@/lib/server/prisma';
+import { isAdmin } from '$lib/server/auth';
+import { prisma } from '$lib/server/prisma';
 import { Role } from '@prisma/client';
 import { error, redirect, type RequestHandler } from '@sveltejs/kit';
 

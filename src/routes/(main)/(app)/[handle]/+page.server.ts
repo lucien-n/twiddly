@@ -7,7 +7,7 @@ import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { isAdmin } from '@/lib/server/auth';
+import { isAdmin } from '$lib/server/auth';
 
 const getTwiddles = async (profileId: string, currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
