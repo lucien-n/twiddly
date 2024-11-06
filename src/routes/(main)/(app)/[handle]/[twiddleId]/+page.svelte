@@ -18,40 +18,40 @@
 
 {#key data.twiddle}
 	<TwiddleContext init={data.twiddle}>
-		{#snippet children(twiddle)}
+		{#snippet children(twiddleState)}
 			<Scrollable>
 				<div class="pb-4">
 					<div class="mb-2 flex items-center gap-3 pb-6">
-						<ProfileAvatar size="md" profile={twiddle.data.author} />
+						<ProfileAvatar size="md" profile={twiddleState.data.author} />
 						<div>
-							<p class="font-semibold">{twiddle.data.author.displayName}</p>
+							<p class="font-semibold">{twiddleState.data.author.displayName}</p>
 							<Button
 								variant="link"
-								href={route('/[handle]', { handle: twiddle.data.author.handle })}
+								href={route('/[handle]', { handle: twiddleState.data.author.handle })}
 								class="h-0 p-0 text-sm text-gray-500"
 							>
-								@{twiddle.data.author.handle}
+								@{twiddleState.data.author.handle}
 							</Button>
 						</div>
 					</div>
 					<div>
 						<div class="mb-4 text-xl">
-							{#each twiddle.data.content.split('\n') as line}
+							{#each twiddleState.data.content.split('\n') as line}
 								<p>{line}</p>
 							{/each}
 						</div>
 
-						{#if twiddle.data.parent}
-							<TwiddleContext init={twiddle.data.parent}>
+						{#if twiddleState.data.parent}
+							<TwiddleContext init={twiddleState.data.parent}>
 								<TwiddleCard />
 							</TwiddleContext>
 						{/if}
 
 						<p class="my-3 flex gap-1 text-sm text-muted-foreground">
 							<span>
-								{formatDate(twiddle.data.createdAt)}
+								{formatDate(twiddleState.data.createdAt)}
 							</span>
-							{#if twiddle.data.isEdited}
+							{#if twiddleState.data.isEdited}
 								<span>·</span>
 								<span>Edited</span>
 							{/if}
@@ -72,9 +72,9 @@
 					</div>
 
 					<div class="flex h-full">
-						{#if twiddle.data.comments?.length}
+						{#if twiddleState.data.comments?.length}
 							<div class="w-full space-y-3">
-								<TwiddleList twiddles={twiddle.data.comments} />
+								<TwiddleList twiddles={twiddleState.data.comments} />
 							</div>
 						{:else}
 							<h1 class="mx-auto self-center text-3xl font-bold">No one commented yet</h1>

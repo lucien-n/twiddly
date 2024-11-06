@@ -7,7 +7,6 @@
 	import NavUser from './nav-user.svelte';
 
 	const authState = getAuthState();
-
 	const isAuthenticated = $derived(!!authState.session);
 
 	let items: NavItemProps[] = $derived([
