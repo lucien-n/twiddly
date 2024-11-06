@@ -13,7 +13,7 @@
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
 
-	let openEditProfileDialog: boolean = $state(false);
+	let openEditProfileDialog = $state(false);
 </script>
 
 <div class="flex h-screen max-h-screen flex-col">
