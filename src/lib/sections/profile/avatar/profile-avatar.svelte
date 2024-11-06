@@ -9,16 +9,18 @@
 	const src = $derived(profile ? getProfileAvatar(profile) : undefined);
 </script>
 
-<Avatar.Root
-	class={avatarVariants({
-		size,
-		className
-	})}
->
-	{#if profile}
-		<Avatar.Image {src} alt="@{profile.handle}" />
-		<Avatar.Fallback>{profile.handle.charAt(0).toUpperCase()}</Avatar.Fallback>
-	{:else}
-		<Avatar.Image alt="placeholder" />
-	{/if}
-</Avatar.Root>
+{#key src}
+	<Avatar.Root
+		class={avatarVariants({
+			size,
+			className
+		})}
+	>
+		{#if profile}
+			<Avatar.Image {src} alt="@{profile.handle}" />
+			<Avatar.Fallback>{profile.handle.charAt(0).toUpperCase()}</Avatar.Fallback>
+		{:else}
+			<Avatar.Image alt="placeholder" />
+		{/if}
+	</Avatar.Root>
+{/key}
