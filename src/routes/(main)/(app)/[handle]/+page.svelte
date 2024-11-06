@@ -54,9 +54,11 @@
 
 	<Separator class="my-5" />
 
-	<Scrollable>
-		<TwiddleList twiddles={data.twiddles} />
-	</Scrollable>
+	{#key profile}
+		<Scrollable>
+			<TwiddleList twiddles={data.twiddles} />
+		</Scrollable>
+	{/key}
 </div>
 
 <SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} />
