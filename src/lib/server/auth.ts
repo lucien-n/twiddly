@@ -125,6 +125,7 @@ export const refreshSession = async (event: RequestEvent) => {
 	if (!sessionId) {
 		event.locals.user = null;
 		event.locals.session = null;
+		event.locals.profile = null;
 		return;
 	}
 
@@ -145,6 +146,14 @@ export const refreshSession = async (event: RequestEvent) => {
 		});
 	}
 
+	const profile = session
+		? await prisma.profile.findFirst({
+				where: { id: session.userId },
+				include: { interfaceSettings: true, privacySettings: true }
+			})
+		: null;
+
+	event.locals.profile = profile;
 	event.locals.user = user;
 	event.locals.session = session;
 };
