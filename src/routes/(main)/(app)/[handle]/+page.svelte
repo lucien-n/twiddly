@@ -32,9 +32,14 @@
 				</Tooltip.Root>
 			{/if}
 		</div>
-		<div class="flex flex-col gap-1 py-6 pl-5">
+		<div class="flex flex-col gap-1 pl-5 pt-6">
 			<h1 class="text-4xl">{profile.displayName}</h1>
 			<p class="text-muted-foreground">@{profile.handle}</p>
+			<div class="mt-2 text-base">
+				{#each profile.bio.split('\n') as line}
+					<p>{line}</p>
+				{/each}
+			</div>
 		</div>
 
 		{#if isSelf}

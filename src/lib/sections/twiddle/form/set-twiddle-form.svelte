@@ -1,15 +1,14 @@
 <script lang="ts">
+	import { getTwiddleState, TwiddleContentField } from '#/twiddle';
 	import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
+	import { TooltippedProgressCircle } from '&/progress';
 	import * as Form from '&/ui/form';
 	import { Send } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
-	import { getTwiddleState, TwiddleContentField } from '#/twiddle';
-	import { toast } from 'svelte-sonner';
-	import * as Tooltip from '&/ui/tooltip';
-	import { ProgressCircle } from '&/progress';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
@@ -32,9 +31,6 @@
 
 	const loading = $derived($submitting);
 	const isComment = $derived(!!setTwiddleForm.data.parentId);
-	const contentPercentage = $derived(
-		Math.ceil(($formData.content.length / ($constraints.content?.maxlength ?? 1)) * 100)
-	);
 </script>
 
 <form method="post" {action} use:enhance>
@@ -71,18 +67,9 @@
 			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
 
-		<Tooltip.Root>
-			<Tooltip.Trigger class="h-7 w-7 self-center">
-				<ProgressCircle
-					progress={contentPercentage}
-					stroke-width={3}
-					bg-stroke="hsl(0 0% 3.9%)"
-					stroke="hsl(0 0% 98%)"
-				/>
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				{$formData.content.length} / {$constraints.content?.maxlength ?? 0}
-			</Tooltip.Content>
-		</Tooltip.Root>
+		<TooltippedProgressCircle
+			current={$formData.content.length}
+			max={$constraints.content?.maxlength ?? 1}
+		/>
 	</div>
 </form>

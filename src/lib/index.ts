@@ -12,6 +12,7 @@ export interface Twiddle {
 		author: {
 			id: string;
 			role: Role;
+			bio: string;
 			handle: string;
 			displayName: string;
 			avatarBackgroundColor: AvatarBackgroundColor;
