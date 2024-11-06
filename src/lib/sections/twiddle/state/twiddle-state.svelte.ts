@@ -25,7 +25,7 @@ export class TwiddleState {
 	async toggleLike() {
 		const initialState = this.data.isLiked;
 		this.data.isLiked = !initialState;
-		const url = this.data.isLiked
+		const url = initialState
 			? route('POST /api/v1/twiddle/[id]/unlike', { id: this.data.id })
 			: route('POST /api/v1/twiddle/[id]/like', { id: this.data.id });
 
