@@ -5,8 +5,10 @@ import { isAdmin, isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
-import { superValidate } from 'sveltekit-superforms';
+import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { MAX_CONTENT_LENGTH } from '../schemas/twiddle/fields';
+import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
 
 export const setTwiddle: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);
@@ -20,7 +22,14 @@ export const setTwiddle: Action = async (event) => {
 		const { data } = setTwiddleForm;
 		const { id, parentId } = data;
 		// primitive formatting
-		const content = data.content.trimEnd();
+		const content = sanitizeTwiddleContent(data.content);
+		if (getSanitizedContentLength(content) > MAX_CONTENT_LENGTH) {
+			return setError(
+				setTwiddleForm,
+				'content',
+				`Twiddle is too long, must not exceed ${MAX_CONTENT_LENGTH}`
+			);
+		}
 
 		if (id) {
 			await prisma.twiddle.update({

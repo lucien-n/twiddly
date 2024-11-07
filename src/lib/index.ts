@@ -87,3 +87,15 @@ export const formatTwiddles = (
 	data: any[],
 	currentUserId: string | undefined
 ): Promise<Twiddle[]> => Promise.all(data.map((d) => formatTwiddle(d, currentUserId)));
+
+export const sanitizeTwiddleContent = (content: string): string => {
+	const formatted = content
+		.split('\n')
+		.map((line) => line.trimEnd())
+		.join('\n');
+
+	return formatted;
+};
+
+export const getSanitizedContentLength = (sanitizedContent: string) =>
+	sanitizedContent.split('\n').join('').length;

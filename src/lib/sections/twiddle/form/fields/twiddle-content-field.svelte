@@ -1,10 +1,13 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
+	import { getAuthState } from '#/auth';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
 	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import * as Form from '&/ui/form';
 	import { Textarea } from '&/ui/textarea';
-	import { getAuthState } from '#/auth';
+	import { MAX_CONTENT_LENGTH } from '@/lib/schemas/twiddle/fields';
 	import type { Infer, SuperForm } from 'sveltekit-superforms';
+	import type { FormEventHandler } from 'svelte/elements';
 
 	interface Props {
 		form: SuperForm<Infer<SetTwiddlechema>>;
@@ -20,12 +23,24 @@
 	const MIN_LINES = 5;
 
 	const getRows = () => {
-		const lines = content.split('\n').length;
+		const lines = sanitizedContent.split('\n').length;
 		return Math.max(MIN_LINES, Math.min(lines, MAX_LINES));
 	};
 
-	const content = $derived($formData.content.trimEnd());
+	let prevContent = $state('');
+	const sanitizedContent = $derived(sanitizeTwiddleContent($formData.content));
+	const sanitizedContentLength = $derived(getSanitizedContentLength(sanitizedContent));
 	const rows: number = $derived(getRows());
+
+	const handleChange: FormEventHandler<HTMLTextAreaElement> = (event) => {
+		if (sanitizedContentLength <= MAX_CONTENT_LENGTH) {
+			prevContent = $formData.content;
+			return;
+		}
+
+		event.preventDefault();
+		$formData.content = prevContent;
+	};
 </script>
 
 <Form.Field {form} name="content" class="relative">
@@ -37,7 +52,8 @@
 				{rows}
 				class="resize-none text-lg"
 				minlength={$constraints.content?.minlength}
-				maxlength={$constraints.content?.maxlength}
+				oninput={handleChange}
+				onchange={handleChange}
 				placeholder={placeholder ?? `What's up ${authState.profile?.displayName ?? 'Stranger'} ?`}
 				autofocus
 			/>

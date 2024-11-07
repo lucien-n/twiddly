@@ -1,3 +1,5 @@
 import { z } from 'zod';
 
-export const contentField = z.string().min(1).max(320);
+export const MAX_CONTENT_LENGTH = 320;
+
+export const contentField = z.string().min(1);
