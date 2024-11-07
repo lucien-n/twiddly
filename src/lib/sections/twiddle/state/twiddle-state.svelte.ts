@@ -15,6 +15,7 @@ export class TwiddleState {
 	openShareDialog: boolean = $state(false);
 
 	deleted: boolean = $state(false);
+	liking: boolean = $state(false);
 
 	constructor({ data, setTwiddleForm, setCommentForm }: Twiddle) {
 		this.data = data;
@@ -23,9 +24,12 @@ export class TwiddleState {
 	}
 
 	async toggleLike() {
-		const initialState = this.data.isLiked;
-		this.data.isLiked = !initialState;
-		const url = initialState
+		const initialState = { liked: this.data.isLiked, likeCount: this.data.likeCount };
+
+		this.data.isLiked = !initialState.liked;
+		this.data.likeCount += initialState.liked ? -1 : 1;
+
+		const url = initialState.liked
 			? route('POST /api/v1/twiddle/[id]/unlike', { id: this.data.id })
 			: route('POST /api/v1/twiddle/[id]/like', { id: this.data.id });
 
@@ -34,12 +38,16 @@ export class TwiddleState {
 		if (errorBody && typeof errorBody === 'object' && 'message' in errorBody) {
 			if (errorBody.message === AuthErrorCode.AuthRequired) {
 				toast.warning('You must be signed-in');
-				return;
 			}
+
+			toast.error(`An error occured : ${errorBody.message}`);
+			return;
 		}
 
 		if (error) {
-			this.data.isLiked = initialState;
+			this.data.isLiked = initialState.liked;
+			this.data.likeCount = initialState.likeCount;
+
 			toast.error(error);
 			return;
 		}
