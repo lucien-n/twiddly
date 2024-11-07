@@ -19,10 +19,6 @@ export const columns: ColumnDef<DataUser>[] = [
 	{ accessorKey: 'role', header: 'Role' },
 	{
 		id: 'actions',
-		cell: ({ row }) =>
-			renderComponent(ActionsCell, {
-				id: row.original.id,
-				handle: row.original.handle
-			})
+		cell: ({ row }) => renderComponent(ActionsCell, row.original)
 	}
 ];

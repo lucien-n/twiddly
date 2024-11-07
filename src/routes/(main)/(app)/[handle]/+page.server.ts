@@ -1,4 +1,4 @@
-import { formatTwiddles } from '$lib';
+import { formatProfile, formatTwiddles } from '$lib';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
 import { prisma } from '$lib/server/prisma';
 import { getProfileSelect } from '$lib/utils/profile';
@@ -25,16 +25,13 @@ const getTwiddles = async (profileId: string, currentUserId?: string) => {
 export const load: PageServerLoad = async (event) => {
 	const { handle } = event.params;
 
-	const profile = await prisma.profile.findFirst({
+	const data = await prisma.profile.findFirst({
 		where: { handle, user: { deletedAt: null } },
 		select: getProfileSelect()
 	});
-	if (!profile) error(404, `Profile @${handle} not found`);
-	if (
-		!isAdmin(event) &&
-		profile.privacySettings?.private &&
-		profile.id !== event.locals.session?.userId
-	)
+	if (!data) error(404, `Profile @${handle} not found`);
+	const profile = formatProfile(data);
+	if (!isAdmin(event) && profile.isPrivate && profile.id !== event.locals.session?.userId)
 		error(401, `@${handle}'s profile is private`);
 
 	return {

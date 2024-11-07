@@ -1,7 +1,19 @@
 import { AvatarBackgroundColor, type Role } from '@prisma/client';
 import { superValidate, type Infer, type SuperValidated } from 'sveltekit-superforms';
-import { setTwiddleSchema, type SetTwiddlechema } from './schemas/twiddle/set-twiddle';
 import { zod } from 'sveltekit-superforms/adapters';
+import { setTwiddleSchema, type SetTwiddlechema } from './schemas/twiddle/set-twiddle';
+import { getProfileAvatar } from './utils/avatar';
+
+export interface Profile {
+	id: string;
+	bio: string;
+	role: Role;
+	avatar: string;
+	handle: string;
+	createdAt: Date;
+	isPrivate: boolean;
+	displayName: string;
+}
 
 export interface Twiddle {
 	data: {
@@ -9,15 +21,7 @@ export interface Twiddle {
 		content: string;
 		createdAt: Date;
 		isEdited: boolean;
-		author: {
-			id: string;
-			role: Role;
-			bio: string;
-			handle: string;
-			displayName: string;
-			avatarBackgroundColor: AvatarBackgroundColor;
-			isPrivate: boolean;
-		};
+		author: Profile;
 		likeCount: number;
 		isLiked: boolean;
 		commentCount: number;
@@ -28,32 +32,45 @@ export interface Twiddle {
 	setCommentForm: SuperValidated<Infer<SetTwiddlechema>>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const formatProfile = (p: any): Profile => ({
+	id: p.id,
+	bio: p.bio,
+	role: p.role,
+	handle: p.handle,
+	avatar:
+		p.handle && p.avatarBackgroundColor
+			? getProfileAvatar(p)
+			: getProfileAvatar({
+					handle: 'unknown',
+					avatarBackgroundColor: AvatarBackgroundColor.MISTYROSE
+				}),
+	createdAt: p.createdAt,
+	displayName: p.displayName,
+	isPrivate: Boolean(p.privacySettings?.private)
+});
+
 export const formatTwiddle = async (
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	t: any,
 	currentUserId: string | undefined
 ): Promise<Twiddle> => {
+	const deleted = !!t.deleted;
 	const data = {
 		id: t.id,
-		content: t.content,
+		content: deleted ? 'This post has been deleted' : t.content,
 		createdAt: t.createdAt,
 		parent: t.parent ? await formatTwiddle(t.parent, currentUserId) : undefined,
-		isEdited: !!t.editedAt,
-		likeCount: t.likeCount,
+		isEdited: deleted ? false : !!t.editedAt,
+		likeCount: deleted ? 0 : t.likeCount,
 		commentCount: t.commentCount,
 		comments: t.children ? await formatTwiddles(t.children, currentUserId) : [],
-		isLiked: currentUserId
-			? t.likes.some(({ profileId }: { profileId: string }) => profileId === currentUserId)
-			: false,
-		author: {
-			bio: t.bio,
-			id: t.author.id,
-			role: t.author.role,
-			handle: t.author.handle,
-			displayName: t.author.displayName,
-			avatarBackgroundColor: t.author.avatarBackgroundColor ?? AvatarBackgroundColor.LAVENDER,
-			isPrivate: !!t.author.privacySettings?.private
-		}
+		isLiked: deleted
+			? false
+			: currentUserId
+				? t.likes.some(({ profileId }: { profileId: string }) => profileId === currentUserId)
+				: false,
+		author: formatProfile(t.author)
 	};
 
 	return {

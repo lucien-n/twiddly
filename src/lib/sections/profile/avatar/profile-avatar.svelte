@@ -1,18 +1,16 @@
 <script lang="ts">
-	import { getProfileAvatar } from '$lib/utils/avatar';
+	import { getAuthState } from '#/auth';
 	import * as Avatar from '&/ui/avatar';
+	import * as Tooltip from '&/ui/tooltip';
+	import { cn } from '&/utils';
+	import { Role } from '@prisma/client';
+	import { Ban, Lock } from 'lucide-svelte';
 	import type { Props } from '.';
 	import { avatarVariants } from './index';
-	import { Ban, Lock } from 'lucide-svelte';
-	import * as Tooltip from '&/ui/tooltip';
-	import { getAuthState } from '#/auth';
-	import { Role } from '@prisma/client';
-	import { cn } from '&/utils';
 
 	const { profile, size, class: className }: Props = $props();
 
 	const authState = getAuthState();
-	const src = $derived(profile ? getProfileAvatar(profile) : undefined);
 </script>
 
 <div class="relative">
@@ -23,7 +21,7 @@
 		})}
 	>
 		{#if profile}
-			<Avatar.Image {src} alt="@{profile.handle}" />
+			<Avatar.Image src={profile.avatar} alt="@{profile.handle}" />
 			<Avatar.Fallback>{profile.handle.charAt(0).toUpperCase()}</Avatar.Fallback>
 		{:else}
 			<Avatar.Image alt="placeholder" />
@@ -44,7 +42,7 @@
 				{profile.id === authState.user?.id ? 'Your' : `${profile.displayName}'s`} profile is restricted
 			</Tooltip.Content>
 		</Tooltip.Root>
-	{:else if profile?.privacySettings?.private}
+	{:else if profile?.isPrivate}
 		<Tooltip.Root>
 			<Tooltip.Trigger
 				class={cn(

@@ -47,7 +47,7 @@
 			</div>
 		</a>
 
-		{#if twiddle.data.parent}
+		{#if twiddle.data.parent && twiddle.data.parent.data}
 			<div class="py-2">
 				<TwiddleContext init={twiddle.data.parent}>
 					{#snippet children(twiddleState)}

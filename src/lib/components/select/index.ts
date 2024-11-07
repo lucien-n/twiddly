@@ -24,7 +24,10 @@ type SingleSelectProps<T extends string> = Partial<ControlAttrs> &
 		onValueChange?: (value: string) => void;
 	};
 
-type ColorSelectProps<T extends string> = SingleSelectProps<T> & {
+type ColorSelectProps<T extends string> = Pick<
+	SingleSelectProps<T>,
+	'value' | 'options' | 'placeholder' | 'onValueChange'
+> & {
 	options: ColorSelectOption<T>[];
 };
 

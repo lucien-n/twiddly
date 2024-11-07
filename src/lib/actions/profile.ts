@@ -17,6 +17,7 @@ export const setProfile: Action = async (event) => {
 	const currentProfile = await prisma.profile.findUnique({
 		where: { id: event.locals.session.userId },
 		select: {
+			bio: true,
 			displayName: true,
 			avatarBackgroundColor: true
 		}
