@@ -11,7 +11,7 @@
 	}
 	const { init, children }: Props = $props();
 
-	const twiddle = $derived(setTwiddleState(init));
+	const twiddle = setTwiddleState(init);
 </script>
 
 {@render children(twiddle)}
