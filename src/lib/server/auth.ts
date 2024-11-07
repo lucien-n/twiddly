@@ -11,6 +11,7 @@ import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 import { getMaintenanceMode } from './utils';
+import { formatProfile } from '..';
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -153,7 +154,7 @@ export const refreshSession = async (event: RequestEvent) => {
 			})
 		: null;
 
-	event.locals.profile = profile;
+	event.locals.profile = profile ? { ...profile, ...formatProfile(profile) } : null;
 	event.locals.user = user;
 	event.locals.session = session;
 };

@@ -113,8 +113,8 @@
 	<Form.LoadingButton class="w-full" {loading} disabled={!$tainted}>
 		{loading ? 'Saving' : 'Save'}
 	</Form.LoadingButton>
-
-	{#if dev && browser}
-		<SuperDebug data={$formData} />
-	{/if}
 </form>
+
+{#if dev && browser}
+	<SuperDebug data={$formData} />
+{/if}

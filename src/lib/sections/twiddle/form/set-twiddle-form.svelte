@@ -4,11 +4,13 @@
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import { TooltippedProgressCircle } from '&/progress';
 	import * as Form from '&/ui/form';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
 	import { Send } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
+	import { MAX_CONTENT_LENGTH } from '@/lib/schemas/twiddle/fields';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
@@ -25,11 +27,14 @@
 					toast.warning(result.status === 401 ? 'You must be signed-in' : 'An error occured')
 			})
 	});
-	const { enhance, submitting, errors, form: formData, constraints } = form;
+	const { enhance, submitting, errors, form: formData } = form;
 
 	const twiddleState = getTwiddleState();
 
 	const loading = $derived($submitting);
+	const sanitizedContentLength = $derived(
+		getSanitizedContentLength(sanitizeTwiddleContent($formData.content))
+	);
 	const isComment = $derived(!!setTwiddleForm.data.parentId);
 </script>
 
@@ -67,9 +72,6 @@
 			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
 
-		<TooltippedProgressCircle
-			current={$formData.content.length}
-			max={$constraints.content?.maxlength ?? 1}
-		/>
+		<TooltippedProgressCircle current={sanitizedContentLength} max={MAX_CONTENT_LENGTH} />
 	</div>
 </form>

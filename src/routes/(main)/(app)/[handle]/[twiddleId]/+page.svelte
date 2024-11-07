@@ -43,7 +43,7 @@
 
 						{#if twiddleState.data.parent}
 							<TwiddleContext init={twiddleState.data.parent}>
-								<TwiddleCard />
+								<TwiddleCard twiddle={twiddleState.data.parent} />
 							</TwiddleContext>
 						{/if}
 

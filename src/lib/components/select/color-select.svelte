@@ -5,7 +5,7 @@
 	import type { ColorSelectProps } from '.';
 
 	// eslint-disable-next-line no-undef
-	let { options, value: value = $bindable(), ...props }: ColorSelectProps<T> = $props();
+	let { options, value = $bindable(), ...props }: ColorSelectProps<T> = $props();
 </script>
 
 <div class="grid grid-flow-col justify-between">

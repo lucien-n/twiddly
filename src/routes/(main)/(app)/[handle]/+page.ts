@@ -1,4 +1,3 @@
-import { getProfileAvatar } from '$lib/utils/avatar';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ data }) => ({
@@ -7,6 +6,6 @@ export const load: PageLoad = async ({ data }) => ({
 		title: `${data.profile.displayName}'s profile`,
 		description: `${data.profile.displayName}'s profile & latest posts`,
 		author: data.profile.handle,
-		image: getProfileAvatar(data.profile)
+		image: data.profile.avatar
 	}
 });

@@ -1,13 +1,17 @@
 <script lang="ts">
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
+	import { route } from '$lib/ROUTES';
 	import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import {
 		handleSuperResult,
 		onSuperFormError,
 		type ActionResultSuccess
 	} from '$lib/utils/super-form';
+	import { TooltippedProgressCircle } from '&/progress';
 	import * as Dialog from '&/ui/dialog';
 	import * as Form from '&/ui/form';
 	import { LoadingButton } from '&/ui/form';
+	import { MAX_CONTENT_LENGTH } from '@/lib/schemas/twiddle/fields';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
@@ -16,7 +20,6 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import TwiddleContentField from '../form/fields/twiddle-content-field.svelte';
 	import { getTwiddleState } from '../state/twiddle-state.svelte';
-	import { route } from '$lib/ROUTES';
 
 	interface Props {
 		open: boolean;
@@ -62,6 +65,9 @@
 	const { form: formData, enhance, submitting, tainted } = form;
 
 	const loading = $derived($submitting);
+	const sanitizedContentLength = $derived(
+		getSanitizedContentLength(sanitizeTwiddleContent($formData.content))
+	);
 
 	onMount(() => {
 		$formData = {
@@ -78,8 +84,16 @@
 			<Dialog.Header>
 				<Dialog.Title>Edit twiddle</Dialog.Title>
 			</Dialog.Header>
-			<div class="my-3">
+			<div class="relative my-3">
 				<TwiddleContentField {form} />
+
+				<div class="absolute bottom-0 right-2">
+					<TooltippedProgressCircle
+						current={sanitizedContentLength}
+						max={MAX_CONTENT_LENGTH}
+						bg-stroke="hsl(0 0% 25%)"
+					/>
+				</div>
 			</div>
 
 			<Form.Field {form} name="id">

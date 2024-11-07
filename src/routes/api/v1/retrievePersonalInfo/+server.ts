@@ -11,8 +11,7 @@ export const GET = async (event) => {
 	}
 
 	try {
-		const data = await prisma.user.update({
-			data: { dataLastRetrievedAt: new Date() },
+		const data = await prisma.user.findFirst({
 			where: { id: event.locals.session.userId },
 			include: {
 				profile: {

@@ -1,7 +1,8 @@
-// See https://kit.svelte.dev/docs/types#app
+import type { Profile } from './lib';
+
 // for information about these interfaces
 declare global {
-	type ProfileWithSettings = import('@prisma/client').Profile & {
+	type ProfileWithSettings = Profile & {
 		interfaceSettings: import('@prisma/client').InterfaceSettings | null;
 		privacySettings: import('@prisma/client').PrivacySettings | null;
 	};

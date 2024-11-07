@@ -3,19 +3,17 @@ import { isAdmin } from '$lib/server/auth';
 import { error, type Actions } from '@sveltejs/kit';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import type { PageServerLoad } from '../$types';
+import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import { dev } from '$app/environment';
 import { setSiteSettings } from '@/hooks/site-settings.svelte';
 
-export const load: PageServerLoad = async (event) => {
-	return {
-		setSiteSettingsForm: await superValidate(
-			event.locals.siteSettings,
-			zod(adminSetSiteSettingsSchema)
-		)
-	};
-};
+export const load: PageServerLoad = async (event) => ({
+	setSiteSettingsForm: await superValidate(
+		event.locals.siteSettings,
+		zod(adminSetSiteSettingsSchema)
+	)
+});
 
 export const actions: Actions = {
 	setSiteSettings: async (event) => {
