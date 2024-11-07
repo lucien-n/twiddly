@@ -37,6 +37,6 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		profile,
 		twiddles: await getTwiddles(profile.id, event.locals.session?.userId),
-		setProfileForm: await superValidate(profile, zod(setProfileSchema))
+		setProfileForm: await superValidate(data, zod(setProfileSchema))
 	};
 };
