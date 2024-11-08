@@ -40,7 +40,7 @@
 				twiddleId: twiddle.data.id
 			})}
 		>
-			<div class="text-foreground">
+			<div class="break-words text-foreground">
 				{#each twiddle.data.content.split('\n') as line}
 					<p>{line}</p>
 				{/each}
