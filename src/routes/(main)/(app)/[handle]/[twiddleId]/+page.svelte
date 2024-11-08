@@ -35,7 +35,7 @@
 						</div>
 					</div>
 					<div>
-						<div class="mb-4 text-xl">
+						<div class="mb-4 break-words text-xl">
 							{#each twiddleState.data.content.split('\n') as line}
 								<p>{line}</p>
 							{/each}
