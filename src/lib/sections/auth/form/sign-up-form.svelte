@@ -38,7 +38,7 @@
 				/>
 			{/snippet}
 		</Form.Control>
-		<!-- todo: <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Field {form} name="handle">
@@ -51,7 +51,7 @@
 				</div>
 			{/snippet}
 		</Form.Control>
-		<!-- todo: <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Field {form} name="email">
@@ -61,7 +61,7 @@
 				<Input {...props} bind:value={$formData.email} />
 			{/snippet}
 		</Form.Control>
-		<!-- todo: <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Field {form} name="password">
@@ -71,7 +71,7 @@
 				<PasswordInput {...props} bind:value={$formData.password} />
 			{/snippet}
 		</Form.Control>
-		<!-- todo: <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />
