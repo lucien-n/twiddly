@@ -9,6 +9,7 @@ export default defineConfig({
 		exclude: ['src/lib/ROUTES.ts'],
 		coverage: {
 			all: false,
+			include: ['src/lib/server/auth.ts'],
 			exclude: ['src/lib/ROUTES.ts', 'tests/']
 		}
 	},
