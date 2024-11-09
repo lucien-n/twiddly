@@ -40,7 +40,6 @@
 	};
 </script>
 
-<!-- todo: handle paste event content length ? -->
 <Form.Field {form} name="content" class="relative">
 	<Form.Control>
 		{#snippet children({ props })}
