@@ -27,19 +27,16 @@
 		return Math.max(MIN_LINES, Math.min(lines, MAX_LINES));
 	};
 
-	let prevContent = $state('');
 	const sanitizedContent = $derived(sanitizeTwiddleContent($formData.content));
 	const sanitizedContentLength = $derived(getSanitizedContentLength(sanitizedContent));
 	const rows: number = $derived(getRows());
 
 	const handleChange: FormEventHandler<HTMLTextAreaElement> = (event) => {
 		if (sanitizedContentLength <= MAX_CONTENT_LENGTH) {
-			prevContent = $formData.content;
 			return;
 		}
 
-		event.preventDefault();
-		$formData.content = prevContent;
+		$formData.content = event.currentTarget.value.slice(0, MAX_CONTENT_LENGTH);
 	};
 </script>
 
