@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { MaintenanceMode } from '@prisma/client';
+	import { buttonVariants } from '&/ui/button';
 	import * as HoverCard from '&/ui/hover-card';
-	import { TriangleAlert, MessageCircleQuestion } from 'lucide-svelte';
-	import { Button, buttonVariants } from '&/ui/button';
+	import { MaintenanceMode } from '@prisma/client';
+	import { TriangleAlert } from 'lucide-svelte';
 
 	interface Props {
 		maintenanceMode: MaintenanceMode | undefined;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import * as Form from '&/ui/form';
 	import type { Snippet } from 'svelte';
 	import SuperDebug from 'sveltekit-superforms';
@@ -17,7 +17,7 @@
 	const { form: formData, enhance, submitting, tainted } = form;
 </script>
 
-{#if browser}
+{#if dev && browser}
 	<div class="absolute right-0 p-5">
 		<SuperDebug data={$formData} />
 	</div>

@@ -31,7 +31,7 @@
 				<Input {...props} bind:value={$formData.email} />
 			{/snippet}
 		</Form.Control>
-		<!-- <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Field {form} name="password">
@@ -41,7 +41,7 @@
 				<PasswordInput {...props} bind:value={$formData.password} />
 			{/snippet}
 		</Form.Control>
-		<!-- <Form.FieldErrors /> -->
+		<Form.FieldErrors />
 	</Form.Field>
 
 	<Form.Errors errors={$errors._errors} />
