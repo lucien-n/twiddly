@@ -1,3 +1,4 @@
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'bits-ui';
 import { z } from 'zod';
 
 export const displayNameField = z
@@ -22,10 +23,7 @@ export const handleField = z
 	})
 	.refine((handle) => !HANDLES_BLACKLIST.includes(handle), 'Invalid handle');
 
-export const otpField = z
-	.string()
-	.length(6)
-	.regex(/^[A-Z0-9]{6}$/);
+export const otpField = z.string().length(6).regex(new RegExp(REGEXP_ONLY_DIGITS_AND_CHARS));
 
 export const HANDLES_BLACKLIST: string[] = [
 	'settings',
