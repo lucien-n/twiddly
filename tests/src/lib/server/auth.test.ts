@@ -338,6 +338,31 @@ describe('auth', () => {
 				...{}
 			});
 		});
+
+		it('should set profile if found', async () => {
+			mCookiesGet.mockReturnValue(baseSessionFixtureA);
+			mValidateSession.mockResolvedValue({ session: baseSessionFixtureA, user: baseUserFixtureA });
+			mProfileFindFirst.mockResolvedValue(baseProfileFixtureA);
+
+			await refreshSession(mRequestEvent);
+
+			expect(mRequestEvent.locals.profile).not.toBeNull();
+			expect(mRequestEvent.locals.profile).toEqual(expect.objectContaining(baseProfileFixtureA)); // Ensure profile data matches
+		});
+
+		it('should not set profile if not found', async () => {
+			const mockSessionId = 'validSessionId';
+			const mockSession = { id: mockSessionId, fresh: true };
+			const mockUser = { id: 'userId', email: 'test@example.com' };
+
+			mCookiesGet.mockReturnValue(mockSessionId);
+			mValidateSession.mockResolvedValue({ session: mockSession, user: mockUser });
+			mProfileFindFirst.mockResolvedValue(null);
+
+			await refreshSession(mRequestEvent);
+
+			expect(mRequestEvent.locals.profile).toBeNull();
+		});
 	});
 
 	describe('verifyVerificationCode', () => {
