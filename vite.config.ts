@@ -4,6 +4,7 @@ import { createRequire } from 'module';
 import path from 'path';
 import { defineConfig } from 'vite';
 import { kitRoutes } from 'vite-plugin-kit-routes';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const require = createRequire(import.meta.url);
 const prismaClientDirectory = path.normalize(
@@ -15,7 +16,14 @@ const prismaClientDirectory = path.normalize(
 const prismaIndexBrowserPath = path.join(prismaClientDirectory, 'index-browser.js');
 
 export default defineConfig({
-	plugins: [kitRoutes<KIT_ROUTES>(), sveltekit()],
+	plugins: [
+		kitRoutes<KIT_ROUTES>(),
+		sveltekit(),
+		visualizer({
+			emitFile: true,
+			filename: 'stats.html'
+		})
+	],
 	resolve: {
 		alias: {
 			'.prisma/client/index-browser': prismaIndexBrowserPath
