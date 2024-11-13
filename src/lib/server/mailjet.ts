@@ -9,5 +9,3 @@ export const mailjet = new Mailjet(
 				apiSecret: MJ_APIKEY_PRIVATE
 			}
 );
-
-export const noReplyEmail = 'no-reply@twiddly.dev';
