@@ -33,7 +33,7 @@ export const setTwiddle: Action = async (event) => {
 
 		if (id) {
 			await prisma.twiddle.update({
-				data: { content },
+				data: { content, editedAt: new Date() },
 				where: { id, ...(isAdmin(event) ? {} : { authorId: event.locals.session.userId }) },
 				select: {
 					id: true // EMPTY SELECT

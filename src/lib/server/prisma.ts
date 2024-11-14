@@ -7,12 +7,3 @@ export const prisma = new PrismaClient(
 			}
 		: undefined
 );
-
-// todo: see — https://pris.ly/d/extensions
-prisma.$use(async (params, next) => {
-	if (params.model === 'Twiddle' && params.action === 'update') {
-		params.args.data.editedAt = new Date();
-	}
-
-	return next(params);
-});
