@@ -16,6 +16,11 @@ const getRandomDateBetweenNowAndThen = (thenDays: number = 14): Date => {
 	date.setHours(Math.floor(Math.random() * 24)); // randomize hours
 	date.setMinutes(Math.floor(Math.random() * 60)); // randomize minutes
 
+	const now = new Date();
+	if (date.getDate() === now.getDate() && date.getHours() > now.getHours()) {
+		date.setHours(Math.floor(Math.floor(Math.random() * now.getHours())));
+	}
+
 	return date;
 };
 
