@@ -3,8 +3,11 @@ import { NO_REPLY_EMAIL } from '@/lib/constants';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { sendEmail, sendOTPVerificationEmail } from '../email';
 
+const mDev = vi.fn();
 vi.mock('$app/environment', () => ({
-	dev: false
+	get dev() {
+		return mDev();
+	}
 }));
 
 describe('sendEmail', () => {
@@ -14,6 +17,7 @@ describe('sendEmail', () => {
 	});
 
 	it('should send email', async () => {
+		mDev.mockReturnValue(false);
 		const mName = 'John Doe';
 		const mEmail = 'john.doe@mail.com';
 		const mBody = 'body';
@@ -45,6 +49,30 @@ describe('sendEmail', () => {
 				}
 			]
 		});
+	});
+
+	it('should send email to contact@lucienn.dev in dev mode', async () => {
+		mDev.mockReturnValue(true);
+		const mName = 'John Doe';
+		const mEmail = 'john.doe@mail.com';
+		const mBody = 'body';
+		const mSubject = 'subject';
+
+		await sendEmail(mBody, mSubject, { name: mName, email: mEmail });
+
+		expect(mMailjetPostRequest).toHaveBeenCalledWith(
+			expect.objectContaining({
+				Messages: expect.arrayContaining([
+					expect.objectContaining({
+						To: expect.arrayContaining([
+							expect.objectContaining({
+								Email: 'contact@lucienn.dev'
+							})
+						])
+					})
+				])
+			})
+		);
 	});
 });
 
