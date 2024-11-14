@@ -4,7 +4,7 @@ import {
 } from '@/lib/external/dicebear-notionists-neutral';
 import { AvatarBackgroundColor, type Profile } from '@prisma/client';
 
-const getAvatarBgColor = (bg: AvatarBackgroundColor | null) =>
+export const getAvatarBgColor = (bg: AvatarBackgroundColor | null) =>
 	AVATAR_BACKGROUND_COLORS[bg ?? AvatarBackgroundColor.LAVENDER].replace('#', '');
 
 export const getProfileAvatar = (profile: Pick<Profile, 'handle' | 'avatarBackgroundColor'>) =>
