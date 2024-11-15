@@ -5,7 +5,7 @@ import { kitRoutes } from 'vite-plugin-kit-routes';
 export default defineConfig({
 	plugins: [kitRoutes(), sveltekit()],
 	test: {
-		include: ['tests/src/**/*.test.ts'],
+		include: ['src/**/*.test.ts'],
 		exclude: ['src/lib/ROUTES.ts'],
 		coverage: {
 			all: false,

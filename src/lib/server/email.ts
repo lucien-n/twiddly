@@ -1,18 +1,19 @@
 import { dev } from '$app/environment';
+import { NO_REPLY_EMAIL } from '../constants';
 import emailVerificationBody from './emails/email-verification-body';
-import { mailjet, noReplyEmail } from './mailjet';
+import { mailjet } from './mailjet';
 
 export interface EmailTo {
 	email: string;
 	name: string;
 }
 
-export const sendEmail = async (content: string, to: EmailTo) => {
+export const sendEmail = async (content: string, subject: string, to: EmailTo) => {
 	const result = await mailjet.post('send', { version: 'v3.1' }).request({
 		Messages: [
 			{
 				From: {
-					Email: noReplyEmail,
+					Email: NO_REPLY_EMAIL,
 					Name: 'Twiddly'
 				},
 				To: [
@@ -21,7 +22,7 @@ export const sendEmail = async (content: string, to: EmailTo) => {
 						Name: to.name
 					}
 				],
-				Subject: 'Your verification code',
+				Subject: subject,
 				HTMLPart: content
 			}
 		]
@@ -31,7 +32,11 @@ export const sendEmail = async (content: string, to: EmailTo) => {
 };
 
 export const sendOTPVerificationEmail = async (code: string, to: EmailTo): Promise<boolean> => {
-	const { response } = await sendEmail(emailVerificationBody(code, to), to);
+	const { response } = await sendEmail(
+		emailVerificationBody(code, to),
+		'Your verification code',
+		to
+	);
 
 	return response.status === 200;
 };

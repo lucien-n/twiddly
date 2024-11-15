@@ -1,9 +1,21 @@
-import { PUBLIC_ORIGIN } from '$env/static/public';
-import { emailVerificationCodeExpiryMinutes } from '../auth';
-import type { EmailTo } from '../email';
+import { describe, expect, it, vi } from 'vitest';
+import emailVerificationBody from '../email-verification-body';
+import { emailVerificationCodeExpiryMinutes } from '../../auth';
 
-// todo: privacy policy page
-export default (code: string, to: EmailTo) => `
+vi.mock('$env/static/public', () => ({
+	PUBLIC_ORIGIN: 'http://localhost'
+}));
+
+describe('email-verification-body', () => {
+	it('should return email verification body', () => {
+		const mPublicOrigin = 'http://localhost';
+		const mCode = '123-AZE';
+		const mName = 'John Doe';
+		const mEmail = 'john.doe@mail.com';
+
+		const body = emailVerificationBody(mCode, { name: mName, email: mEmail });
+
+		expect(body).toEqual(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,22 +92,24 @@ export default (code: string, to: EmailTo) => `
 
         <div class="email-body">
             <h2>Your OTP Code</h2>
-            <p>Hello ${to.name}! Here's your code to verify your email on Twiddly:</p>
+            <p>Hello ${mName}! Here's your code to verify your email on Twiddly:</p>
 
-            <div class="otp-box">${code}</div>
+            <div class="otp-box">${mCode}</div>
 
             <p>This code is valid for the next ${emailVerificationCodeExpiryMinutes} minutes. Please use it to complete your sign-up process.</p>
 
-            <p>Verify your code <a href="${PUBLIC_ORIGIN}/verify">here</a></p>
+            <p>Verify your code <a href="${mPublicOrigin}/verify">here</a></p>
 
             <p>If you did not request this code, please ignore this email.</p>
         </div>
 
         <div class="email-footer">
             <p>Sent with ❤️ from Twiddly</p>
-            <p><a href="${PUBLIC_ORIGIN}">Visit our website</a> | <a href="${PUBLIC_ORIGIN}/privacy">Privacy Policy</a></p>
+            <p><a href="${mPublicOrigin}">Visit our website</a> | <a href="${mPublicOrigin}/privacy">Privacy Policy</a></p>
         </div>
     </div>
 </body>
 </html>
-`;
+`);
+	});
+});

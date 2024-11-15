@@ -12,7 +12,7 @@
 
 {#if open}
 	<footer
-		class="absolute bottom-0 z-20 flex h-14 w-full border-t bg-background"
+		class="absolute bottom-0 z-[5] flex h-14 w-full border-t bg-background"
 		transition:fly={{ y: -20, duration: 150 }}
 	>
 		<div class="ml-auto flex items-center">
