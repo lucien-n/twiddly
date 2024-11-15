@@ -2,17 +2,16 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# on ne copie d'abord que le package et le lock pour optimiser l'utilisation cache
-#   => docker cache chaque etapes
 COPY package.json pnpm-lock.yaml ./
 
 RUN npm install -g pnpm
-RUN pnpm install
+RUN pnpm install --frozen-lockfile --prod
 
 COPY . .
 
 RUN pnpm prisma generate
+RUN pnpm build
 
-EXPOSE 5173
+EXPOSE 3000
 
-CMD ["pnpm", "dev"]
+CMD ["node", "build/index.js"]
