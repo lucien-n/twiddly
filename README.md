@@ -41,6 +41,7 @@ POSTGRES_PRISMA_URL="postgres://url"
 MJ_APIKEY_PUBLIC="your_public_api_key_here"
 MJ_APIKEY_PRIVATE="your_private_api_key_here"
 PUBLIC_ORIGIN="http(s)://host:port?"
+POSTGRES_PASSWORD="password"
 ```
 
 Make sure to replace the API keys with your actual Mailgun API keys and adjust the database URL if necessary.
