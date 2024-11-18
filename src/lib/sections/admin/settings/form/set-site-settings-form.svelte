@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
 	import { route } from '$lib/ROUTES';
 	import {
 		adminSetSiteSettingsSchema,
@@ -9,7 +8,7 @@
 	import { SingleSelect, type SingleSelectOption } from '&/select';
 	import * as Form from '&/ui/form';
 	import { MaintenanceMode } from '@prisma/client';
-	import SuperDebug, { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	interface Props {
@@ -40,10 +39,6 @@
 		}
 	];
 </script>
-
-{#if dev}
-	<SuperDebug data={$formData} />
-{/if}
 
 <form method="post" action={route('setSiteSettings /admin/settings')} use:enhance>
 	<Form.Field {form} name="maintenanceMode">
