@@ -2,7 +2,7 @@
 	import { getAuthState } from '#/auth';
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
-	import { Home, LogIn, Settings2, User, Users } from 'lucide-svelte';
+	import { Heart, Home, LogIn, Settings2, User, Users } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
 	import NavUser from './nav-user.svelte';
 
@@ -19,6 +19,14 @@
 			label: 'Profile',
 			action: authState.profile ? route('/[handle]', { handle: authState.profile.handle }) : '',
 			icon: User,
+			hidden: !isAuthenticated
+		},
+		{
+			label: 'Likes',
+			action: authState.profile
+				? route('/[handle]/liked', { handle: authState.profile.handle })
+				: '',
+			icon: Heart,
 			hidden: !isAuthenticated
 		}
 	]);

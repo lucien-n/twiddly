@@ -29,10 +29,14 @@ export const load: PageServerLoad = async (event) => {
 		where: { handle, user: { deletedAt: null } },
 		select: getProfileSelect()
 	});
-	if (!data) error(404, `Profile @${handle} not found`);
+	if (!data) {
+		error(404, `Profile @${handle} not found`);
+	}
+
 	const profile = formatProfile(data);
-	if (!isAdmin(event) && profile.isPrivate && profile.id !== event.locals.session?.userId)
+	if (!isAdmin(event) && profile.isPrivate && profile.id !== event.locals.session?.userId) {
 		error(401, `@${handle}'s profile is private`);
+	}
 
 	return {
 		profile,

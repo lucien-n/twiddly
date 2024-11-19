@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 	import { route } from '$lib/ROUTES';
 	import { Button } from '&/ui/button';
 	import { ChevronRight } from 'lucide-svelte';
@@ -6,11 +8,11 @@
 	const paths: { label: string; href: string }[] = [
 		{
 			label: 'Interface',
-			href: route('/settings/interface')
+			href: browser ? route('/[handle]/settings/interface', { handle: $page.params.handle }) : ''
 		},
 		{
 			label: 'Privacy',
-			href: route('/settings/privacy')
+			href: browser ? route('/[handle]/settings/privacy', { handle: $page.params.handle }) : ''
 		}
 	];
 </script>

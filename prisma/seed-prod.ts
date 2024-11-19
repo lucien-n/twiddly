@@ -3,14 +3,12 @@ import { MaintenanceMode, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const HANDLES_BLACKLIST: string[] = [
-	'settings',
 	'sign-in',
 	'sign-up',
 	'sitemaps.xml',
 	'verify',
 	'actions',
-	'api',
-	'healthz'
+	'api'
 ];
 
 async function seedSiteSettings() {
