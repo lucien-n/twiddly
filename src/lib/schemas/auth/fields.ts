@@ -26,12 +26,10 @@ export const handleField = z
 export const otpField = z.string().length(6).regex(new RegExp(REGEXP_ONLY_DIGITS_AND_CHARS));
 
 export const HANDLES_BLACKLIST: string[] = [
-	'settings',
 	'sign-in', // ? already rejected since it contains a dash
 	'sign-up', // ? already rejected since it contains a dash
 	'sitemaps.xml', // ? already rejected since it contains a dot
 	'verify',
 	'actions',
-	'api',
-	'healthz'
+	'api'
 ];
