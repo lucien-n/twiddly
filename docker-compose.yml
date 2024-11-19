@@ -10,6 +10,9 @@ services:
       - '3000:3000'
     environment:
       POSTGRES_PRISMA_URL: ${POSTGRES_PRISMA_URL}
+      MJ_APIKEY_PUBLIC: ${MJ_APIKEY_PUBLIC}
+      MJ_APIKEY_PRIVATE: ${MJ_APIKEY_PRIVATE}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN}
     depends_on:
       - db
     volumes:
