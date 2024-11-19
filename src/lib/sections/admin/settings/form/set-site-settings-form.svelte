@@ -57,7 +57,7 @@
 
 	<Form.Errors errors={$errors._errors} />
 
-	<Form.LoadingButton {loading} disabled={!$tainted}>
+	<Form.LoadingButton {loading} disabled={!$tainted} class="mt-31">
 		<p>{loading ? 'Saving...' : 'Save'}</p>
 	</Form.LoadingButton>
 </form>
