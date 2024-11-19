@@ -1,5 +1,7 @@
 import type { ComponentType } from 'svelte';
 import AppSidebar from './app-sidebar.svelte';
+import NavigationBreadcrumbs from './navigation-breadcrumbs.svelte';
+import NavigationProgressBar from './navigation-progress-bar.svelte';
 
 interface NavItemProps {
 	label: string;
@@ -8,4 +10,4 @@ interface NavItemProps {
 	hidden?: boolean;
 }
 
-export { AppSidebar, type NavItemProps };
+export { AppSidebar, NavigationBreadcrumbs, NavigationProgressBar, type NavItemProps };
