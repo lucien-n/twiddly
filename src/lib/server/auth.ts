@@ -36,8 +36,6 @@ export const signUpWithEmailAndPassword = async (
 	if (getMaintenanceMode(event) !== MaintenanceMode.OPEN)
 		throw new AuthError(AuthErrorCode.Unauthorized);
 
-	if (!handleField.safeParse(meta.handle).success) throw new AuthError(AuthErrorCode.InvalidHandle);
-
 	const handleError = await checkHandle(meta.handle);
 	if (handleError) throw new AuthError(handleError);
 
