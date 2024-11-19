@@ -14,8 +14,7 @@
 			{@const className = index === 0 ? 'hidden md:block' : ''}
 			{@const label =
 				index === 0 ? 'Home' : path.charAt(0).toUpperCase() + path.slice(1).toLowerCase()}
-			{@const href =
-				index === 0 ? route('/') : PUBLIC_ORIGIN + '/' + paths.slice(0, index).join('/')}
+			{@const href = index === 0 ? route('/') : PUBLIC_ORIGIN + paths.slice(1, index + 1).join('/')}
 			<Breadcrumb.Item class={className}>
 				{#if index < paths.length - 1}
 					<Breadcrumb.Link {href}>
