@@ -27,7 +27,7 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	const profile = formatProfile(data);
-	if (profile.isPrivate) {
+	if (profile.isPrivate && profile.id !== event.locals.session?.userId) {
 		error(401, `@${event.params.handle}'s profile is private`);
 	}
 
