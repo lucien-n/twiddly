@@ -28,14 +28,12 @@ export const handleRouting: {
 			case MaintenanceMode.VERIFIED: {
 				if (isVerified(event) || isInRoute(event, signInRoutes)) break;
 
-				error(503, 'Twiddly access is locked (Verified users only).');
-				break;
+				return handlerRedirect(307, '/sign-in');
 			}
 			case MaintenanceMode.ADMIN: {
 				if (isAdmin || isInRoute(event, signInRoutes)) break;
 
-				error(503, 'Twiddly access is locked (Admin only).');
-				break;
+				return handlerRedirect(307, '/sign-in');
 			}
 		}
 
