@@ -1,6 +1,5 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
-	import { browser, dev } from '$app/environment';
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear-notionists-neutral';
 	import { route } from '$lib/ROUTES';
 	import { setProfileSchema, type SetProfileSchema } from '$lib/schemas/profile/set-profile';
@@ -12,7 +11,7 @@
 	import { Textarea } from '&/ui/textarea';
 	import { AvatarBackgroundColor } from '@prisma/client';
 	import type { ActionResult } from '@sveltejs/kit';
-	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	interface Props {
@@ -114,7 +113,3 @@
 		{loading ? 'Saving' : 'Save'}
 	</Form.LoadingButton>
 </form>
-
-{#if dev && browser}
-	<SuperDebug data={$formData} />
-{/if}

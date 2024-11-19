@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { browser, dev } from '$app/environment';
 	import * as Form from '&/ui/form';
 	import type { Snippet } from 'svelte';
-	import SuperDebug from 'sveltekit-superforms';
 	import type { SuperForm } from 'sveltekit-superforms/client';
 
 	interface Props {
@@ -14,14 +12,8 @@
 	}
 	const { label, action, form, children }: Props = $props();
 
-	const { form: formData, enhance, submitting, tainted } = form;
+	const { enhance, submitting, tainted } = form;
 </script>
-
-{#if dev && browser}
-	<div class="absolute right-0 p-5">
-		<SuperDebug data={$formData} />
-	</div>
-{/if}
 
 <form method="post" {action} use:enhance class="flex h-full flex-col">
 	<h1 class="mb-5 text-3xl font-bold">{label}</h1>

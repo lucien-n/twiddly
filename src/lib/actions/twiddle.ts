@@ -75,7 +75,7 @@ export const setTwiddle: Action = async (event) => {
 		});
 
 		redirect(
-			201,
+			303,
 			route('/[handle]/[twiddleId]', { handle: twiddle.author.handle, twiddleId: twiddle.id })
 		);
 	} catch (e) {

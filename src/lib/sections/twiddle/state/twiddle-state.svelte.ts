@@ -38,9 +38,13 @@ export class TwiddleState {
 		if (errorBody && typeof errorBody === 'object' && 'message' in errorBody) {
 			if (errorBody.message === AuthErrorCode.AuthRequired) {
 				toast.warning('You must be signed-in');
+			} else {
+				toast.error(`An error occured : ${errorBody.message}`);
 			}
 
-			toast.error(`An error occured : ${errorBody.message}`);
+			this.data.isLiked = initialState.liked;
+			this.data.likeCount = initialState.likeCount;
+
 			return;
 		}
 

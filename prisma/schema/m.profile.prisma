@@ -2,7 +2,7 @@ model Profile {
     id String @id
 
     handle                String                 @unique
-    displayName           String                 @unique
+    displayName           String
     bio                   String
     avatarBackgroundColor AvatarBackgroundColor?
     role                  Role                   @default(USER)
