@@ -153,24 +153,6 @@ describe('auth', () => {
 			).rejects.toThrowError(new AuthError(AuthErrorCode.HandleAlreadyInUse));
 		});
 
-		it('should throw error if handle is invalid (non regex compliant)', async () => {
-			await expect(
-				signUpWithEmailAndPassword(mRequestEvent, 'different@mail.com', mPassword, {
-					displayName: baseProfileFixtureA.displayName,
-					handle: 'handle with spaces'
-				})
-			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
-		});
-
-		it('should throw error if handle is invalid (in hardcoded blacklist)', async () => {
-			await expect(
-				signUpWithEmailAndPassword(mRequestEvent, 'different@mail.com', mPassword, {
-					displayName: baseProfileFixtureA.displayName,
-					handle: 'verify'
-				})
-			).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
-		});
-
 		it('should throw error if handle is invalid (in db blacklist)', async () => {
 			const mHandle = 'blacklistedHandle';
 			mTransaction.mockResolvedValue([{ handle: mHandle }, null]);

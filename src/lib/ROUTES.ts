@@ -41,7 +41,7 @@ const PAGES = {
 const SERVERS = {
   "GET /.well-known/security.txt": `/.well-known/security.txt`,
   "GET /robots.txt": `/robots.txt`,
-  "GET /sitemaps.xml": `/sitemaps.xml`,
+  "GET /sitemap.xml": `/sitemap.xml`,
   "GET /api/v1/admin/users/[id]/restrict": (params: { id: (string | number) }) => {
     return `/api/v1/admin/users/${params.id}/restrict`
   },
@@ -183,7 +183,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = {
   PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/[handle]/liked': 'handle', '/[handle]/settings': 'handle', '/[handle]/settings/interface': 'handle', '/[handle]/settings/privacy': 'handle', '/admin/settings': never, '/admin/users': never }
-  SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemaps.xml': never, 'GET /api/v1/admin/users/[id]/restrict': 'id', 'GET /api/v1/admin/users/[id]/unrestrict': 'id', 'GET /api/v1/deleteAccounts': never, 'GET /api/v1/retrievePersonalInfo': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
+  SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemap.xml': never, 'GET /api/v1/admin/users/[id]/restrict': 'id', 'GET /api/v1/admin/users/[id]/unrestrict': 'id', 'GET /api/v1/deleteAccounts': never, 'GET /api/v1/retrievePersonalInfo': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
   ACTIONS: { 'setSiteSettings /admin/settings': never, 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
   Params: { handle: never, twiddleId: never, id: never }
