@@ -14,15 +14,8 @@ const getTwiddles = async (currentUserId?: string) => {
 			parent: { select: getTwiddleSelect(currentUserId) }
 		},
 		where: {
-			author: { user: { deletedAt: null } },
-			OR: [
-				{
-					AND: [{ author: { privacySettings: { private: false } } }, getTwiddleWhere()]
-				},
-				{
-					AND: [{ authorId: currentUserId }, getTwiddleWhere()]
-				}
-			]
+			...getTwiddleWhere(),
+			OR: [{ author: { privacySettings: { private: false } } }, { authorId: currentUserId }]
 		}
 	});
 
