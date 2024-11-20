@@ -17,9 +17,7 @@
 		[
 			{
 				label: 'Settings',
-				action: authState.profile
-					? route('/[handle]/settings', { handle: authState.profile.handle })
-					: '',
+				action: authState.profile ? route('/settings') : '',
 				icon: Settings,
 				hidden: !isAuthenticated
 			},

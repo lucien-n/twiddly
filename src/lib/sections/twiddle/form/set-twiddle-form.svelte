@@ -10,7 +10,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms/client';
-	import { MAX_CONTENT_LENGTH } from '@/lib/schemas/twiddle/fields';
+	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
 
 	interface Props {
 		setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;

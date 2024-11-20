@@ -1,9 +1,7 @@
-import type { PageServerLoad } from './$types';
+import { formatTwiddles, type Profile } from '$lib';
 import { prisma } from '$lib/server/prisma';
-import { getProfileSelect } from '$lib/utils/profile';
-import { formatProfile, formatTwiddles, type Profile } from '$lib';
-import { getTwiddleSelect, getTwiddleWhere } from '@/lib/utils/twiddle';
-import { error } from '@sveltejs/kit';
+import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
+import type { PageServerLoad } from './$types';
 
 const getLikedTwiddles = async (profile: Profile) => {
 	const select = getTwiddleSelect(profile.id);
@@ -18,20 +16,9 @@ const getLikedTwiddles = async (profile: Profile) => {
 };
 
 export const load: PageServerLoad = async (event) => {
-	const data = await prisma.profile.findFirst({
-		select: getProfileSelect(),
-		where: { handle: event.params.handle }
-	});
-	if (!data) {
-		error(404, `Profile @${event.params.handle} not found`);
-	}
-
-	const profile = formatProfile(data);
-	if (profile.isPrivate && profile.id !== event.locals.session?.userId) {
-		error(401, `@${event.params.handle}'s profile is private`);
-	}
+	const parent = await event.parent();
 
 	return {
-		twiddles: await getLikedTwiddles(profile)
+		twiddles: await getLikedTwiddles(parent.profile)
 	};
 };

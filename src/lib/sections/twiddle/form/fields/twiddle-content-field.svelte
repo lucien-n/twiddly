@@ -5,7 +5,7 @@
 	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
 	import * as Form from '&/ui/form';
 	import { Textarea } from '&/ui/textarea';
-	import { MAX_CONTENT_LENGTH } from '@/lib/schemas/twiddle/fields';
+	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
 	import type { Infer, SuperForm } from 'sveltekit-superforms';
 	import type { FormEventHandler } from 'svelte/elements';
 

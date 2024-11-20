@@ -31,5 +31,6 @@ export const HANDLES_BLACKLIST: string[] = [
 	'sitemaps.xml', // ? already rejected since it contains a dot
 	'verify',
 	'actions',
-	'api'
+	'api',
+	'settings'
 ];

@@ -13,24 +13,18 @@ const PAGES = {
   "/sign-in": `/sign-in`,
   "/sign-up": `/sign-up`,
   "/verify": `/verify`,
-  "/[handle]": (params: { handle: (string | number) }) => {
-    return `/${params.handle}`
-  },
   "/[handle]/[twiddleId]": (params: { handle: (string | number), twiddleId: (string | number) }) => {
     return `/${params.handle}/${params.twiddleId}`
+  },
+  "/[handle]/activity": (params: { handle: (string | number) }) => {
+    return `/${params.handle}/activity`
   },
   "/[handle]/liked": (params: { handle: (string | number) }) => {
     return `/${params.handle}/liked`
   },
-  "/[handle]/settings": (params: { handle: (string | number) }) => {
-    return `/${params.handle}/settings`
-  },
-  "/[handle]/settings/interface": (params: { handle: (string | number) }) => {
-    return `/${params.handle}/settings/interface`
-  },
-  "/[handle]/settings/privacy": (params: { handle: (string | number) }) => {
-    return `/${params.handle}/settings/privacy`
-  },
+  "/settings": `/settings`,
+  "/settings/interface": `/settings/interface`,
+  "/settings/privacy": `/settings/privacy`,
   "/admin/settings": `/admin/settings`,
   "/admin/users": `/admin/users`
 }
@@ -182,7 +176,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]': 'handle', '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/[handle]/liked': 'handle', '/[handle]/settings': 'handle', '/[handle]/settings/interface': 'handle', '/[handle]/settings/privacy': 'handle', '/admin/settings': never, '/admin/users': never }
+  PAGES: { '/': never, '/sign-in': never, '/sign-up': never, '/verify': never, '/[handle]/[twiddleId]': 'handle' | 'twiddleId', '/[handle]/activity': 'handle', '/[handle]/liked': 'handle', '/settings': never, '/settings/interface': never, '/settings/privacy': never, '/admin/settings': never, '/admin/users': never }
   SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemap.xml': never, 'GET /api/v1/admin/users/[id]/restrict': 'id', 'GET /api/v1/admin/users/[id]/unrestrict': 'id', 'GET /api/v1/deleteAccounts': never, 'GET /api/v1/retrievePersonalInfo': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
   ACTIONS: { 'setSiteSettings /admin/settings': never, 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
