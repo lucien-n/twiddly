@@ -14,4 +14,6 @@ model Twiddle {
     parent   Twiddle?  @relation("TwiddleToTwiddle", references: [id], fields: [parentId], onDelete: Cascade)
     children Twiddle[] @relation("TwiddleToTwiddle")
     likes    Like[]
+
+    @@index([authorId, deletedAt])
 }

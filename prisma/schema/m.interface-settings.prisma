@@ -1,6 +1,6 @@
 model InterfaceSettings {
-    theme Theme @default(SYSTEM)
+    theme  Theme  @default(SYSTEM)
+    userId String @unique
 
-    userId  String  @unique
     profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

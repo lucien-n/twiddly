@@ -4,11 +4,12 @@ model User {
     emailVerified Boolean   @default(false)
     passwordHash  String
     deletedAt     DateTime?
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt()
 
     sessions              Session[]
     profile               Profile?
     emailVerificationCode EmailVerificationCode?
+
+    @@index([email, deletedAt])
 }
