@@ -1,6 +1,8 @@
 model PrivacySettings {
-    private Boolean @default(false)
-    userId  String  @unique
+    private   Boolean @default(false)
+    profileId String  @unique
 
-    profile Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+    profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+    @@index([profileId])
 }

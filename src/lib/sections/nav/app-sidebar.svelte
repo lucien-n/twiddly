@@ -5,6 +5,9 @@
 	import { Heart, Home, LogIn, Settings2, User, Users } from 'lucide-svelte';
 	import type { NavItemProps } from '.';
 	import NavUser from './nav-user.svelte';
+	import { cn } from '&/utils';
+	import { browser } from '$app/environment';
+	import { navigating } from '$app/stores';
 
 	const authState = getAuthState();
 	const isAuthenticated = $derived(!!authState.session);
@@ -17,7 +20,9 @@
 		},
 		{
 			label: 'Profile',
-			action: authState.profile ? route('/[handle]', { handle: authState.profile.handle }) : '',
+			action: authState.profile
+				? route('/[handle]/activity', { handle: authState.profile.handle })
+				: '',
 			icon: User,
 			hidden: !isAuthenticated
 		},
@@ -86,7 +91,11 @@
 						<div
 							class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
 						>
-							<img src="/twiddly.svg" alt="Twiddly logo" class="p-1" />
+							<img
+								src="/twiddly.svg"
+								alt="Twiddly logo"
+								class={cn('p-1', browser && $navigating && 'animate-pulse')}
+							/>
 						</div>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">Twiddly</span>

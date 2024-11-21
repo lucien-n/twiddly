@@ -11,6 +11,7 @@ import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';
 import { getMaintenanceMode } from './utils';
+
 export const hashOptions = {
 	memoryCost: 19456,
 	timeCost: 2,

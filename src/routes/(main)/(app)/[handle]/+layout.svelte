@@ -1,17 +1,27 @@
 <script lang="ts">
-	import { Dropdown } from '&/dropdown';
-	import { Scrollable } from '&/scrollable';
-	import { Separator } from '&/ui/separator';
 	import { getAuthState } from '#/auth';
 	import { ProfileAvatar, SetProfileDialog } from '#/profile';
-	import { TwiddleList } from '#/twiddle';
+	import { Dropdown } from '&/dropdown';
+	import { Separator } from '&/ui/separator';
 	import { EllipsisVertical } from 'lucide-svelte';
+	import * as Tabs from '&/ui/tabs';
+	import { route } from '$lib/ROUTES';
 
-	const { data } = $props();
+	const { data, children } = $props();
 	const profile = $derived(data.profile);
 
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
+
+	const tabs = $derived([
+		{
+			label: 'Activity',
+			href: route('/[handle]/activity', { handle: profile.handle }),
+			value: 'activity'
+		},
+		{ label: 'Liked', href: route('/[handle]/liked', { handle: profile.handle }), value: 'liked' }
+	] as const);
+	const currentTab: (typeof tabs)[number]['value'] = 'activity';
 
 	let openEditProfileDialog = $state(false);
 </script>
@@ -42,9 +52,18 @@
 	<Separator class="my-5" />
 
 	{#key profile}
-		<Scrollable>
-			<TwiddleList twiddles={data.twiddles} />
-		</Scrollable>
+		<Tabs.Root>
+			<Tabs.List class="w-full">
+				{#each tabs as { label, href, value } (value)}
+					<a {href}>
+						<Tabs.Trigger class="mx-auto w-full text-center" {value}>{label}</Tabs.Trigger>
+					</a>
+				{/each}
+			</Tabs.List>
+			<Tabs.Content value={currentTab}>
+				{@render children()}
+			</Tabs.Content>
+		</Tabs.Root>
 	{/key}
 </div>
 

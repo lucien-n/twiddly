@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 	import * as Breadcrumb from '&/ui/breadcrumb';
-	import { route } from '@/lib/ROUTES';
+	import { route } from '$lib/ROUTES';
 
 	const paths = $derived(browser ? $page.url.pathname.split('/') : []);
 </script>
