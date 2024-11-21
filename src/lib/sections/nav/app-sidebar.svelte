@@ -94,7 +94,7 @@
 							<img
 								src="/twiddly.svg"
 								alt="Twiddly logo"
-								class={cn('p-1', browser && $navigating && 'animate-pulse')}
+								class={cn('p-1', browser && $navigating && 'animate-bounce')}
 							/>
 						</div>
 						<div class="grid flex-1 text-left text-sm leading-tight">
