@@ -13,6 +13,7 @@
 	const authState = getAuthState();
 	const isSelf = $derived(authState.session?.userId === profile.id);
 
+	
 	const tabs = $derived([
 		{
 			label: 'Activity',
