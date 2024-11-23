@@ -91,7 +91,10 @@
 		</div>
 	</div>
 
-	<Tabs.Root class={cn('w-full', isMini ? 'mt-2' : 'mt-8')} bind:value={currentTab}>
+	<Tabs.Root
+		class={cn('w-full transition-all duration-200 ease-in-out', isMini ? 'mt-2' : 'mt-8')}
+		bind:value={currentTab}
+	>
 		<Tabs.List class="w-full">
 			{#each tabs as { label, href, value } (value)}
 				<a {href} class="w-full">
