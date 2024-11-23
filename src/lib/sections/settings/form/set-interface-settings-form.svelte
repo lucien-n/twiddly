@@ -5,7 +5,7 @@
 		setInterfaceSettingsSchema,
 		type SetInterfaceSettingsSchema
 	} from '$lib/schemas/settings/set-settings';
-	import { SingleSelect } from '&/select';
+	import { ColorSelect, SingleSelect } from '&/select';
 	import * as Form from '&/ui/form';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import SetSettingsForm from './set-settings-form.svelte';
@@ -59,20 +59,23 @@
 			{#snippet children({ props })}
 				<Form.Label>Theme Color</Form.Label>
 				<Form.Description>Your preferred app interface color</Form.Description>
-				<SingleSelect
+				<ColorSelect
 					{...props}
 					options={[
 						{
 							label: 'Black & White',
-							value: ThemeColor.DEFAULT
+							value: ThemeColor.DEFAULT,
+							color: 'black'
 						},
 						{
 							label: 'Green',
-							value: ThemeColor.GREEN
+							value: ThemeColor.GREEN,
+							color: 'hsl(142.1 70.6% 45.3%)'
 						},
 						{
 							label: 'Violet',
-							value: ThemeColor.VIOLET
+							value: ThemeColor.VIOLET,
+							color: 'hsl(263.4 70% 50.4%)'
 						}
 					]}
 					bind:value={$formData.themeColor as ThemeColor}

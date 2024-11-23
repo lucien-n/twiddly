@@ -5,16 +5,16 @@
 	import type { ColorSelectProps } from '.';
 
 	// eslint-disable-next-line no-undef
-	let { options, value = $bindable(), ...props }: ColorSelectProps<T> = $props();
+	let { options, value = $bindable(), class: className, ...props }: ColorSelectProps<T> = $props();
 </script>
 
-<div class="grid grid-flow-col justify-between">
+<div class={cn('flex justify-between gap-3', className)}>
 	{#each options as opt}
 		{@const selected = opt.value === value}
 		<Tooltip.Root>
 			<Tooltip.Trigger
 				class={cn(
-					'relative h-9 w-9 rounded-md focus-visible:border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background',
+					'relative h-9 w-full rounded-md ring-2 ring-transparent ring-offset-1 focus-visible:border-none focus-visible:outline-none focus-visible:ring-primary focus-visible:ring-offset-background',
 					selected && 'border-2 border-primary'
 				)}
 				style="background-color: {opt.color};"
