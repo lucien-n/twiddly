@@ -1,4 +1,4 @@
-enum Theme {
+enum ThemeMode {
     LIGHT
     DARK
     SYSTEM

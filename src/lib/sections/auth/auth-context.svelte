@@ -2,8 +2,8 @@
 	import type { Snippet } from 'svelte';
 	import { setAuthState, type AuthState, type SetAuthState } from './auth-state.svelte';
 	import { SignOutDialog } from '.';
-	import { getModeWatcherTheme } from '$lib/utils/theme';
-	import { setMode } from 'mode-watcher';
+	import { getModeWatcherThemeMode, getModeWatcherThemeColor } from '$lib/utils/theme';
+	import { setMode, setTheme } from 'mode-watcher';
 
 	interface Props {
 		init: SetAuthState;
@@ -19,7 +19,11 @@
 	});
 
 	$effect(() => {
-		setMode(getModeWatcherTheme(init.profile?.interfaceSettings?.theme));
+		setMode(getModeWatcherThemeMode(init.profile?.interfaceSettings?.themeMode));
+	});
+
+	$effect(() => {
+		setTheme(getModeWatcherThemeColor(init.profile?.interfaceSettings?.themeColor));
 	});
 </script>
 

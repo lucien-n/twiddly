@@ -15,7 +15,8 @@ export const load: PageServerLoad = async (event) => {
 	const interfaceSettings = await prisma.interfaceSettings.findFirst({
 		where: { profileId: userId, profile: { user: { deletedAt: null } } },
 		select: {
-			theme: true
+			themeMode: true,
+			themeColor: true
 		}
 	});
 	if (!interfaceSettings) {
