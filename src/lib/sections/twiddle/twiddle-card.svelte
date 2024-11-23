@@ -13,21 +13,19 @@
 		twiddle: Twiddle;
 	}
 	const { twiddle }: Props = $props();
+
+	const profileHref = $derived(route('/[handle]/activity', { handle: twiddle.data.author.handle }));
 </script>
 
 <Card.Root class="mx-auto transition-shadow duration-300 hover:shadow-lg">
 	<Card.Header>
 		<div class="flex items-center space-x-4">
-			<a href={route('/[handle]', { handle: twiddle.data.author.handle })}>
+			<a href={profileHref}>
 				<ProfileAvatar profile={twiddle.data.author} />
 			</a>
 			<div>
 				<p class="font-semibold">{twiddle.data.author.displayName}</p>
-				<Button
-					variant="link"
-					href={route('/[handle]', { handle: twiddle.data.author.handle })}
-					class="h-0 p-0 text-sm text-gray-500"
-				>
+				<Button variant="link" href={profileHref} class="h-0 p-0 text-sm text-gray-500">
 					@{twiddle.data.author.handle}
 				</Button>
 			</div>

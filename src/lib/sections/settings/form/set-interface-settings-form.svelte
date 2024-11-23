@@ -1,16 +1,18 @@
 <!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
-	import { SingleSelect } from '&/select';
 	import { route } from '$lib/ROUTES';
 	import {
 		setInterfaceSettingsSchema,
 		type SetInterfaceSettingsSchema
 	} from '$lib/schemas/settings/set-settings';
+	import { ColorSelect, SingleSelect } from '&/select';
 	import * as Form from '&/ui/form';
-	import { Theme } from '@prisma/client';
 	import { type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import SetSettingsForm from './set-settings-form.svelte';
 	import { superSettingsForm } from './super-settings-form';
+	import { ThemeColor, ThemeMode } from '@prisma/client';
+	import { setMode, setTheme } from 'mode-watcher';
+	import { getModeWatcherThemeColor, getModeWatcherThemeMode } from '@/lib/utils/theme';
 
 	interface Props {
 		data: SuperValidated<Infer<SetInterfaceSettingsSchema>>;
@@ -26,28 +28,65 @@
 	action={route('setInterfaceSettings /actions/v1/settings')}
 	{form}
 >
-	<Form.Field {form} name="theme">
+	<Form.Field {form} name="themeMode">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>Theme</Form.Label>
-				<Form.Description>Your preferred appearance for the app interface</Form.Description>
+				<Form.Label>Theme Mode</Form.Label>
+				<Form.Description>Your preferred app interface mode</Form.Description>
 				<SingleSelect
 					{...props}
 					options={[
 						{
 							label: 'Light',
-							value: Theme.LIGHT
+							value: ThemeMode.LIGHT
 						},
 						{
 							label: 'Dark',
-							value: Theme.DARK
+							value: ThemeMode.DARK
 						},
 						{
 							label: 'System',
-							value: Theme.SYSTEM
+							value: ThemeMode.SYSTEM
 						}
 					]}
-					bind:value={$formData.theme as Theme}
+					bind:value={$formData.themeMode as ThemeMode}
+					onValueChange={(themeMode) => {
+						setMode(getModeWatcherThemeMode(themeMode as ThemeMode));
+					}}
+				/>
+			{/snippet}
+		</Form.Control>
+		<Form.FieldErrors />
+	</Form.Field>
+
+	<Form.Field {form} name="themeColor">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>Theme Color</Form.Label>
+				<Form.Description>Your preferred app interface color</Form.Description>
+				<ColorSelect
+					{...props}
+					options={[
+						{
+							label: 'Black & White',
+							value: ThemeColor.DEFAULT,
+							color: 'black'
+						},
+						{
+							label: 'Green',
+							value: ThemeColor.GREEN,
+							color: 'hsl(142.1 70.6% 45.3%)'
+						},
+						{
+							label: 'Violet',
+							value: ThemeColor.VIOLET,
+							color: 'hsl(263.4 70% 50.4%)'
+						}
+					]}
+					bind:value={$formData.themeColor as ThemeColor}
+					onValueChange={(themeColor) => {
+						setTheme(getModeWatcherThemeColor(themeColor as ThemeColor));
+					}}
 				/>
 			{/snippet}
 		</Form.Control>

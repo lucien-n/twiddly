@@ -15,7 +15,7 @@
 	const { enhance, submitting, tainted } = form;
 </script>
 
-<form method="post" {action} use:enhance class="flex h-full flex-col">
+<form method="post" {action} use:enhance class="flex h-full flex-col px-2">
 	<h1 class="mb-5 text-3xl font-bold">{label}</h1>
 
 	{@render children()}

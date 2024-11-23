@@ -27,7 +27,7 @@
 			hidden: !isAuthenticated
 		},
 		{
-			label: 'Likes',
+			label: 'Liked',
 			action: authState.profile
 				? route('/[handle]/liked', { handle: authState.profile.handle })
 				: '',

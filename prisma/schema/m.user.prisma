@@ -10,4 +10,6 @@ model User {
     sessions              Session[]
     profile               Profile?
     emailVerificationCode EmailVerificationCode?
+
+    @@index([email, deletedAt])
 }

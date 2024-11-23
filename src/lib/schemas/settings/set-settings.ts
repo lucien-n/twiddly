@@ -1,8 +1,9 @@
-import { Theme } from '@prisma/client';
+import { ThemeColor, ThemeMode } from '@prisma/client';
 import { z } from 'zod';
 
 export const setInterfaceSettingsSchema = z.object({
-	theme: z.nativeEnum(Theme).default(Theme.SYSTEM)
+	themeMode: z.nativeEnum(ThemeMode).default(ThemeMode.SYSTEM),
+	themeColor: z.nativeEnum(ThemeColor).default(ThemeColor.DEFAULT)
 });
 
 export type SetInterfaceSettingsSchema = typeof setInterfaceSettingsSchema;

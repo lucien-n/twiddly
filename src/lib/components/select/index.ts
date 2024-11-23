@@ -29,6 +29,7 @@ type ColorSelectProps<T extends string> = Pick<
 	'value' | 'options' | 'placeholder' | 'onValueChange'
 > & {
 	options: ColorSelectOption<T>[];
+	class?: string;
 };
 
 export {

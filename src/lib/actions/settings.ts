@@ -19,17 +19,18 @@ export const setInterfaceSettings: Action = async (event) => {
 		});
 	}
 
-	const { theme } = form.data;
+	const { themeMode, themeColor } = form.data;
 	try {
 		await prisma.interfaceSettings.update({
 			data: {
-				theme
+				themeMode,
+				themeColor
 			},
 			where: {
-				userId: event.locals.session.userId
+				profileId: event.locals.session.userId
 			},
 			select: {
-				userId: true // EMPTY SELECT
+				profileId: true // EMPTY SELECT
 			}
 		});
 	} catch (e) {
@@ -56,10 +57,10 @@ export const setPrivacySettings: Action = async (event) => {
 				private: privateProfile
 			},
 			where: {
-				userId: event.locals.session.userId
+				profileId: event.locals.session.userId
 			},
 			select: {
-				userId: true // EMPTY SELECT
+				profileId: true // EMPTY SELECT
 			}
 		});
 	} catch (e) {

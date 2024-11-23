@@ -1,4 +1,4 @@
-import { route } from '$lib/ROUTES';
+import { route } from '$lib/ROUTES.js';
 import { redirect } from '@sveltejs/kit';
 
 export const load = (event) => {

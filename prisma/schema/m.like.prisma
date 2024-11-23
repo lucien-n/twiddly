@@ -1,10 +1,11 @@
 model Like {
+    createdAt DateTime @default(now())
     twiddleId String
     profileId String
-    twiddle   Twiddle @relation(fields: [twiddleId], references: [id], onDelete: Cascade)
-    profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-    createdAt DateTime @default(now())
+    twiddle Twiddle @relation(fields: [twiddleId], references: [id], onDelete: Cascade)
+    profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
     @@unique([twiddleId, profileId])
+    @@index([twiddleId, profileId])
 }

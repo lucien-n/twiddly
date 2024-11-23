@@ -8,6 +8,6 @@
 
 <NonVerifiedBanner bind:open={bannerOpen} />
 
-<div class="mx-auto w-full overflow-hidden sm:max-w-3xl sm:gap-4">
+<div class="mx-auto h-full w-full overflow-hidden sm:max-w-3xl sm:gap-4">
 	{@render children()}
 </div>

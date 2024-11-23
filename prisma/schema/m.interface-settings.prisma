@@ -1,6 +1,7 @@
 model InterfaceSettings {
-    theme     Theme  @default(SYSTEM)
-    profileId String @unique
+    themeMode  ThemeMode  @default(SYSTEM)
+    themeColor ThemeColor @default(DEFAULT)
+    profileId  String     @unique
 
     profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 

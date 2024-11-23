@@ -1,6 +1,5 @@
 model Profile {
-    id String @id
-
+    id                    String                 @id
     handle                String                 @unique
     displayName           String
     bio                   String
@@ -12,4 +11,6 @@ model Profile {
     privacySettings   PrivacySettings?
     twiddles          Twiddle[]
     likes             Like[]
+
+    @@index([handle])
 }

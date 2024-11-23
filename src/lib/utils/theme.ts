@@ -1,14 +1,29 @@
-import { Theme } from '@prisma/client';
+import { ThemeColor, ThemeMode } from '@prisma/client';
 
-export const getModeWatcherTheme = (theme?: Theme): 'dark' | 'light' | 'system' => {
-	switch (theme) {
-		case Theme.DARK:
+export const getModeWatcherThemeMode = (themeMode?: ThemeMode): 'dark' | 'light' | 'system' => {
+	switch (themeMode) {
+		case ThemeMode.DARK:
 			return 'dark';
-		case Theme.LIGHT:
+		case ThemeMode.LIGHT:
 			return 'light';
-		case Theme.SYSTEM:
+		case ThemeMode.SYSTEM:
 			return 'system';
 	}
 
 	return 'light';
+};
+
+export const colorThemes = ['default', 'green-theme', 'violet-theme'] as const;
+
+export const getModeWatcherThemeColor = (themeColor?: ThemeColor): (typeof colorThemes)[number] => {
+	switch (themeColor) {
+		case ThemeColor.DEFAULT:
+			return 'default';
+		case ThemeColor.GREEN:
+			return 'green-theme';
+		case ThemeColor.VIOLET:
+			return 'violet-theme';
+	}
+
+	return 'default';
 };

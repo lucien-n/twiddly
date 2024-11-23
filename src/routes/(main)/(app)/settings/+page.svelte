@@ -21,7 +21,7 @@
 
 	{#each paths as { label, href }}
 		<Button variant="link" {href} class="group flex w-full justify-between py-8">
-			<h1 class="text-3xl font-bold">
+			<h1 class="text-3xl font-bold text-foreground">
 				{label}
 			</h1>
 
