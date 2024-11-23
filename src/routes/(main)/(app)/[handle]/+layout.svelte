@@ -1,19 +1,15 @@
 <script lang="ts">
-	import { getAuthState } from '#/auth';
-	import { ProfileAvatar, SetProfileDialog } from '#/profile';
-	import { Dropdown } from '&/dropdown';
-	import { Separator } from '&/ui/separator';
-	import { EllipsisVertical } from 'lucide-svelte';
-	import * as Tabs from '&/ui/tabs';
+	import { page } from '$app/stores';
 	import { route } from '$lib/ROUTES';
+	import { Scrollable } from '&/scrollable';
+	import MiniProfileHeader from './mini-profile-header.svelte';
+	import ProfileHeader from './profile-header.svelte';
+	import type { ProfileTab, Tab } from './types';
 
 	const { data, children } = $props();
 	const profile = $derived(data.profile);
 
-	const authState = getAuthState();
-	const isSelf = $derived(authState.session?.userId === profile.id);
-
-	const tabs = $derived([
+	const tabs: Tab[] = $derived([
 		{
 			label: 'Activity',
 			href: route('/[handle]/activity', { handle: profile.handle }),
@@ -21,50 +17,43 @@
 		},
 		{ label: 'Liked', href: route('/[handle]/liked', { handle: profile.handle }), value: 'liked' }
 	] as const);
-	const currentTab: (typeof tabs)[number]['value'] = 'activity';
+	let currentTab: ProfileTab = $state('activity');
+	let scroll = $state(0);
 
-	let openEditProfileDialog = $state(false);
+	$effect(() => {
+		const possibleTabs: ProfileTab[] = ['activity', 'liked'];
+		const currentPage = $page.url.href.split('/').pop()?.toLowerCase() as ProfileTab;
+
+		if (!currentPage || !possibleTabs.includes(currentPage)) {
+			currentTab = 'activity';
+		}
+
+		currentTab = currentPage;
+	});
 </script>
 
-<div class="flex h-screen max-h-screen flex-col">
-	<header class="flex py-4">
-		<ProfileAvatar {profile} size="lg" />
-		<div class="flex flex-col gap-1 pl-5 pt-6">
-			<h1 class="text-4xl">{profile.displayName}</h1>
-			<p class="text-muted-foreground">@{profile.handle}</p>
-			<div class="mt-2 text-base">
-				{#each profile.bio.split('\n') as line}
-					<p>{line}</p>
-				{/each}
-			</div>
-		</div>
+<div class="relative flex h-full w-full flex-col">
+	<MiniProfileHeader
+		{profile}
+		{tabs}
+		setProfileForm={data.setProfileForm}
+		bind:scroll
+		bind:currentTab
+	/>
 
-		{#if isSelf}
-			<Dropdown
-				items={[{ item: 'Edit', onclick: () => (openEditProfileDialog = true) }]}
-				class="ml-auto h-fit p-5"
-			>
-				<EllipsisVertical />
-			</Dropdown>
-		{/if}
-	</header>
+	<Scrollable bind:scroll>
+		<ProfileHeader
+			{profile}
+			{tabs}
+			setProfileForm={data.setProfileForm}
+			bind:scroll
+			bind:currentTab
+		/>
 
-	<Separator class="my-5" />
-
-	{#key profile}
-		<Tabs.Root>
-			<Tabs.List class="w-full">
-				{#each tabs as { label, href, value } (value)}
-					<a {href}>
-						<Tabs.Trigger class="mx-auto w-full text-center" {value}>{label}</Tabs.Trigger>
-					</a>
-				{/each}
-			</Tabs.List>
-			<Tabs.Content value={currentTab}>
+		{#key profile}
+			<div class="space-y-3">
 				{@render children()}
-			</Tabs.Content>
-		</Tabs.Root>
-	{/key}
+			</div>
+		{/key}
+	</Scrollable>
 </div>
-
-<SetProfileDialog bind:open={openEditProfileDialog} data={data.setProfileForm} />
