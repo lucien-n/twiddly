@@ -5,7 +5,7 @@
 	import type { ColorSelectProps } from '.';
 
 	// eslint-disable-next-line no-undef
-	let { options, value = $bindable(), class: className, ...props }: ColorSelectProps<T> = $props();
+	let { options, value = $bindable(), class: className, onValueChange, ...props }: ColorSelectProps<T> = $props();
 </script>
 
 <div class={cn('flex justify-between gap-3', className)}>
@@ -18,7 +18,10 @@
 					selected && 'border-2 border-primary'
 				)}
 				style="background-color: {opt.color};"
-				onclick={() => (value = opt.value)}
+				onclick={() => {
+					value = opt.value;
+					onValueChange?.(opt.value)
+				}}
 			>
 				{#if selected}
 					<CircleCheckBig

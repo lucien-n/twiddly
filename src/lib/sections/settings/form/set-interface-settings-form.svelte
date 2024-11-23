@@ -11,6 +11,8 @@
 	import SetSettingsForm from './set-settings-form.svelte';
 	import { superSettingsForm } from './super-settings-form';
 	import { ThemeColor, ThemeMode } from '@prisma/client';
+	import { setMode, setTheme } from 'mode-watcher';
+	import { getModeWatcherThemeColor, getModeWatcherThemeMode } from '@/lib/utils/theme';
 
 	interface Props {
 		data: SuperValidated<Infer<SetInterfaceSettingsSchema>>;
@@ -48,6 +50,9 @@
 						}
 					]}
 					bind:value={$formData.themeMode as ThemeMode}
+					onValueChange={(themeMode) => {
+						setMode(getModeWatcherThemeMode(themeMode as ThemeMode));
+					}}
 				/>
 			{/snippet}
 		</Form.Control>
@@ -79,6 +84,9 @@
 						}
 					]}
 					bind:value={$formData.themeColor as ThemeColor}
+					onValueChange={(themeColor) => {
+						setTheme(getModeWatcherThemeColor(themeColor as ThemeColor));
+					}}
 				/>
 			{/snippet}
 		</Form.Control>
