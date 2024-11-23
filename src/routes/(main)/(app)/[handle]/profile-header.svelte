@@ -54,7 +54,7 @@
 		<ProfileAvatar
 			{profile}
 			size={isMini ? 'default' : 'lg'}
-			class="transition-all duration-200 ease-in-out"
+			class="transition-all duration-150 ease-in-out"
 		/>
 		<div
 			class={cn(
@@ -74,14 +74,16 @@
 		</div>
 
 		<div class="ml-auto flex gap-3">
-			<Tooltip.Root>
-				<Tooltip.Trigger onclick={() => (scroll = -1)}>
-					<ArrowUp />
-				</Tooltip.Trigger>
-				<Tooltip.Content>
-					<p>Back to top</p>
-				</Tooltip.Content>
-			</Tooltip.Root>
+			{#if isMini}
+				<Tooltip.Root>
+					<Tooltip.Trigger onclick={() => (scroll = -1)}>
+						<ArrowUp />
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Back to top</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+			{/if}
 
 			{#if isSelf}
 				<Dropdown items={[{ item: 'Edit', onclick: () => (openEditProfileDialog = true) }]}>
