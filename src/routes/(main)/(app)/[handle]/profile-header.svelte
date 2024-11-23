@@ -10,21 +10,15 @@
 	import { slide } from 'svelte/transition';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { ProfileTab, Tab } from './types';
+	import { route } from '$lib/ROUTES';
+	import { page } from '$app/stores';
 
 	interface Props {
 		profile: Profile;
 		setProfileForm: SuperValidated<Infer<SetProfileSchema>>;
-		tabs: Tab[];
-		currentTab: ProfileTab;
 		scroll: number;
 	}
-	let {
-		profile,
-		setProfileForm,
-		tabs,
-		currentTab = $bindable(),
-		scroll = $bindable()
-	}: Props = $props();
+	let { profile, setProfileForm, scroll = $bindable() }: Props = $props();
 
 	let openEditProfileDialog = $state(false);
 
@@ -32,6 +26,27 @@
 
 	const isSelf = $derived(authState.session?.userId === profile.id);
 	const isMini = $derived(scroll === -1 || scroll > 200);
+
+	const tabs: Tab[] = $derived([
+		{
+			label: 'Activity',
+			href: route('/[handle]/activity', { handle: profile.handle }),
+			value: 'activity'
+		},
+		{ label: 'Liked', href: route('/[handle]/liked', { handle: profile.handle }), value: 'liked' }
+	] as const);
+	let currentTab: ProfileTab = $state('activity');
+
+	$effect(() => {
+		const possibleTabs: ProfileTab[] = ['activity', 'liked'];
+		const currentPage = $page.url.href.split('/').pop()?.toLowerCase() as ProfileTab;
+
+		if (!currentPage || !possibleTabs.includes(currentPage)) {
+			currentTab = 'activity';
+		}
+
+		currentTab = currentPage;
+	});
 </script>
 
 <header class="flex flex-col py-4">
