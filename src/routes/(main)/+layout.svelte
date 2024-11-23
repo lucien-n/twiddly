@@ -22,7 +22,7 @@
 				<Separator orientation="vertical" class="mr-2 h-4" />
 				<NavigationBreadcrumbs />
 
-				{#each ['default', 'green-theme'] as theme}
+				{#each ['default', 'green-theme', 'violet-theme'] as theme}
 					<Button onclick={() => setTheme(theme)}>
 						{theme}
 					</Button>
