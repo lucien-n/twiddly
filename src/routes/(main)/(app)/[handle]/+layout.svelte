@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import { route } from '$lib/ROUTES';
 	import { Scrollable } from '&/scrollable';
-	import MiniProfileHeader from './mini-profile-header.svelte';
 	import ProfileHeader from './profile-header.svelte';
 	import type { ProfileTab, Tab } from './types';
 
@@ -33,7 +32,7 @@
 </script>
 
 <div class="relative flex h-full w-full flex-col">
-	<MiniProfileHeader
+	<ProfileHeader
 		{profile}
 		{tabs}
 		setProfileForm={data.setProfileForm}
@@ -42,14 +41,6 @@
 	/>
 
 	<Scrollable bind:scroll>
-		<ProfileHeader
-			{profile}
-			{tabs}
-			setProfileForm={data.setProfileForm}
-			bind:scroll
-			bind:currentTab
-		/>
-
 		{#key profile}
 			<div class="space-y-3">
 				{@render children()}
