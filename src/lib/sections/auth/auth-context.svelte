@@ -3,7 +3,9 @@
 	import { setAuthState, type AuthState, type SetAuthState } from './auth-state.svelte';
 	import { SignOutDialog } from '.';
 	import { getModeWatcherThemeMode, getModeWatcherThemeColor } from '$lib/utils/theme';
-	import { setMode, setTheme } from 'mode-watcher';
+	import { mode, setMode, setTheme, theme } from 'mode-watcher';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
 	interface Props {
 		init: SetAuthState;
@@ -19,11 +21,21 @@
 	});
 
 	$effect(() => {
-		setMode(getModeWatcherThemeMode(init.profile?.interfaceSettings?.themeMode));
+		const userMode = getModeWatcherThemeMode(init.profile?.interfaceSettings?.themeMode);
+		if ($mode === userMode || (browser && $page.url.pathname.startsWith('/settings/interface'))) {
+			return;
+		}
+
+		setMode(userMode);
 	});
 
 	$effect(() => {
-		setTheme(getModeWatcherThemeColor(init.profile?.interfaceSettings?.themeColor));
+		const userColor = getModeWatcherThemeColor(init.profile?.interfaceSettings?.themeColor);
+		if ($theme === userColor || (browser && $page.url.pathname.startsWith('/settings/interface'))) {
+			return;
+		}
+
+		setTheme(userColor);
 	});
 </script>
 
