@@ -81,6 +81,11 @@
 							label: 'Violet',
 							value: ThemeColor.VIOLET,
 							color: 'hsl(263.4 70% 50.4%)'
+						},
+						{
+							label: 'Rose',
+							value: ThemeColor.ROSE,
+							color: 'hsl(346.8 77.2% 49.8%)'
 						}
 					]}
 					bind:value={$formData.themeColor as ThemeColor}

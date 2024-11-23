@@ -2,4 +2,5 @@ enum ThemeColor {
     DEFAULT
     GREEN
     VIOLET
+    ROSE
 }

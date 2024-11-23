@@ -13,7 +13,7 @@ export const getModeWatcherThemeMode = (themeMode?: ThemeMode): 'dark' | 'light'
 	return 'light';
 };
 
-export const colorThemes = ['default', 'green-theme', 'violet-theme'] as const;
+export const colorThemes = ['default', 'green-theme', 'violet-theme', 'rose-theme'] as const;
 
 export const getModeWatcherThemeColor = (themeColor?: ThemeColor): (typeof colorThemes)[number] => {
 	switch (themeColor) {
@@ -23,6 +23,8 @@ export const getModeWatcherThemeColor = (themeColor?: ThemeColor): (typeof color
 			return 'green-theme';
 		case ThemeColor.VIOLET:
 			return 'violet-theme';
+		case ThemeColor.ROSE:
+			return 'rose-theme';
 	}
 
 	return 'default';
