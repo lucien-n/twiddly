@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import { formatDate } from '$lib/utils/date';
+	import { formatDate } from '$lib/utils/helpers';
 	import { Button } from '&/ui/button';
 	import { Separator } from '&/ui/separator';
 	import { ProfileAvatar } from '#/profile';

@@ -2,7 +2,7 @@
 	import { ProfileAvatar } from '#/profile';
 	import type { Twiddle } from '$lib/models';
 	import { route } from '$lib/ROUTES';
-	import { formatDate } from '$lib/utils/date';
+	import { formatDate } from '$lib/utils/helpers';
 	import { Button } from '&/ui/button';
 	import * as Card from '&/ui/card';
 	import { TwiddleCard } from '.';
