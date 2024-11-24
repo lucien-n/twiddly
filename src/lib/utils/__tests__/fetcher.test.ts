@@ -95,4 +95,17 @@ describe('fetcher', () => {
 			headers: mHeaders
 		});
 	});
+
+	it('should return "Network error" if the thrown error does not have a message', async () => {
+		const mockError = { name: 'ErrorWithoutMessage' };
+		const mUrl = 'https://example.com';
+		mockFetch.mockRejectedValueOnce(mockError);
+
+		const result = await fetcher(mUrl);
+
+		expect(result).toEqual({
+			error: 'Network error'
+		});
+		expect(mockFetch).toHaveBeenCalledWith(mUrl, { method: undefined });
+	});
 });
