@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { LoadingButton, type LoadingButtonProps } from '&/button';
-	import type { HTMLAttributes } from 'svelte/elements';
 
-	const { children, ...props }: Omit<LoadingButtonProps, keyof HTMLAttributes<HTMLAnchorElement>> =
-		$props();
+	const { children, ...props }: LoadingButtonProps = $props();
 </script>
 
 <LoadingButton type="submit" {...props}>

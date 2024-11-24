@@ -4,12 +4,12 @@
 	import type { LoadingButtonProps } from '.';
 
 	const { children, loading, disableWhileLoading = true, ...props }: LoadingButtonProps = $props();
+	const disabled = $derived(
+		!!(disableWhileLoading ? loading : 'disabled' in props && props.disabled)
+	);
 </script>
 
-<Button
-	disabled={(disableWhileLoading && loading) || ('disabled' in props && props.disabled)}
-	{...props}
->
+<Button {...props} {disabled}>
 	{#if loading}
 		<LoaderCircle class="mr-2 animate-spin" />
 	{/if}
