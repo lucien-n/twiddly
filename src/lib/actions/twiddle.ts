@@ -3,12 +3,12 @@ import { route } from '$lib/ROUTES';
 import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
 import { isAdmin, isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
+import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { MAX_CONTENT_LENGTH } from '../schemas/twiddle/fields';
-import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
 
 export const setTwiddle: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);

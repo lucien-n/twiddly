@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { ProfileAvatar } from '#/profile';
+	import type { Twiddle } from '$lib/models';
 	import { route } from '$lib/ROUTES';
 	import { formatDate } from '$lib/utils/date';
 	import { Button } from '&/ui/button';
 	import * as Card from '&/ui/card';
-	import { ProfileAvatar } from '#/profile';
-	import TwiddleFooter from './twiddle-footer.svelte';
-	import { TwiddleContext } from './state';
 	import { TwiddleCard } from '.';
-	import type { Twiddle } from '$lib';
+	import { TwiddleContext } from './state';
+	import TwiddleFooter from './twiddle-footer.svelte';
 
 	interface Props {
 		twiddle: Twiddle;

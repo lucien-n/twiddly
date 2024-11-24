@@ -6,15 +6,18 @@ import { isAdmin, isVerified } from '$lib/server/auth';
 import { dev } from '$app/environment';
 
 export const POST: RequestHandler = async (event) => {
-	if (!isVerified(event)) return error(401, AuthErrorCode.AuthRequired);
+	if (!isVerified(event)) {
+		return error(401, AuthErrorCode.AuthRequired);
+	}
 
+	const { userId } = event.locals.session;
 	const { id: twiddleId } = event.params;
 	try {
 		const twiddle = await prisma.twiddle.update({
 			data: { deletedAt: new Date() },
 			where: {
 				id: twiddleId,
-				...(isAdmin(event) ? {} : { authorId: event.locals.session.userId })
+				...(isAdmin(event) ? {} : { authorId: userId })
 			},
 			select: {
 				parent: {

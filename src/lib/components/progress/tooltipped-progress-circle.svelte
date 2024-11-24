@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { calculatePercentage } from '$lib/utils/helpers';
 	import * as Tooltip from '&/ui/tooltip';
-	import { percentage } from '$lib/utils/percentage';
 	import type { TooltippedProgressCircleProps } from '.';
 	import ProgressCircle from './progress-circle.svelte';
 
 	const { current, max, ...props }: TooltippedProgressCircleProps = $props();
-	const progress = $derived(percentage(current, max));
+	const progress = $derived(calculatePercentage(current, max));
 </script>
 
 <Tooltip.Root>

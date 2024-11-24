@@ -27,7 +27,7 @@
 							<p class="font-semibold">{twiddleState.data.author.displayName}</p>
 							<Button
 								variant="link"
-								href={route('/[handle]', { handle: twiddleState.data.author.handle })}
+								href={route('/[handle]/activity', { handle: twiddleState.data.author.handle })}
 								class="h-0 p-0 text-sm text-gray-500"
 							>
 								@{twiddleState.data.author.handle}

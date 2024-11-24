@@ -1,4 +1,5 @@
 import { dev } from '$app/environment';
+import { formatProfile } from '$lib/models';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
 import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
@@ -6,7 +7,6 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { generateIdFromEntropySize, type Session } from 'lucia';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
-import { formatProfile } from '..';
 import { sendOTPVerificationEmail } from './email';
 import { lucia } from './lucia';
 import { prisma } from './prisma';

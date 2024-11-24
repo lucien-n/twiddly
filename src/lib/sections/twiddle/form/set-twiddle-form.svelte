@@ -4,7 +4,7 @@
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import { TooltippedProgressCircle } from '&/progress';
 	import * as Form from '&/ui/form';
-	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
 	import { Send } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';

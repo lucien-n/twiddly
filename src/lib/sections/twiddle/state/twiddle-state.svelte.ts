@@ -1,4 +1,4 @@
-import type { Twiddle } from '$lib';
+import type { Twiddle } from '$lib/models';
 import { route } from '$lib/ROUTES';
 import { AuthErrorCode } from '$lib/utils/auth-error';
 import { fetcher } from '$lib/utils/fetcher';

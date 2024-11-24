@@ -1,6 +1,5 @@
-import { formatTwiddle } from '$lib';
+import { formatTwiddle, getTwiddleSelect, getTwiddleWhere } from '$lib/models';
 import { prisma } from '$lib/server/prisma';
-import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import { error } from 'console';
 import type { PageServerLoad } from './$types';
 

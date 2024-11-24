@@ -2,7 +2,7 @@
 	import { getAuthState } from '#/auth';
 	import { ProfileAvatar, SetProfileDialog } from '#/profile';
 	import { page } from '$app/stores';
-	import type { Profile } from '$lib';
+	import type { Profile } from '$lib/models';
 	import { route } from '$lib/ROUTES';
 	import type { SetProfileSchema } from '$lib/schemas/profile/set-profile';
 	import { Dropdown } from '&/dropdown';

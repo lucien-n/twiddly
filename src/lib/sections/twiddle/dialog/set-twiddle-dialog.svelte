@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
 	import { route } from '$lib/ROUTES';
+	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
 	import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
 	import {
 		handleSuperResult,
 		onSuperFormError,
@@ -11,7 +12,6 @@
 	import * as Dialog from '&/ui/dialog';
 	import * as Form from '&/ui/form';
 	import { LoadingButton } from '&/ui/form';
-	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';

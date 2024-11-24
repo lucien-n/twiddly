@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Twiddle } from '$lib';
+	import type { Twiddle } from '$lib/models';
 	import { TwiddleCard, TwiddleCardSkeleton, TwiddleContext } from '.';
 
 	interface Props {

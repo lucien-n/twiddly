@@ -1,19 +1,8 @@
-import { AvatarBackgroundColor, type Role } from '@prisma/client';
 import { superValidate, type Infer, type SuperValidated } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { setTwiddleSchema, type SetTwiddlechema } from './schemas/twiddle/set-twiddle';
-import { getProfileAvatar } from './utils/avatar';
-
-export interface Profile {
-	id: string;
-	bio: string;
-	role: Role;
-	avatar: string;
-	handle: string;
-	createdAt: Date;
-	isPrivate: boolean;
-	displayName: string;
-}
+import { setTwiddleSchema, type SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
+import { formatProfile, getProfileSelect, type Profile } from './profile';
+import { Role, type Like, type Prisma } from '@prisma/client';
 
 export interface Twiddle {
 	data: {
@@ -31,24 +20,6 @@ export interface Twiddle {
 	setTwiddleForm: SuperValidated<Infer<SetTwiddlechema>>;
 	setCommentForm: SuperValidated<Infer<SetTwiddlechema>>;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const formatProfile = (p: any): Profile => ({
-	id: p.id,
-	bio: p.bio,
-	role: p.role,
-	handle: p.handle,
-	avatar:
-		p.handle && p.avatarBackgroundColor
-			? getProfileAvatar(p)
-			: getProfileAvatar({
-					handle: 'unknown',
-					avatarBackgroundColor: AvatarBackgroundColor.MISTYROSE
-				}),
-	createdAt: p.createdAt,
-	displayName: p.displayName,
-	isPrivate: Boolean(p.privacySettings?.private)
-});
 
 export const formatTwiddle = async (
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,14 +59,31 @@ export const formatTwiddles = (
 	currentUserId: string | undefined
 ): Promise<Twiddle[]> => Promise.all(data.map((d) => formatTwiddle(d, currentUserId)));
 
-export const sanitizeTwiddleContent = (content: string): string => {
-	const formatted = content
-		.split('\n')
-		.map((line) => line.trimEnd())
-		.join('\n');
+export const isLiked = (
+	currentUserId: string | undefined,
+	likes: Pick<Like, 'profileId'>[]
+): boolean => !!currentUserId && likes.some(({ profileId }) => currentUserId === profileId);
 
-	return formatted;
-};
+export const getTwiddleSelect = (currentUserId?: string) => ({
+	id: true,
+	editedAt: true,
+	content: true,
+	createdAt: true,
+	likeCount: true,
+	commentCount: true,
+	author: { select: getProfileSelect() },
+	likes: { where: { profileId: currentUserId } }
+});
 
-export const getSanitizedContentLength = (sanitizedContent: string) =>
-	sanitizedContent.split('\n').join('').length;
+export const getTwiddleOrderBy = (
+	orderBy?: Prisma.TwiddleOrderByWithRelationInput
+): Prisma.TwiddleOrderByWithRelationInput => ({
+	createdAt: 'desc',
+	...orderBy
+});
+
+export const getTwiddleWhere = (where?: Prisma.TwiddleWhereInput): Prisma.TwiddleWhereInput => ({
+	deletedAt: null,
+	author: { user: { deletedAt: null }, role: { not: Role.RESTRICTED } },
+	...where
+});

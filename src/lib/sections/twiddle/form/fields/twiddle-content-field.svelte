@@ -1,13 +1,12 @@
-<!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
 	import { getAuthState } from '#/auth';
-	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
+	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
 	import type { SetTwiddlechema } from '$lib/schemas/twiddle/set-twiddle';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
 	import * as Form from '&/ui/form';
 	import { Textarea } from '&/ui/textarea';
-	import { MAX_CONTENT_LENGTH } from '$lib/schemas/twiddle/fields';
-	import type { Infer, SuperForm } from 'sveltekit-superforms';
 	import type { FormEventHandler } from 'svelte/elements';
+	import type { Infer, SuperForm } from 'sveltekit-superforms';
 
 	interface Props {
 		form: SuperForm<Infer<SetTwiddlechema>>;
