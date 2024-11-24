@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
 	calculatePercentage,
 	copyToClipboard,
+	formatDate,
 	getSanitizedContentLength,
 	sanitizeTwiddleContent
 } from '../helpers';
@@ -65,5 +66,15 @@ describe('calculatePercentage', () => {
 		const result = calculatePercentage(value, max);
 
 		expect(result).toEqual(expectedResult);
+	});
+});
+
+describe('formatDate', () => {
+	it('should return formatted date', () => {
+		const mDate = new Date('6-12-2020 22:17');
+
+		const result = formatDate(mDate);
+
+		expect(result).toEqual('Jun 12, 2020, 10:17 PM');
 	});
 });
