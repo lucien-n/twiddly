@@ -72,6 +72,6 @@
 			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
 
-		<TooltippedProgressCircle current={sanitizedContentLength} max={MAX_CONTENT_LENGTH} />
+		<TooltippedProgressCircle current={sanitizedContentLength + 50} max={MAX_CONTENT_LENGTH} />
 	</div>
 </form>

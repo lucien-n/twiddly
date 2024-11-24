@@ -15,7 +15,6 @@
 			{progress}
 			stroke-width={3}
 			bg-stroke={props['bg-stroke'] ?? 'hsl(0 0% 3.9%)'}
-			stroke="hsl(0 0% 98%)"
 		/>
 	</Tooltip.Trigger>
 	<Tooltip.Content>
