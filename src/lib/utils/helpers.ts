@@ -21,4 +21,4 @@ export const sanitizeTwiddleContent = (content: string): string => {
 	return formatted;
 };
 
-export const calculatePercentage = (value: number, max: number) => Math.ceil((value / max) * 100);
+export const calculatePercentage = (value: number, max: number) => Math.floor((value / max) * 100);
