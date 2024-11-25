@@ -50,33 +50,38 @@
 </script>
 
 <header class="flex w-full flex-col py-4">
-	<div class="flex w-full gap-3">
-		<ProfileAvatar
-			{profile}
-			size={isMini ? 'default' : 'lg'}
-			class="transition-all duration-150 ease-in-out"
-		/>
-		<div
-			class={cn(
-				'flex transition-all duration-200 ease-in-out',
-				isMini ? 'items-center gap-3' : 'flex-col gap-1 pl-5 pt-6'
-			)}
-		>
-			<h1 class={cn(isMini ? 'mb-[.1rem] text-xl' : 'text-4xl')}>{profile.displayName}</h1>
-			<p class="text-muted-foreground">@{profile.handle}</p>
-			{#if !isMini}
-				<div class="mt-2 text-base">
-					{#each profile.bio.split('\n') as line}
-						<p>{line}</p>
-					{/each}
-				</div>
-			{/if}
+	<div class="flex w-full justify-between">
+		<div class="flex gap-3">
+			<ProfileAvatar
+				{profile}
+				size={isMini ? 'default' : 'lg'}
+				class="transition-all duration-150 ease-in-out"
+			/>
+			<div
+				class={cn(
+					'flex transition-all duration-200 ease-in-out',
+					isMini ? 'items-center gap-3' : 'flex-col gap-1 pl-5 pt-6'
+				)}
+			>
+				<h1 class={cn(isMini ? 'mb-[.1rem] text-xl' : 'text-4xl')}>{profile.displayName}</h1>
+				<p class="text-muted-foreground">@{profile.handle}</p>
+				{#if !isMini}
+					<div class="mt-2 text-base">
+						{#each profile.bio.split('\n') as line}
+							<p>{line}</p>
+						{/each}
+					</div>
+				{/if}
+			</div>
 		</div>
 
-		<div class="ml-auto flex gap-3">
+		<div class="flex gap-3 pr-8">
 			{#if isMini}
 				<Tooltip.Root>
-					<Tooltip.Trigger onclick={() => (scroll = -1)}>
+					<Tooltip.Trigger
+						onclick={() => (scroll = -1)}
+						class="flex aspect-square items-center justify-center rounded-full border border-primary transition-all hover:bg-primary/10"
+					>
 						<ArrowUp />
 					</Tooltip.Trigger>
 					<Tooltip.Content>
