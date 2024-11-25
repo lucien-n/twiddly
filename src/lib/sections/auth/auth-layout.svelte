@@ -11,15 +11,9 @@
 	const { title, description, children, footer }: Props = $props();
 </script>
 
-<div class="h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+<div class="h-screen w-full lg:grid lg:grid-cols-2">
 	<div class="hidden items-center bg-muted lg:flex">
-		<img
-			src="/twiddly.svg"
-			alt="twiddly"
-			width="1920"
-			height="1080"
-			class="w-full object-cover dark:brightness-[0.2]"
-		/>
+		<img src="/twiddly.svg" alt="twiddly" class="w-full object-cover dark:brightness-[0.2]" />
 	</div>
 	<div class="flex items-center justify-center py-12">
 		<div class="mx-auto grid w-[350px] gap-6">

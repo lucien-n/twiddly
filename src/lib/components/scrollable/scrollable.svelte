@@ -4,7 +4,13 @@
 	import { ArrowUp } from 'lucide-svelte';
 	import type { ScrollableProps } from '.';
 
-	let { class: className, children, scroll = $bindable(0), ...props }: ScrollableProps = $props();
+	let {
+		class: className,
+		children,
+		scroll = $bindable(0),
+		hideBackToTop,
+		...props
+	}: ScrollableProps = $props();
 
 	let el: HTMLElement | undefined = $state();
 	const handleScroll = (event: Event) => {
@@ -30,8 +36,8 @@
 	onscroll={handleScroll}
 	{...props}
 >
-	{#if scroll > 2000}
-		<div class="sticky left-0 right-0 top-3 z-10 mx-auto w-fit">
+	{#if !hideBackToTop && scroll > 200}
+		<div class="sticky left-0 right-0 top-3 z-10 mx-auto h-0 w-fit">
 			<Button onclick={resetScroll}>
 				<ArrowUp />
 				<span>Back To Top</span>

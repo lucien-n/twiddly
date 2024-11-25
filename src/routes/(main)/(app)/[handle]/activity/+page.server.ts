@@ -1,6 +1,5 @@
-import { formatTwiddles } from '$lib';
+import { formatTwiddles, getTwiddleSelect, getTwiddleWhere } from '$lib/models';
 import { prisma } from '$lib/server/prisma';
-import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 
 const getTwiddles = async (profileId: string, currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({

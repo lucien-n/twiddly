@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { route } from '$lib/ROUTES';
-	import { formatDate } from '$lib/utils/date';
+	import { formatDate } from '$lib/utils/helpers';
 	import { Button } from '&/ui/button';
 	import { Separator } from '&/ui/separator';
 	import { ProfileAvatar } from '#/profile';
@@ -27,7 +27,7 @@
 							<p class="font-semibold">{twiddleState.data.author.displayName}</p>
 							<Button
 								variant="link"
-								href={route('/[handle]', { handle: twiddleState.data.author.handle })}
+								href={route('/[handle]/activity', { handle: twiddleState.data.author.handle })}
 								class="h-0 p-0 text-sm text-gray-500"
 							>
 								@{twiddleState.data.author.handle}

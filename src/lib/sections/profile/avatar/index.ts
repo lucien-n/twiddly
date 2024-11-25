@@ -1,7 +1,7 @@
+import type { Profile } from '$lib/models';
 import { type VariantProps, tv } from 'tailwind-variants';
-import ProfileAvatar from './profile-avatar.svelte';
 import ProfileAvatarSkeleton from './profile-avatar-skeleton.svelte';
-import type { Profile } from '$lib';
+import ProfileAvatar from './profile-avatar.svelte';
 
 export const avatarVariants = tv({
 	base: 'border rounded-full',

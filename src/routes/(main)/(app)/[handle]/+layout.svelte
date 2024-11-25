@@ -11,9 +11,9 @@
 <div class="relative flex h-full w-full flex-col">
 	<ProfileHeader {profile} setProfileForm={data.setProfileForm} bind:scroll />
 
-	<Scrollable bind:scroll>
+	<Scrollable bind:scroll hideBackToTop>
 		{#key profile}
-			<div class="space-y-3">
+			<div class="min-h-screen space-y-3">
 				{@render children()}
 			</div>
 		{/key}

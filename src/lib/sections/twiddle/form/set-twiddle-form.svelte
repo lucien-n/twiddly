@@ -4,7 +4,7 @@
 	import { handleSuperResult, onSuperFormError } from '$lib/utils/super-form';
 	import { TooltippedProgressCircle } from '&/progress';
 	import * as Form from '&/ui/form';
-	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib';
+	import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
 	import { Send } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm } from 'sveltekit-superforms';
@@ -72,6 +72,6 @@
 			<p>{isComment ? 'Comment' : 'Twiddle'}</p>
 		</Form.LoadingButton>
 
-		<TooltippedProgressCircle current={sanitizedContentLength} max={MAX_CONTENT_LENGTH} />
+		<TooltippedProgressCircle current={sanitizedContentLength + 50} max={MAX_CONTENT_LENGTH} />
 	</div>
 </form>

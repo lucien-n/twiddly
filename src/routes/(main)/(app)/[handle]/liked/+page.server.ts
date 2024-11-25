@@ -1,6 +1,5 @@
-import { formatTwiddles, type Profile } from '$lib';
+import { formatTwiddles, getTwiddleSelect, getTwiddleWhere, type Profile } from '$lib/models';
 import { prisma } from '$lib/server/prisma';
-import { getTwiddleSelect, getTwiddleWhere } from '$lib/utils/twiddle';
 import type { PageServerLoad } from './$types';
 
 const getLikedTwiddles = async (profile: Profile) => {

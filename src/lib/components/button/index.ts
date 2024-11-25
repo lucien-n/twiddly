@@ -1,8 +1,8 @@
-import type { Button as ButtonPrimitive } from 'bits-ui';
 import type { Snippet } from 'svelte';
+import type { HTMLButtonAttributes } from 'svelte/elements';
 import LoadingButton from './loading-button.svelte';
 
-type LoadingButtonProps = ButtonPrimitive.RootProps & {
+type LoadingButtonProps = HTMLButtonAttributes & {
 	children: Snippet;
 	loading?: boolean;
 	disableWhileLoading?: boolean;

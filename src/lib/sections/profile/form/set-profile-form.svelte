@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: Can only bind to an Identifier or MemberExpression -->
 <script lang="ts">
 	import { AVATAR_BACKGROUND_COLORS } from '$lib/external/dicebear-notionists-neutral';
 	import { route } from '$lib/ROUTES';

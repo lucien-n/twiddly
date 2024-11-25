@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { PasswordInput } from '&/input';
 	import { route } from '$lib/ROUTES';
 	import { signUpSchema, type SignUpSchema } from '$lib/schemas/auth/sign-up';
 	import { generateHandle } from '$lib/utils/handle';
 	import { onSuperFormError } from '$lib/utils/super-form';
+	import { PasswordInput } from '&/input';
 	import * as Form from '&/ui/form';
 	import { Input } from '&/ui/input';
 	import { zodClient, type Infer } from 'sveltekit-superforms/adapters';

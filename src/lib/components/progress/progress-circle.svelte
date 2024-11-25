@@ -10,7 +10,7 @@
 		cy="50%"
 		r="calc(50% - 2px)"
 		stroke-width={props['stroke-width'] ?? 4}
-		stroke={props['bg-stroke'] ?? 'lightgray'}
+		class="stroke-secondary"
 	/>
 	<circle
 		cx="50%"
@@ -24,5 +24,6 @@
 		stroke-linecap="round"
 		transform="rotate(-90)"
 		transform-origin="center"
+		class="stroke-primary"
 	/>
 </svg>

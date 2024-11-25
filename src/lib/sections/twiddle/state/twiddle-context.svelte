@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Twiddle } from '$lib';
+	import type { Twiddle } from '$lib/models';
 	import type { Snippet } from 'svelte';
 	import { DeleteTwiddleDialog, SetTwiddleDialog } from '../dialog';
 	import ShareTwiddleDialog from '../dialog/share-twiddle-dialog.svelte';
