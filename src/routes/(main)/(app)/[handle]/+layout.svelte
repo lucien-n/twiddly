@@ -13,7 +13,7 @@
 
 	<Scrollable bind:scroll>
 		{#key profile}
-			<div class="space-y-3">
+			<div class="min-h-screen space-y-3">
 				{@render children()}
 			</div>
 		{/key}
