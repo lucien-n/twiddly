@@ -30,8 +30,8 @@
 	onscroll={handleScroll}
 	{...props}
 >
-	{#if scroll > 2000}
-		<div class="sticky left-0 right-0 top-3 z-10 mx-auto w-fit">
+	{#if scroll > 200}
+		<div class="sticky left-0 right-0 top-3 z-10 mx-auto h-0 w-fit">
 			<Button onclick={resetScroll}>
 				<ArrowUp />
 				<span>Back To Top</span>
