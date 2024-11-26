@@ -11,7 +11,7 @@
 	import { superSettingsForm } from './super-settings-form';
 	import { ThemeColor, ThemeMode } from '@prisma/client';
 	import { setMode, setTheme } from 'mode-watcher';
-	import { getModeWatcherThemeColor, getModeWatcherThemeMode } from '@/lib/utils/theme';
+	import { getModeWatcherThemeColor, getModeWatcherThemeMode } from '$lib/utils/theme';
 
 	interface Props {
 		data: SuperValidated<Infer<SetInterfaceSettingsSchema>>;

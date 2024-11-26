@@ -30,10 +30,14 @@
 	const tabs: Tab[] = $derived([
 		{
 			label: 'Activity',
-			href: route('/[handle]/activity', { handle: profile.handle }),
+			href: route('/[handle=handle]/activity', { handle: profile.handle }),
 			value: 'activity'
 		},
-		{ label: 'Liked', href: route('/[handle]/liked', { handle: profile.handle }), value: 'liked' }
+		{
+			label: 'Liked',
+			href: route('/[handle=handle]/liked', { handle: profile.handle }),
+			value: 'liked'
+		}
 	] as const);
 	let currentTab: ProfileTab = $state('activity');
 

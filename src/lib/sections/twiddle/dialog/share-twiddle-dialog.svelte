@@ -16,7 +16,7 @@
 
 	const url = $derived(
 		new URL(
-			route('/[handle]/[twiddleId]', {
+			route('/[handle=handle]/[twiddleId]', {
 				handle: twiddle.data.author.handle,
 				twiddleId: twiddle.data.id
 			}),

@@ -76,7 +76,10 @@ export const setTwiddle: Action = async (event) => {
 
 		redirect(
 			303,
-			route('/[handle]/[twiddleId]', { handle: twiddle.author.handle, twiddleId: twiddle.id })
+			route('/[handle=handle]/[twiddleId]', {
+				handle: twiddle.author.handle,
+				twiddleId: twiddle.id
+			})
 		);
 	} catch (e) {
 		if (dev) console.error(e);

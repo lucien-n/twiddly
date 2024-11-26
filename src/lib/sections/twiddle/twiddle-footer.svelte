@@ -29,7 +29,7 @@
 		size="icon"
 		class="flex w-auto items-center space-x-2 px-2 transition-colors duration-200 hover:text-blue-500"
 		onclick={(event) => event.stopPropagation()}
-		href={route('/[handle]/[twiddleId]', {
+		href={route('/[handle=handle]/[twiddleId]', {
 			handle: twiddle.data.author.handle,
 			twiddleId: twiddle.data.id
 		})}

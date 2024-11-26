@@ -22,7 +22,7 @@
 		{
 			label: 'Profile',
 			action: authState.profile
-				? route('/[handle]/activity', { handle: authState.profile.handle })
+				? route('/[handle=handle]/activity', { handle: authState.profile.handle })
 				: '',
 			icon: User,
 			hidden: !isAuthenticated
@@ -30,7 +30,7 @@
 		{
 			label: 'Liked',
 			action: authState.profile
-				? route('/[handle]/liked', { handle: authState.profile.handle })
+				? route('/[handle=handle]/liked', { handle: authState.profile.handle })
 				: '',
 			icon: Heart,
 			hidden: !isAuthenticated

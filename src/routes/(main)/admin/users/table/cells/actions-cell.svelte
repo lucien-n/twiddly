@@ -69,7 +69,7 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<a href={route('/[handle]/activity', { handle })}>
+		<a href={route('/[handle=handle]/activity', { handle })}>
 			<DropdownMenu.Item>
 				<ExternalLink />
 				<p>View profile</p>

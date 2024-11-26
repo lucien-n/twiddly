@@ -14,7 +14,9 @@
 	}
 	const { twiddle }: Props = $props();
 
-	const profileHref = $derived(route('/[handle]/activity', { handle: twiddle.data.author.handle }));
+	const profileHref = $derived(
+		route('/[handle=handle]/activity', { handle: twiddle.data.author.handle })
+	);
 </script>
 
 <Card.Root class="mx-auto transition-shadow duration-300 hover:shadow-lg">
@@ -33,7 +35,7 @@
 	</Card.Header>
 	<Card.Content>
 		<a
-			href={route('/[handle]/[twiddleId]', {
+			href={route('/[handle=handle]/[twiddleId]', {
 				handle: twiddle.data.author.handle,
 				twiddleId: twiddle.data.id
 			})}
