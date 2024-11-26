@@ -77,7 +77,7 @@
 		<Sidebar.MenuItem>
 			<Sidebar.MenuButton
 				data-isCurrent={isCurrent}
-				class=" rounded-md transition-all data-[isCurrent=true]:bg-sidebar-primary/20 data-[isCurrent=true]:text-sidebar-accent-foreground"
+				class="rounded-md transition-all data-[isCurrent=true]:bg-sidebar-primary/20 data-[isCurrent=true]:text-sidebar-accent-foreground"
 			>
 				{#snippet child({ props })}
 					{#if typeof item.action === 'string'}
