@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { getAuthState } from '#/auth';
+	import { browser } from '$app/environment';
+	import { navigating, page } from '$app/stores';
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
+	import { cn } from '&/utils';
 	import { Heart, Home, LogIn, Settings2, User, Users } from 'lucide-svelte';
+	import { crossfade } from 'svelte/transition';
 	import type { NavItemProps } from '.';
 	import NavUser from './nav-user.svelte';
-	import { cn } from '&/utils';
-	import { browser } from '$app/environment';
-	import { navigating } from '$app/stores';
 
 	const authState = getAuthState();
 	const isAuthenticated = $derived(!!authState.session);
@@ -52,25 +53,40 @@
 	let footerItems: NavItemProps[] = $derived([
 		{ label: 'Sign In', action: route('/sign-in'), icon: LogIn, hidden: isAuthenticated }
 	]);
+
+	const key = 'nav-current-item';
+	const [send, receive] = crossfade({});
 </script>
 
-{#snippet navItemContent(item: NavItemProps)}
+{#snippet navItemContent(item: NavItemProps, isCurrent: boolean)}
 	<item.icon />
 	<span>{item.label}</span>
+	{#if isCurrent}
+		<div
+			in:send={{ key }}
+			out:receive={{ key }}
+			class="ml-auto h-[.4rem] w-[.4rem] rounded-full bg-primary"
+		></div>
+	{/if}
 {/snippet}
 
 {#snippet navItem(item: NavItemProps)}
 	{#if !item.hidden}
+		{@const isCurrent =
+			browser && typeof item.action === 'string' && $page.url.pathname === item.action}
 		<Sidebar.MenuItem>
-			<Sidebar.MenuButton>
+			<Sidebar.MenuButton
+				data-isCurrent={isCurrent}
+				class=" rounded-md transition-all data-[isCurrent=true]:bg-sidebar-primary/20 data-[isCurrent=true]:text-sidebar-accent-foreground"
+			>
 				{#snippet child({ props })}
 					{#if typeof item.action === 'string'}
 						<a href={item.action} {...props}>
-							{@render navItemContent(item)}
+							{@render navItemContent(item, isCurrent)}
 						</a>
 					{:else}
 						<button onclick={item.action} {...props}>
-							{@render navItemContent(item)}
+							{@render navItemContent(item, isCurrent)}
 						</button>
 					{/if}
 				{/snippet}
