@@ -10,7 +10,8 @@ export default defineConfig({
 		coverage: {
 			all: false,
 			exclude: ['src/lib/ROUTES.ts', 'tests/']
-		}
+		},
+		globalSetup: './vitest.global-setup.ts'
 	},
 	resolve: {
 		alias: {
