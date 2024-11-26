@@ -1,9 +1,9 @@
 import { dev } from '$app/environment';
-import { formatProfile } from '$lib/models';
 import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
 import { hash, verify } from '@node-rs/argon2';
 import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
+import type { User as LuciaUser } from 'lucia';
 import { generateIdFromEntropySize, type Session } from 'lucia';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
@@ -118,13 +118,15 @@ export const signInWithEmailAndPassword = async (
 	await createSession(existingUser.id, event);
 };
 
-export const refreshSession = async (event: RequestEvent) => {
+export const refreshSession = async (
+	event: RequestEvent
+): Promise<{ user: LuciaUser | null; session: Session | null }> => {
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 	if (!sessionId) {
-		event.locals.user = null;
-		event.locals.session = null;
-		event.locals.profile = null;
-		return;
+		return {
+			user: null,
+			session: null
+		};
 	}
 
 	const { session, user } = await lucia.validateSession(sessionId);
@@ -144,16 +146,7 @@ export const refreshSession = async (event: RequestEvent) => {
 		});
 	}
 
-	const profile = session
-		? await prisma.profile.findFirst({
-				where: { id: session.userId },
-				include: { interfaceSettings: true, privacySettings: true }
-			})
-		: null;
-
-	event.locals.profile = profile ? { ...profile, ...formatProfile(profile) } : null;
-	event.locals.user = user;
-	event.locals.session = session;
+	return { user, session };
 };
 
 export const createSession = async (userId: string, event: RequestEvent) => {
