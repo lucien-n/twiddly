@@ -29,6 +29,7 @@ export const HANDLES_BLACKLIST: string[] = [
 	'sign-in', // ? already rejected since it contains a dash
 	'sign-up', // ? already rejected since it contains a dash
 	'sitemaps.xml', // ? already rejected since it contains a dot
+	'admin',
 	'verify',
 	'actions',
 	'api',
