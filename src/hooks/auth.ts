@@ -10,12 +10,10 @@ export const handleAuth: Handle = async ({ resolve, event }) => {
 	event.locals.session = session;
 
 	if (session) {
-		const profileData = session
-			? await prisma.profile.findFirst({
-					where: { id: session.userId },
-					include: { interfaceSettings: true, privacySettings: true }
-				})
-			: null;
+		const profileData = await prisma.profile.findFirst({
+			where: { id: session.userId },
+			include: { interfaceSettings: true, privacySettings: true }
+		});
 
 		event.locals.profile = profileData ? { ...profileData, ...formatProfile(profileData) } : null;
 	} else {
