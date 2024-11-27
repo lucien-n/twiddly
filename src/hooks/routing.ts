@@ -24,8 +24,6 @@ export const handleRouting: {
 		const maintenanceMode = getMaintenanceMode(event);
 		const isAdmin = event.locals.profile?.role === Role.ADMIN;
 
-		console.log({ isAdmin });
-
 		switch (maintenanceMode) {
 			case MaintenanceMode.VERIFIED: {
 				if (isVerified(event) || isInRoute(event, signInRoutes)) break;
