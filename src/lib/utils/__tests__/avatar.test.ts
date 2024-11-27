@@ -1,5 +1,4 @@
 import { AvatarBackgroundColor } from '@prisma/client';
-import { describe, expect, it } from 'vitest';
 import { getAvatarBgColor, getProfileAvatar } from '../avatar';
 
 describe('getAvatarBgColor', () => {

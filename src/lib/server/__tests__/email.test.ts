@@ -1,6 +1,5 @@
 import { mMailjet, mMailjetPostRequest } from '$tests/mocks/mailjet';
 import { NO_REPLY_EMAIL } from '$lib/constants';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { sendEmail, sendOTPVerificationEmail } from '../email';
 
 const mDev = vi.fn();

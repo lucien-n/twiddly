@@ -37,7 +37,6 @@ import { baseProfileFixtureA } from '$tests/fixtures/profile';
 import { baseSessionFixtureA } from '$tests/fixtures/session';
 import { baseUserFixtureA, baseUserFixtureB } from '$tests/fixtures/user';
 import type { RequestEvent } from '@sveltejs/kit';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MaintenanceMode, Role } from '@prisma/client';
 
 const mPassword = 'password';

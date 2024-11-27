@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { getMaintenanceMode, handlerRedirect } from '../utils';
 import { MaintenanceMode } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';

@@ -1,5 +1,4 @@
 import { AvatarBackgroundColor } from '@prisma/client';
-import { describe, it, expect } from 'vitest';
 import { getAvatarURLParams } from '../dicebear-notionists-neutral';
 
 describe('getAvatarURLParams', () => {

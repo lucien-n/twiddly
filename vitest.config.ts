@@ -11,7 +11,8 @@ export default defineConfig({
 			all: false,
 			exclude: ['src/lib/ROUTES.ts', 'tests/']
 		},
-		globalSetup: './vitest.global-setup.ts'
+		globalSetup: './vitest.global-setup.ts',
+		globals: true
 	},
 	resolve: {
 		alias: {

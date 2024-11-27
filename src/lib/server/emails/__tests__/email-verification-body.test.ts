@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest';
 import emailVerificationBody from '../email-verification-body';
 import { emailVerificationCodeExpiryMinutes } from '../../auth';
 

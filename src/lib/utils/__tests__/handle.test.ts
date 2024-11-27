@@ -1,4 +1,3 @@
-import { describe, expect, it } from 'vitest';
 import { generateHandle } from '../handle';
 
 describe('generateHandle', () => {
