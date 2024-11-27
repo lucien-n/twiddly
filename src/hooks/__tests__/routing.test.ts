@@ -46,7 +46,7 @@ describe('handleRouting', () => {
 	});
 
 	describe('beforeAuth', () => {
-		it('should go through pre auth routing', async () => {
+		it('should resolve pre auth routing', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
@@ -85,7 +85,7 @@ describe('handleRouting', () => {
 	});
 
 	describe('afterAuth', () => {
-		it('should go through post auth routing', async () => {
+		it('should resolve post auth routing', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
@@ -128,7 +128,7 @@ describe('handleRouting', () => {
 			expect(mHandlerRedirect).toHaveBeenCalledWith(307, '/sign-in');
 		});
 
-		it('should go through post auth if site is accessible to verified users only and current user is', async () => {
+		it('should resolve post auth if site is accessible to verified users only and current user is', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
@@ -174,7 +174,7 @@ describe('handleRouting', () => {
 			expect(mHandlerRedirect).toHaveBeenCalledWith(307, '/sign-in');
 		});
 
-		it('should go through post auth if site is accessible to admin users only and current user is', async () => {
+		it('should resolve post auth if site is accessible to admin users only and current user is', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
@@ -196,7 +196,7 @@ describe('handleRouting', () => {
 			expect(mResolve).toHaveBeenCalledWith(mEvent);
 		});
 
-		it('should go through post auth if site is not locked and user is in sign-in route', async () => {
+		it('should resolve post auth if site is not locked and user is in sign-in route', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
@@ -263,7 +263,7 @@ describe('handleRouting', () => {
 			expect(mHandlerRedirect).toHaveBeenCalledWith(303, '/');
 		});
 
-		it('should go through post auth if admin tries to access admin page', async () => {
+		it('should resolve post auth if admin tries to access admin page', async () => {
 			const mEvent = {
 				locals: {
 					siteSettings: {
