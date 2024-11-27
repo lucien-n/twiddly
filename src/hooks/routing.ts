@@ -6,7 +6,7 @@ import { error, type Handle, type RequestEvent } from '@sveltejs/kit';
 
 const signInRoutes = [route('/sign-in'), route('signIn /actions/v1/auth')];
 
-const isInRoute = (event: RequestEvent, routes: string[]) =>
+export const isInRoute = (event: RequestEvent, routes: string[]) =>
 	routes.some((p) => p.split('?')[0] === event.url.pathname);
 
 export const handleRouting: {
@@ -23,6 +23,8 @@ export const handleRouting: {
 	afterAuth: ({ event, resolve }) => {
 		const maintenanceMode = getMaintenanceMode(event);
 		const isAdmin = event.locals.profile?.role === Role.ADMIN;
+
+		console.log({ isAdmin });
 
 		switch (maintenanceMode) {
 			case MaintenanceMode.VERIFIED: {
