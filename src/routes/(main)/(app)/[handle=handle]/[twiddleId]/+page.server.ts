@@ -24,7 +24,7 @@ const getTwiddle = async (id: string, currentUserId?: string) => {
 };
 
 export const load: PageServerLoad = async (event) => {
-	const twiddle = getTwiddle(event.params.twiddleId, event.locals.session?.userId);
+	const twiddle = await getTwiddle(event.params.twiddleId, event.locals.session?.userId);
 
 	return {
 		twiddle
