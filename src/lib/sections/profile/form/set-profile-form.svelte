@@ -27,6 +27,13 @@
 	const { form: formData, enhance, errors, submitting, tainted, constraints } = form;
 
 	const loading = $derived($submitting);
+
+	const bioRows = $derived.by(() => {
+		const minRows = 3;
+		const lineCount = $formData.bio?.split('\n').length ?? minRows;
+
+		return lineCount > minRows ? lineCount : minRows;
+	});
 </script>
 
 <form method="post" action={route('setProfile /actions/v1/profile')} use:enhance>
@@ -46,7 +53,7 @@
 			{#snippet children({ props })}
 				<Form.Label>Bio</Form.Label>
 				<Form.Description>Express yourself !</Form.Description>
-				<Textarea {...props} bind:value={$formData.bio} />
+				<Textarea {...props} bind:value={$formData.bio} rows={bioRows} />
 
 				<div class="absolute bottom-2 right-2">
 					<TooltippedProgressCircle
