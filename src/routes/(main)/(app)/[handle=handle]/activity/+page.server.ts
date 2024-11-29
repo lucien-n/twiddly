@@ -16,8 +16,9 @@ const getTwiddles = async (profileId: string, currentUserId?: string) => {
 
 export const load = async (event) => {
 	const parent = await event.parent();
+	const twiddles = await getTwiddles(parent.profile?.id, event.locals.session?.userId);
 
 	return {
-		twiddles: await getTwiddles(parent.profile?.id, event.locals.session?.userId)
+		twiddles
 	};
 };
