@@ -1,3 +1,4 @@
+import type { PageInfosProps } from '#/application';
 import type { Profile } from './lib';
 
 // for information about these interfaces
@@ -16,13 +17,7 @@ declare global {
 			siteSettings: import('@prisma/client').SiteSettings | null;
 		}
 		interface PageData {
-			infos: {
-				title: string;
-				description?: string;
-				author?: string;
-				image?: string;
-				imageType?: string;
-			};
+			infos: PageInfosProps;
 		}
 		// interface PageState {}
 		// interface Platform {}
