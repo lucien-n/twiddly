@@ -16,8 +16,9 @@ const getLikedTwiddles = async (profile: Profile) => {
 
 export const load: PageServerLoad = async (event) => {
 	const parent = await event.parent();
+	const twiddles = await getLikedTwiddles(parent.profile);
 
 	return {
-		twiddles: await getLikedTwiddles(parent.profile)
+		twiddles
 	};
 };

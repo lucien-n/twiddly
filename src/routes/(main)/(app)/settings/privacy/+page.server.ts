@@ -22,7 +22,9 @@ export const load: PageServerLoad = async (event) => {
 		throw new Error(`Interface settings not found for user "${userId}"`);
 	}
 
+	const setSettingsForm = await superValidate(privacySettings, zod(setPrivacySettingsSchema));
+
 	return {
-		setSettingsForm: await superValidate(privacySettings, zod(setPrivacySettingsSchema))
+		setSettingsForm
 	};
 };

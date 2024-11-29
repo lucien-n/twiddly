@@ -21,7 +21,14 @@ const getTwiddles = async (currentUserId?: string) => {
 	return formatTwiddles(twiddles, currentUserId);
 };
 
-export const load: PageServerLoad = async (event) => ({
-	twiddles: await getTwiddles(event.locals.session?.userId),
-	setTwiddleForm: await superValidate(zod(setTwiddleSchema))
-});
+export const load: PageServerLoad = async (event) => {
+	const [twiddles, setTwiddleForm] = await Promise.all([
+		getTwiddles(event.locals.session?.userId),
+		superValidate(zod(setTwiddleSchema))
+	]);
+
+	return {
+		twiddles,
+		setTwiddleForm
+	};
+};

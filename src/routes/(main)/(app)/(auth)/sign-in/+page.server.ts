@@ -10,7 +10,9 @@ export const load = async (event) => {
 		redirect(302, route('/'));
 	}
 
+	const signInForm = await superValidate(zod(signInSchema));
+
 	return {
-		signInForm: await superValidate(zod(signInSchema))
+		signInForm
 	};
 };

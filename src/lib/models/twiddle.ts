@@ -44,12 +44,17 @@ export const formatTwiddle = async (
 		author: formatProfile(t.author)
 	};
 
-	return {
-		data,
-		setTwiddleForm: await superValidate(data, zod(setTwiddleSchema), { id: `${data.id}-edit` }),
-		setCommentForm: await superValidate({ parentId: data.id }, zod(setTwiddleSchema), {
+	const [setTwiddleForm, setCommentForm] = await Promise.all([
+		superValidate(data, zod(setTwiddleSchema), { id: `${data.id}-edit` }),
+		superValidate({ parentId: data.id }, zod(setTwiddleSchema), {
 			id: `${data.id}-comment`
 		})
+	]);
+
+	return {
+		data,
+		setTwiddleForm,
+		setCommentForm
 	};
 };
 

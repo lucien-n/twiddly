@@ -23,7 +23,9 @@ export const load: PageServerLoad = async (event) => {
 		throw new Error(`Interface settings not found for user "${userId}"`);
 	}
 
+	const setSettingsForm = await superValidate(interfaceSettings, zod(setInterfaceSettingsSchema));
+
 	return {
-		setSettingsForm: await superValidate(interfaceSettings, zod(setInterfaceSettingsSchema))
+		setSettingsForm
 	};
 };

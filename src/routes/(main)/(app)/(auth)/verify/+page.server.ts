@@ -11,7 +11,9 @@ export const load: PageServerLoad = async (event) => {
 		redirect(302, route('/'));
 	}
 
+	const otpForm = await superValidate(zod(otpSchema));
+
 	return {
-		otpForm: await superValidate(zod(otpSchema))
+		otpForm
 	};
 };

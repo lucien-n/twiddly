@@ -23,8 +23,10 @@ export const load: LayoutServerLoad = async (event) => {
 		error(401, `@${handle}'s profile is private`);
 	}
 
+	const setProfileForm = await superValidate(data, zod(setProfileSchema));
+
 	return {
 		profile,
-		setProfileForm: await superValidate(data, zod(setProfileSchema))
+		setProfileForm
 	};
 };

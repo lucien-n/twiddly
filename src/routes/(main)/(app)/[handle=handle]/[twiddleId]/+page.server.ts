@@ -23,6 +23,10 @@ const getTwiddle = async (id: string, currentUserId?: string) => {
 	return formatTwiddle(twiddle, currentUserId);
 };
 
-export const load: PageServerLoad = async (event) => ({
-	twiddle: await getTwiddle(event.params.twiddleId, event.locals.session?.userId)
-});
+export const load: PageServerLoad = async (event) => {
+	const twiddle = getTwiddle(event.params.twiddleId, event.locals.session?.userId);
+
+	return {
+		twiddle
+	};
+};
