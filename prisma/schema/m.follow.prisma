@@ -1,6 +1,7 @@
 model Follow {
     followerId  String
     followingId String
+    status      FollowStatus
 
     follower  Profile @relation("FollowerToFollowed", references: [id], fields: [followerId], onDelete: Cascade)
     following Profile @relation("FollowedToFollower", references: [id], fields: [followingId], onDelete: Cascade)

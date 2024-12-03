@@ -1,0 +1,5 @@
+enum FollowStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
