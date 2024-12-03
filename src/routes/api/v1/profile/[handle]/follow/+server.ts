@@ -12,7 +12,7 @@ import { getDecrementFollowCountsActions, getIncrementFollowCountsActions } from
 
 export const POST: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
-		error(401, AuthCode.AuthRequired);
+		return error(401, AuthCode.AuthRequired);
 	}
 
 	const { handle } = event.params;
@@ -60,17 +60,15 @@ export const POST: RequestHandler = async (event) => {
 		switch (e) {
 			case ProfileCode.NotFound:
 				return error(404, `Profile @${handle} not found`);
-			case ProfileCode.Private:
-				return error(401, `Profile @${handle} is private`);
 			default:
-				error(500, `Could not follow profile @${handle}`);
+				return error(500, `Could not follow profile @${handle}`);
 		}
 	}
 };
 
 export const DELETE: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
-		error(401, AuthCode.AuthRequired);
+		return error(401, AuthCode.AuthRequired);
 	}
 
 	const { handle } = event.params;
@@ -110,80 +108,87 @@ export const DELETE: RequestHandler = async (event) => {
 			case ProfileCode.NotFound:
 				return error(404, `Profile @${handle} neither found or followed`);
 			default:
-				error(500, `Could not unfollow profile @${handle}`);
+				return error(500, `Could not unfollow profile @${handle}`);
 		}
 	}
 };
 
 export const PUT: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
-		error(401, AuthCode.AuthRequired);
+		return error(401, AuthCode.AuthRequired);
 	}
 
 	if (!event.request.bodyUsed) {
-		error(422, 'Missing body');
+		return error(422, 'Missing body');
 	}
 
+	let newStatus: FollowStatus;
 	try {
 		const body = await event.request.json();
-		const { status: newStatus } = updateFollowRequestSchema.parse(body);
+		const result = updateFollowRequestSchema.parse(body);
+		newStatus = result.status;
+	} catch {
+		return error(422, 'Invalid body');
+	}
 
-		const { handle } = event.params;
-		try {
-			const profile = await prisma.profile.findFirst({
-				where: { handle, user: { deletedAt: null } },
-				select: {
-					id: true
-				}
-			});
-			if (!profile) {
-				throw ProfileCode.NotFound;
+	const { handle } = event.params;
+	try {
+		const profile = await prisma.profile.findFirst({
+			where: { handle, user: { deletedAt: null } },
+			select: {
+				id: true
 			}
+		});
+		if (!profile) {
+			throw ProfileCode.NotFound;
+		}
 
-			const followerId = event.locals.session.userId;
-			const followingId = profile.id;
-			const followerId_followingId = {
-				followerId,
-				followingId
-			};
-			const follow = await prisma.follow.findUnique({
-				where: { followerId_followingId }
-			});
-			if (!follow) {
-				throw FollowCode.RequestNotFound;
+		const followerId = event.locals.session.userId;
+		const followingId = profile.id;
+		const followerId_followingId = {
+			followerId,
+			followingId
+		};
+		const follow = await prisma.follow.findUnique({
+			where: { followerId_followingId }
+		});
+		if (!follow) {
+			throw FollowCode.RequestNotFound;
+		}
+
+		switch (newStatus) {
+			case FollowStatus.REJECTED: {
+				await prisma.follow.delete({ where: { followerId_followingId } });
+				break;
 			}
-
-			switch (newStatus) {
-				case FollowStatus.REJECTED: {
-					await prisma.follow.delete({ where: { followerId_followingId } });
-					break;
-				}
-				case FollowStatus.APPROVED: {
-					await prisma.$transaction([
-						prisma.follow.update({
-							data: { status: newStatus },
-							where: { followerId_followingId }
-						}),
-						...getIncrementFollowCountsActions(followerId, followingId)
-					]);
-					break;
-				}
-			}
-
-			return new Response();
-		} catch (e) {
-			if (dev) {
-				console.error(e);
-			}
-
-			switch (e) {
-				case FollowCode.RequestNotFound:
-					return error(404, 'Could not find follow request');
-				default:
-					error(500, `Could not follow profile @${handle}`);
+			case FollowStatus.APPROVED: {
+				await prisma.$transaction([
+					prisma.follow.update({
+						data: { status: newStatus },
+						where: { followerId_followingId }
+					}),
+					...getIncrementFollowCountsActions(followerId, followingId)
+				]);
+				break;
 			}
 		}
-	} catch {
-		error(422, 'Invalid body');
+
+		return new Response();
+	} catch (e) {
+		if (dev) {
+			console.error(e);
+		}
+
+		switch (e) {
+			case ProfileCode.NotFound:
+				return error(404, `Profile @${handle} not found`);
+			case FollowCode.RequestNotFound:
+				return error(404, 'Could not find follow request');
+			default:
+				return error(
+					500,
+					`Could not ${newStatus === FollowStatus.APPROVED ? 'approve' : 'reject'} follow request`
+				);
+		}
 	}
 };

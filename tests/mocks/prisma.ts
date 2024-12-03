@@ -12,6 +12,8 @@ export const mEmailVerificationCodeDelete = vi.fn();
 export const mHandleBlacklistFindFirst = vi.fn();
 export const mFollowCreate = vi.fn();
 export const mFollowDelete = vi.fn();
+export const mFollowFindUnique = vi.fn();
+export const mFollowUpdate = vi.fn();
 
 vi.mock('$lib/server/prisma', () => ({
 	prisma: {
@@ -35,7 +37,9 @@ vi.mock('$lib/server/prisma', () => ({
 		},
 		follow: {
 			create: mFollowCreate,
-			delete: mFollowDelete
+			delete: mFollowDelete,
+			findUnique: mFollowFindUnique,
+			update: mFollowUpdate
 		}
 	}
 }));
