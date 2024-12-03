@@ -1,10 +1,14 @@
 import { dev } from '$app/environment';
 import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
-import { AuthCode } from '@/lib/utils/auth-code';
+import { ProfileCode } from '$lib/utils/profile-code';
+import { AuthCode } from '$lib/utils/auth-code';
+import { FollowStatus } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { ProfileCode } from '$lib/utils/profile-code';
+import { updateFollowRequestSchema } from '$lib/schemas/follow/update-request';
+import { FollowCode } from '$lib/utils/follow-code';
+import { getDecrementFollowCountsActions, getIncrementFollowCountsActions } from './helpers';
 
 export const POST: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
@@ -27,34 +31,24 @@ export const POST: RequestHandler = async (event) => {
 		if (!profile) {
 			throw ProfileCode.NotFound;
 		}
-		if (profile?.privacySettings?.private) {
-			throw ProfileCode.Private;
-		}
 
 		const followerId = event.locals.session.userId;
 		const followingId = profile.id;
+
+		const isFollowingPrivate = !!profile.privacySettings?.private;
+		const status = isFollowingPrivate ? FollowStatus.PENDING : FollowStatus.APPROVED;
 
 		await prisma.$transaction([
 			prisma.follow.create({
 				data: {
 					followerId,
-					followingId
+					followingId,
+					status
 				}
 			}),
-			prisma.profile.update({
-				data: { followingCount: { increment: 1 } },
-				where: { id: followerId },
-				select: {
-					id: true // EMPTY SELECT
-				}
-			}),
-			prisma.profile.update({
-				data: { followersCount: { increment: 1 } },
-				where: { id: followingId },
-				select: {
-					id: true // EMPTY SELECT
-				}
-			})
+			...(status === FollowStatus.APPROVED
+				? getIncrementFollowCountsActions(followerId, followingId)
+				: [])
 		]);
 
 		return new Response();
@@ -103,20 +97,7 @@ export const DELETE: RequestHandler = async (event) => {
 					}
 				}
 			}),
-			prisma.profile.update({
-				data: { followingCount: { decrement: 1 } },
-				where: { id: followerId },
-				select: {
-					id: true // EMPTY SELECT
-				}
-			}),
-			prisma.profile.update({
-				data: { followersCount: { decrement: 1 } },
-				where: { id: followingId },
-				select: {
-					id: true // EMPTY SELECT
-				}
-			})
+			...getDecrementFollowCountsActions(followerId, followingId)
 		]);
 
 		return new Response();
@@ -131,5 +112,78 @@ export const DELETE: RequestHandler = async (event) => {
 			default:
 				error(500, `Could not unfollow profile @${handle}`);
 		}
+	}
+};
+
+export const PUT: RequestHandler = async (event) => {
+	if (!isVerified(event)) {
+		error(401, AuthCode.AuthRequired);
+	}
+
+	if (!event.request.bodyUsed) {
+		error(422, 'Missing body');
+	}
+
+	try {
+		const body = await event.request.json();
+		const { status: newStatus } = updateFollowRequestSchema.parse(body);
+
+		const { handle } = event.params;
+		try {
+			const profile = await prisma.profile.findFirst({
+				where: { handle, user: { deletedAt: null } },
+				select: {
+					id: true
+				}
+			});
+			if (!profile) {
+				throw ProfileCode.NotFound;
+			}
+
+			const followerId = event.locals.session.userId;
+			const followingId = profile.id;
+			const followerId_followingId = {
+				followerId,
+				followingId
+			};
+			const follow = await prisma.follow.findUnique({
+				where: { followerId_followingId }
+			});
+			if (!follow) {
+				throw FollowCode.RequestNotFound;
+			}
+
+			switch (newStatus) {
+				case FollowStatus.REJECTED: {
+					await prisma.follow.delete({ where: { followerId_followingId } });
+					break;
+				}
+				case FollowStatus.APPROVED: {
+					await prisma.$transaction([
+						prisma.follow.update({
+							data: { status: newStatus },
+							where: { followerId_followingId }
+						}),
+						...getIncrementFollowCountsActions(followerId, followingId)
+					]);
+					break;
+				}
+			}
+
+			return new Response();
+		} catch (e) {
+			if (dev) {
+				console.error(e);
+			}
+
+			switch (e) {
+				case FollowCode.RequestNotFound:
+					return error(404, 'Could not find follow request');
+				default:
+					error(500, `Could not follow profile @${handle}`);
+			}
+		}
+	} catch {
+		error(422, 'Invalid body');
 	}
 };

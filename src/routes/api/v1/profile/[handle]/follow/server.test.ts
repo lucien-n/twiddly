@@ -8,6 +8,7 @@ import { relationalProfileFixtureA, relationalProfileFixtureB } from '$tests/fix
 import type { RequestEvent } from './$types';
 import { DELETE, POST } from './+server';
 import { AuthCode } from '@/lib/utils/auth-code';
+import { FollowStatus } from '@prisma/client';
 
 describe('POST', () => {
 	const mFollower = relationalProfileFixtureA;
@@ -53,7 +54,8 @@ describe('POST', () => {
 		expect(mFollowCreate).toHaveBeenCalledWith({
 			data: {
 				followerId: mFollower.id,
-				followingId: mFollowing.id
+				followingId: mFollowing.id,
+				status: FollowStatus.APPROVED
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenCalledTimes(2);
@@ -118,15 +120,37 @@ describe('POST', () => {
 		});
 	});
 
-	it('should throw a 401 profile is private error if profile is private', async () => {
+	it('should create a follow with a status of pending if profile is private', async () => {
 		mProfileFindFirst.mockResolvedValue({ ...mFollowing, privacySettings: { private: true } });
 
-		await expect(POST(mBaseEvent)).rejects.toEqual({
-			status: 401,
-			body: {
-				message: `Profile @${mFollowing.handle} is private`
+		const result = await POST(mBaseEvent);
+
+		expect(result).toEqual(new Response());
+		expect(mProfileFindFirst).toHaveBeenCalledWith({
+			select: {
+				id: true,
+				privacySettings: {
+					select: {
+						private: true
+					}
+				}
+			},
+			where: {
+				handle: mFollowing.handle,
+				user: {
+					deletedAt: null
+				}
 			}
 		});
+		expect(mFollowCreate).toHaveBeenCalledTimes(1);
+		expect(mFollowCreate).toHaveBeenCalledWith({
+			data: {
+				followerId: mFollower.id,
+				followingId: mFollowing.id,
+				status: FollowStatus.PENDING
+			}
+		});
+		expect(mProfileUpdate).toHaveBeenCalledTimes(0);
 	});
 
 	it('should throw a generic 500 error if an unknown error occurs', async () => {
