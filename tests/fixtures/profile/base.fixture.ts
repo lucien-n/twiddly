@@ -7,5 +7,17 @@ export const baseProfileFixtureA: BaseProfile = {
 	role: Role.USER,
 	handle: 'testuser',
 	displayName: 'Test User',
-	avatarBackgroundColor: AvatarBackgroundColor.LIGTH_BLUE
+	avatarBackgroundColor: AvatarBackgroundColor.LIGTH_BLUE,
+	followersCount: 0,
+	followingCount: 0
+};
+
+export const baseProfileFixtureB: BaseProfile = {
+	bio: 'Twiddly is fire',
+	role: Role.USER,
+	handle: 'john_doe',
+	displayName: 'John Doe',
+	avatarBackgroundColor: AvatarBackgroundColor.LAVENDER,
+	followersCount: 0,
+	followingCount: 0
 };

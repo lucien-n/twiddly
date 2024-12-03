@@ -14,7 +14,8 @@ const config = {
 			'#': './src/lib/sections',
 			'@': './src/',
 			$tests: './tests'
-		}
+		},
+		files: {}
 	}
 };
 

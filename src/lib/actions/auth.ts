@@ -15,7 +15,7 @@ import {
 import { sendOTPVerificationEmail } from '$lib/server/email';
 import { lucia } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
+import { AuthError, AuthCode } from '@/lib/utils/auth-code';
 import { error, fail, redirect, type Action } from '@sveltejs/kit';
 import { superValidate, setError } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -42,7 +42,7 @@ export const signIn: Action = async (event) => {
 		if (!(e instanceof AuthError)) return error(500, { message: 'An unknown error occurred' });
 
 		switch (e.code) {
-			case AuthErrorCode.InvalidCredentials:
+			case AuthCode.InvalidCredentials:
 				return setError(signInForm, 'Invalid credentials');
 			default:
 				return error(500, { message: 'An error occured' });
@@ -75,11 +75,11 @@ export const signUp: Action = async (event) => {
 		if (!(e instanceof AuthError)) return error(500, { message: 'An unknown error occurred' });
 
 		switch (e.code) {
-			case AuthErrorCode.EmailAlreadyInUse:
+			case AuthCode.EmailAlreadyInUse:
 				return setError(signUpForm, 'email', 'Already in use');
-			case AuthErrorCode.HandleAlreadyInUse:
+			case AuthCode.HandleAlreadyInUse:
 				return setError(signUpForm, 'handle', 'Already in use');
-			case AuthErrorCode.InvalidHandle:
+			case AuthCode.InvalidHandle:
 				return setError(signUpForm, 'handle', 'Invalid');
 			default:
 				return error(500, { message: 'An error occured' });

@@ -1,6 +1,6 @@
 import type { Twiddle } from '$lib/models';
 import { route } from '$lib/ROUTES';
-import { AuthErrorCode } from '$lib/utils/auth-error';
+import { AuthCode } from '@/lib/utils/auth-code';
 import { fetcher } from '$lib/utils/fetcher';
 import { getContext, setContext } from 'svelte';
 import { toast } from 'svelte-sonner';
@@ -36,7 +36,7 @@ export class TwiddleState {
 		const { data, error, errorBody } = await fetcher<number>(url, 'POST');
 
 		if (errorBody && typeof errorBody === 'object' && 'message' in errorBody) {
-			if (errorBody.message === AuthErrorCode.AuthRequired) {
+			if (errorBody.message === AuthCode.AuthRequired) {
 				toast.warning('You must be signed-in');
 			} else {
 				toast.error(`An error occured : ${errorBody.message}`);

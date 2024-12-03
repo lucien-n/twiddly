@@ -1,4 +1,4 @@
-export enum AuthErrorCode {
+export enum AuthCode {
 	EmailAlreadyInUse = 'auth/email-already-in-use',
 	InvalidCredentials = 'auth/invalid-credentials',
 	InvalidHandle = 'auth/invalid-handle',
@@ -8,7 +8,7 @@ export enum AuthErrorCode {
 }
 
 export class AuthError extends Error {
-	constructor(public code: AuthErrorCode) {
+	constructor(public code: AuthCode) {
 		super(code);
 		this.name = 'AuthError';
 	}

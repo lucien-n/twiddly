@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
+import { AuthError, AuthCode } from '@/lib/utils/auth-code';
 import { hash, verify } from '@node-rs/argon2';
 import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
@@ -33,7 +33,7 @@ export const signUpWithEmailAndPassword = async (
 	meta: Pick<Profile, 'displayName' | 'handle'>
 ): Promise<User> => {
 	if (getMaintenanceMode(event) !== MaintenanceMode.OPEN)
-		throw new AuthError(AuthErrorCode.Unauthorized);
+		throw new AuthError(AuthCode.Unauthorized);
 
 	const handleError = await checkHandle(meta.handle);
 	if (handleError) throw new AuthError(handleError);
@@ -41,7 +41,7 @@ export const signUpWithEmailAndPassword = async (
 	const existingUserEmail = await prisma.user.findFirst({
 		where: { email }
 	});
-	if (existingUserEmail) throw new AuthError(AuthErrorCode.EmailAlreadyInUse);
+	if (existingUserEmail) throw new AuthError(AuthCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
 	const id = generateIdFromEntropySize(10);
@@ -90,28 +90,27 @@ export const signInWithEmailAndPassword = async (
 	});
 	if (!existingUser) {
 		await hash(password);
-		throw new AuthError(AuthErrorCode.InvalidCredentials);
+		throw new AuthError(AuthCode.InvalidCredentials);
 	}
 
 	switch (getMaintenanceMode(event)) {
 		case MaintenanceMode.VERIFIED: {
-			if (!existingUser.emailVerified) throw new AuthError(AuthErrorCode.Unauthorized);
+			if (!existingUser.emailVerified) throw new AuthError(AuthCode.Unauthorized);
 			break;
 		}
 		case MaintenanceMode.ADMIN: {
-			if (existingUser.profile?.role !== Role.ADMIN)
-				throw new AuthError(AuthErrorCode.Unauthorized);
+			if (existingUser.profile?.role !== Role.ADMIN) throw new AuthError(AuthCode.Unauthorized);
 			break;
 		}
 		case MaintenanceMode.LOCKED: {
-			throw new AuthError(AuthErrorCode.Unauthorized);
+			throw new AuthError(AuthCode.Unauthorized);
 		}
 	}
 
 	if (!dev) {
 		const validPassword = await verifyPassword(password, existingUser.passwordHash);
 		if (!validPassword) {
-			throw new AuthError(AuthErrorCode.InvalidCredentials);
+			throw new AuthError(AuthCode.InvalidCredentials);
 		}
 	}
 
@@ -196,7 +195,7 @@ export const verifyVerificationCode = async (
 	return true;
 };
 
-export const checkHandle = async (handle: string): Promise<AuthErrorCode | undefined> => {
+export const checkHandle = async (handle: string): Promise<AuthCode | undefined> => {
 	const result = await prisma.$transaction([
 		prisma.handleBlacklist.findFirst({ where: { handle } }),
 		prisma.profile.findFirst({
@@ -208,11 +207,11 @@ export const checkHandle = async (handle: string): Promise<AuthErrorCode | undef
 	]);
 
 	if (result[0]) {
-		return AuthErrorCode.InvalidHandle;
+		return AuthCode.InvalidHandle;
 	}
 
 	if (result[1]) {
-		return AuthErrorCode.HandleAlreadyInUse;
+		return AuthCode.HandleAlreadyInUse;
 	}
 };
 

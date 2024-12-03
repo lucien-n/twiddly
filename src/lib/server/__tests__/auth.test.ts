@@ -31,7 +31,7 @@ import {
 	verifyPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
-import { AuthError, AuthErrorCode } from '$lib/utils/auth-error';
+import { AuthError, AuthCode } from '@/lib/utils/auth-code';
 import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
 import { baseProfileFixtureA } from '$tests/fixtures/profile';
 import { baseSessionFixtureA } from '$tests/fixtures/session';
@@ -137,7 +137,7 @@ describe('signUpWithEmailAndPassword', () => {
 				displayName: baseProfileFixtureA.displayName,
 				handle: 'differenthandle'
 			})
-		).rejects.toThrowError(new AuthError(AuthErrorCode.EmailAlreadyInUse));
+		).rejects.toThrowError(new AuthError(AuthCode.EmailAlreadyInUse));
 	});
 
 	it('should throw error if handle is already in use', async () => {
@@ -148,7 +148,7 @@ describe('signUpWithEmailAndPassword', () => {
 				displayName: baseProfileFixtureA.displayName,
 				handle: baseProfileFixtureA.handle
 			})
-		).rejects.toThrowError(new AuthError(AuthErrorCode.HandleAlreadyInUse));
+		).rejects.toThrowError(new AuthError(AuthCode.HandleAlreadyInUse));
 	});
 
 	it('should throw error if handle is invalid (in db blacklist)', async () => {
@@ -160,7 +160,7 @@ describe('signUpWithEmailAndPassword', () => {
 				displayName: baseProfileFixtureA.displayName,
 				handle: mHandle
 			})
-		).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidHandle));
+		).rejects.toThrowError(new AuthError(AuthCode.InvalidHandle));
 	});
 
 	it('should throw error if email could not be sent', async () => {
@@ -185,7 +185,7 @@ describe('signUpWithEmailAndPassword', () => {
 				displayName: baseProfileFixtureA.displayName,
 				handle: baseProfileFixtureA.handle
 			})
-		).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		).rejects.toThrowError(new AuthError(AuthCode.Unauthorized));
 	});
 });
 
@@ -204,7 +204,7 @@ describe('signInWithEmailAndPassword', () => {
 
 		await expect(
 			signInWithEmailAndPassword(mRequestEvent, 'invalid@mail.com', mPassword)
-		).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidCredentials));
+		).rejects.toThrowError(new AuthError(AuthCode.InvalidCredentials));
 	});
 
 	it('should throw error if password verification fails', async () => {
@@ -212,7 +212,7 @@ describe('signInWithEmailAndPassword', () => {
 
 		await expect(
 			signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, 'wrong-password')
-		).rejects.toThrowError(new AuthError(AuthErrorCode.InvalidCredentials));
+		).rejects.toThrowError(new AuthError(AuthCode.InvalidCredentials));
 	});
 
 	it('should throw error if site is under admin access only and user is unauthorized', async () => {
@@ -221,7 +221,7 @@ describe('signInWithEmailAndPassword', () => {
 
 		await expect(
 			signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
-		).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		).rejects.toThrowError(new AuthError(AuthCode.Unauthorized));
 	});
 
 	it('should sign in if site is under admin access only and user is authorized', async () => {
@@ -242,7 +242,7 @@ describe('signInWithEmailAndPassword', () => {
 
 		await expect(
 			signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
-		).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		).rejects.toThrowError(new AuthError(AuthCode.Unauthorized));
 	});
 
 	it('should sign in if maintenance mode is verified and user is verified', async () => {
@@ -260,7 +260,7 @@ describe('signInWithEmailAndPassword', () => {
 
 		await expect(
 			signInWithEmailAndPassword(mRequestEvent, baseUserFixtureA.email, mPassword)
-		).rejects.toThrowError(new AuthError(AuthErrorCode.Unauthorized));
+		).rejects.toThrowError(new AuthError(AuthCode.Unauthorized));
 	});
 });
 
@@ -430,7 +430,7 @@ describe('checkHandle', () => {
 
 		const result = await checkHandle(mHandle);
 
-		expect(result).toEqual(AuthErrorCode.InvalidHandle);
+		expect(result).toEqual(AuthCode.InvalidHandle);
 	});
 
 	it('should return handle already used auth error code for duplicated handle', async () => {
@@ -439,7 +439,7 @@ describe('checkHandle', () => {
 
 		const result = await checkHandle(mHandle);
 
-		expect(result).toEqual(AuthErrorCode.HandleAlreadyInUse);
+		expect(result).toEqual(AuthCode.HandleAlreadyInUse);
 	});
 });
 

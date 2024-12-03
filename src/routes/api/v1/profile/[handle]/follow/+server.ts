@@ -1,13 +1,14 @@
 import { dev } from '$app/environment';
 import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
-import { AuthErrorCode } from '$lib/utils/auth-error';
+import { AuthCode } from '@/lib/utils/auth-code';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { ProfileCode } from '$lib/utils/profile-code';
 
 export const POST: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
-		error(401, AuthErrorCode.AuthRequired);
+		error(401, AuthCode.AuthRequired);
 	}
 
 	const { handle } = event.params;
@@ -24,10 +25,10 @@ export const POST: RequestHandler = async (event) => {
 			}
 		});
 		if (!profile) {
-			error(404, `Profile @${handle} not found`);
+			throw ProfileCode.NotFound;
 		}
 		if (profile?.privacySettings?.private) {
-			error(401, `Profile @${handle} is private`);
+			throw ProfileCode.Private;
 		}
 
 		const followerId = event.locals.session.userId;
@@ -62,13 +63,20 @@ export const POST: RequestHandler = async (event) => {
 			console.error(e);
 		}
 
-		error(500, `Could not follow profile @${handle}`);
+		switch (e) {
+			case ProfileCode.NotFound:
+				return error(404, `Profile @${handle} not found`);
+			case ProfileCode.Private:
+				return error(401, `Profile @${handle} is private`);
+			default:
+				error(500, `Could not follow profile @${handle}`);
+		}
 	}
 };
 
 export const DELETE: RequestHandler = async (event) => {
 	if (!isVerified(event)) {
-		error(401, AuthErrorCode.AuthRequired);
+		error(401, AuthCode.AuthRequired);
 	}
 
 	const { handle } = event.params;
@@ -77,16 +85,11 @@ export const DELETE: RequestHandler = async (event) => {
 		const profile = await prisma.profile.findFirst({
 			where: { handle, user: { deletedAt: null }, followers: { some: { followerId } } },
 			select: {
-				id: true,
-				privacySettings: {
-					select: {
-						private: true
-					}
-				}
+				id: true
 			}
 		});
 		if (!profile) {
-			error(404, `Profile @${handle} neither found or followed`);
+			throw ProfileCode.NotFound;
 		}
 
 		const followingId = profile.id;
@@ -122,6 +125,11 @@ export const DELETE: RequestHandler = async (event) => {
 			console.error(e);
 		}
 
-		error(500, `Could not follow profile @${handle}`);
+		switch (e) {
+			case ProfileCode.NotFound:
+				return error(404, `Profile @${handle} neither found or followed`);
+			default:
+				error(500, `Could not unfollow profile @${handle}`);
+		}
 	}
 };
