@@ -11,5 +11,6 @@ model User {
     profile               Profile?
     emailVerificationCode EmailVerificationCode?
 
-    @@index([email, deletedAt])
+    @@index([email])
+    @@index([deletedAt])
 }

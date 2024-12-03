@@ -15,5 +15,6 @@ model Twiddle {
     children Twiddle[] @relation("TwiddleToTwiddle")
     likes    Like[]
 
-    @@index([authorId, deletedAt])
+    @@index([authorId])
+    @@index([deletedAt])
 }

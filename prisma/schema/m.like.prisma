@@ -7,5 +7,6 @@ model Like {
     profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
     @@unique([twiddleId, profileId])
-    @@index([twiddleId, profileId])
+    @@index([twiddleId])
+    @@index([profileId])
 }
