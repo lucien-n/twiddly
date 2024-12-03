@@ -5,12 +5,16 @@ model Profile {
     bio                   String
     avatarBackgroundColor AvatarBackgroundColor?
     role                  Role                   @default(USER)
+    followingCount        Int                    @default(0)
+    followersCount        Int                    @default(0)
 
     user              User               @relation(references: [id], fields: [id], onDelete: Cascade)
     interfaceSettings InterfaceSettings?
     privacySettings   PrivacySettings?
     twiddles          Twiddle[]
     likes             Like[]
+    following         Follow[]           @relation("FollowerToFollowed")
+    followers         Follow[]           @relation("FollowedToFollower")
 
     @@index([handle])
 }
