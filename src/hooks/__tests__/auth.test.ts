@@ -28,7 +28,8 @@ describe('handleAuth', () => {
 			avatar:
 				'https://api.dicebear.com/9.x/notionists-neutral/svg?seed=testuser&backgroundColor=86c9e1',
 			createdAt: new Date('2024-12-12'),
-			isPrivate: false
+			isPrivate: false,
+			isFollowedByCurrentUser: false
 		};
 
 		mRefreshSession.mockResolvedValue({ user: baseUserFixtureA, session: mSession });
