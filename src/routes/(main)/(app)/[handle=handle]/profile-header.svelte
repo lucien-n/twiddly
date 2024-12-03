@@ -5,11 +5,13 @@
 	import type { Profile } from '$lib/models';
 	import { route } from '$lib/ROUTES';
 	import type { SetProfileSchema } from '$lib/schemas/profile/set-profile';
+	import LoadingButton from '&/button/loading-button.svelte';
 	import { Dropdown } from '&/dropdown';
 	import * as Tabs from '&/ui/tabs';
 	import * as Tooltip from '&/ui/tooltip';
 	import { cn } from '&/utils';
-	import { ArrowUp, EllipsisVertical } from 'lucide-svelte';
+	import { ArrowUp, EllipsisVertical, UserMinus, UserPlus } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { ProfileTab, Tab } from './types';
 
@@ -51,6 +53,33 @@
 
 		currentTab = currentPage;
 	});
+
+	let isFollowedByCurrentUser = $state(profile.isFollowedByCurrentUser);
+	let followLoading = $state(false);
+	const handleFollowToggle = async () => {
+		if (followLoading) {
+			toast.warning('Please wait');
+			return;
+		}
+		followLoading = true;
+
+		try {
+			const method = isFollowedByCurrentUser ? 'DELETE' : 'POST';
+			const res = await fetch(
+				route(`${method} /api/v1/profile/[handle]/follow`, { handle: profile.handle }),
+				{ method }
+			);
+
+			if (res.ok) {
+				isFollowedByCurrentUser = method === 'POST' ? true : false;
+			}
+		} catch (e) {
+			console.error(e);
+			toast.error('An error occured');
+		}
+
+		followLoading = false;
+	};
 </script>
 
 <header class="flex w-full flex-col py-4">
@@ -79,12 +108,31 @@
 			</div>
 		</div>
 
-		<div class="flex gap-3 pr-8">
+		<div class="flex items-center gap-3 pr-8">
+			{#if !isSelf}
+				<LoadingButton
+					variant={isFollowedByCurrentUser ? 'default' : 'secondary'}
+					onclick={handleFollowToggle}
+					loading={followLoading}
+					keepEnabledWhileLoading
+				>
+					{#snippet icon()}
+						{#if isFollowedByCurrentUser}
+							<UserMinus />
+						{:else}
+							<UserPlus />
+						{/if}
+					{/snippet}
+
+					<p>{isFollowedByCurrentUser ? 'Unfollow' : 'Follow'}</p>
+				</LoadingButton>
+			{/if}
+
 			{#if isMini}
 				<Tooltip.Root>
 					<Tooltip.Trigger
 						onclick={() => (scroll = -1)}
-						class="flex aspect-square items-center justify-center rounded-full border border-primary transition-all hover:bg-primary/10"
+						class="flex aspect-square h-10 w-10 items-center justify-center rounded-full border border-primary transition-all hover:bg-primary/10"
 					>
 						<ArrowUp />
 					</Tooltip.Trigger>

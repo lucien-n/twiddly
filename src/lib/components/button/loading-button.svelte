@@ -3,16 +3,22 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import type { LoadingButtonProps } from '.';
 
-	const { children, loading, disableWhileLoading = true, ...props }: LoadingButtonProps = $props();
+	const { children, icon, loading, keepEnabledWhileLoading, ...props }: LoadingButtonProps =
+		$props();
+
 	const disabled = $derived(
-		!!(disableWhileLoading ? loading : 'disabled' in props && props.disabled)
+		!!(keepEnabledWhileLoading ? 'disabled' in props && props.disabled : loading)
 	);
 </script>
 
 <Button {...props} {disabled}>
-	{#if loading}
-		<LoaderCircle class="mr-2 animate-spin" />
-	{/if}
+	<div class="mr-1">
+		{#if loading}
+			<LoaderCircle class="animate-spin" />
+		{:else if icon}
+			{@render icon()}
+		{/if}
+	</div>
 
 	{@render children()}
 </Button>

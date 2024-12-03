@@ -9,16 +9,17 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
 	const { handle } = event.params;
+	const currentUserId = event.locals.session?.userId;
 
 	const data = await prisma.profile.findFirst({
 		where: { handle, user: { deletedAt: null } },
-		select: getProfileSelect()
+		select: getProfileSelect(currentUserId)
 	});
 	if (!data) {
 		error(404, `Profile @${handle} not found`);
 	}
 
-	const profile = formatProfile(data);
+	const profile = formatProfile(data, currentUserId);
 	if (!isAdmin(event) && profile.isPrivate && profile.id !== event.locals.session?.userId) {
 		error(401, `@${handle}'s profile is private`);
 	}

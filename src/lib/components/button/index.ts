@@ -1,11 +1,12 @@
+import type { ButtonProps } from '&/ui/button';
 import type { Snippet } from 'svelte';
-import type { HTMLButtonAttributes } from 'svelte/elements';
 import LoadingButton from './loading-button.svelte';
 
-type LoadingButtonProps = HTMLButtonAttributes & {
+type LoadingButtonProps = ButtonProps & {
 	children: Snippet;
+	icon?: Snippet;
 	loading?: boolean;
-	disableWhileLoading?: boolean;
+	keepEnabledWhileLoading?: boolean;
 };
 
 export { LoadingButton, type LoadingButtonProps };
