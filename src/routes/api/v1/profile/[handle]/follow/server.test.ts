@@ -252,17 +252,26 @@ describe('DELETE', () => {
 });
 
 describe('PUT', () => {
-	const getEvent = (request: {
-		json: () => Promise<{ status: FollowStatus }>;
-		bodyUsed: boolean;
-	}): RequestEvent =>
+	const getEvent = ({
+		json,
+		bodyUsed
+	}: {
+		json?: () => Promise<{ status: FollowStatus | string }>;
+		bodyUsed?: boolean;
+	} = {}): RequestEvent =>
 		({
 			...mBaseEvent,
-			request
+			request: {
+				json: json ?? (async () => ({ status: FollowStatus.APPROVED })),
+				bodyUsed: bodyUsed === undefined ? true : bodyUsed
+			}
 		}) as unknown as RequestEvent;
 
 	beforeEach(async () => {
 		vi.resetAllMocks();
+
+		mProfileFindFirst.mockResolvedValue(mFollowing);
+		mFollowFindUnique.mockResolvedValue(relationalFollowFixtureA);
 	});
 
 	it('should accept pending follow', async () => {
@@ -272,8 +281,6 @@ describe('PUT', () => {
 			}),
 			bodyUsed: true
 		});
-		mProfileFindFirst.mockResolvedValue(mFollowing);
-		mFollowFindUnique.mockResolvedValue(relationalFollowFixtureA);
 
 		const result = await PUT(mEvent);
 
@@ -346,8 +353,6 @@ describe('PUT', () => {
 			}),
 			bodyUsed: true
 		});
-		mProfileFindFirst.mockResolvedValue(mFollowing);
-		mFollowFindUnique.mockResolvedValue(relationalFollowFixtureA);
 
 		const result = await PUT(mEvent);
 
@@ -386,7 +391,7 @@ describe('PUT', () => {
 	it('should throw a 401 auth required error if user is not verified', async () => {
 		await expect(
 			PUT({
-				...getEvent({ json: async () => ({ status: FollowStatus.APPROVED }), bodyUsed: true }),
+				...getEvent(),
 				locals: { user: { emailVerified: false } }
 			} as RequestEvent)
 		).rejects.toEqual({
@@ -400,9 +405,7 @@ describe('PUT', () => {
 	it('should throw a 404 profile not found error if profile is not found', async () => {
 		mProfileFindFirst.mockResolvedValue(null);
 
-		await expect(
-			PUT(getEvent({ json: async () => ({ status: FollowStatus.APPROVED }), bodyUsed: true }))
-		).rejects.toEqual({
+		await expect(PUT(getEvent())).rejects.toEqual({
 			status: 404,
 			body: {
 				message: `Profile @${mFollowing.handle} not found`
@@ -410,13 +413,57 @@ describe('PUT', () => {
 		});
 	});
 
-	it('should throw a generic 500 error if an unknown error occurs', async () => {
+	it('should throw a 422 error if no body is empty', async () => {
+		await expect(PUT(getEvent({ bodyUsed: false }))).rejects.toEqual({
+			status: 422,
+			body: {
+				message: 'Missing body'
+			}
+		});
+	});
+
+	it('should throw a 422 error if the body is invalid', async () => {
+		await expect(
+			PUT(getEvent({ json: async () => ({ status: 'invalid-status' }), bodyUsed: true }))
+		).rejects.toEqual({
+			status: 422,
+			body: {
+				message: 'Invalid body'
+			}
+		});
+	});
+
+	it('should throw a 404 error if the follow request is not found', async () => {
+		mFollowFindUnique.mockResolvedValue(null);
+
+		await expect(PUT(getEvent())).rejects.toEqual({
+			status: 404,
+			body: {
+				message: 'Could not find follow request'
+			}
+		});
+	});
+
+	it('should throw a generic 500 error if an unknown error occurs when approving', async () => {
 		mProfileFindFirst.mockRejectedValue({});
 
-		await expect(POST(mBaseEvent)).rejects.toEqual({
+		await expect(PUT(getEvent())).rejects.toEqual({
 			status: 500,
 			body: {
-				message: `Could not follow profile @${mFollowing.handle}`
+				message: 'Could not approve follow request'
+			}
+		});
+	});
+
+	it('should throw a generic 500 error if an unknown error occurs when rejecting', async () => {
+		mProfileFindFirst.mockRejectedValue({});
+
+		await expect(
+			PUT(getEvent({ json: async () => ({ status: FollowStatus.REJECTED }) }))
+		).rejects.toEqual({
+			status: 500,
+			body: {
+				message: 'Could not reject follow request'
 			}
 		});
 	});
