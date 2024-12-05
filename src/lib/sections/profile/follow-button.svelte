@@ -14,71 +14,113 @@
 		profile: Profile;
 	}
 	const { profile }: Props = $props();
+	const { APPROVED, PENDING } = FollowStatus;
 
 	const authState = getAuthState();
 	const isSelf = $derived(authState.profile.id === profile.id);
+	let currentUserFollowStatus = $state(profile.currentUserFollowStatus);
 
 	let openConfirmUnfollowDialog = $state(false);
-	let followStatus = $state(profile.followStatus);
-	let isFollowedByCurrentUser = $derived(followStatus === FollowStatus.APPROVED);
-	const handleClick = () => {
-		if (!isFollowedByCurrentUser && profile.isPrivate) {
-			openConfirmUnfollowDialog = true;
-			return;
-		}
-
-		handleFollowToggle();
-	};
-
 	let followLoading = $state(false);
-	const handleFollowToggle = async () => {
-		if (followLoading) {
-			toast.warning('Please wait');
-			return;
-		}
+	const loader = async (predicate: () => Promise<void>) => {
 		followLoading = true;
 
-		const getRequest = (): {
-			method: 'POST' | 'DELETE';
-			body?: { action: FollowAction };
-		} => {
-			switch (followStatus) {
-				case FollowStatus.APPROVED:
-					return { method: 'DELETE' };
-				default:
-					return { method: 'POST' };
-			}
-		};
+		await predicate();
 
-		const { method, body } = getRequest();
-		const { data, error } = await fetcher<FollowStatus>(
-			route(`${method} /api/v1/profile/[handle]/follow`, { handle: profile.handle }),
-			method,
-			{ body: body ? JSON.stringify(body) : undefined }
-		);
-
-		if (error) {
-			toast.error(error);
-		}
-
-		if (data) {
-			followStatus = data;
-		}
-
-		openConfirmUnfollowDialog = false;
 		followLoading = false;
+	};
+
+	const handleFollow = async () => {
+		if ([PENDING, APPROVED].some((status) => status === currentUserFollowStatus)) {
+			return;
+		}
+
+		await loader(async () => {
+			const { data, error } = await fetcher<FollowStatus>(
+				route('POST /api/v1/profile/[handle]/follow', { handle: profile.handle }),
+				'POST'
+			);
+
+			if (error) {
+				toast.error(error);
+				return;
+			}
+
+			currentUserFollowStatus = data;
+		});
+	};
+
+	const handleCancelFollowRequest = async () => {
+		if (currentUserFollowStatus !== PENDING) {
+			return;
+		}
+
+		await loader(async () => {
+			const { data, error } = await fetcher<FollowStatus>(
+				route('PUT /api/v1/profile/[handle]/follow', { handle: profile.handle }),
+				'PUT',
+				{ body: JSON.stringify({ action: 'CANCEL' } satisfies { action: FollowAction }) }
+			);
+
+			if (error) {
+				toast.error(error);
+				return;
+			}
+
+			currentUserFollowStatus = data;
+		});
+	};
+
+	const handleUnfollow = async () => {
+		if (currentUserFollowStatus !== APPROVED) {
+			return;
+		}
+
+		await loader(async () => {
+			const { data, error } = await fetcher<FollowStatus>(
+				route('DELETE /api/v1/profile/[handle]/follow', { handle: profile.handle }),
+				'DELETE'
+			);
+
+			if (error) {
+				toast.error(error);
+				return;
+			}
+
+			currentUserFollowStatus = data;
+		});
+	};
+
+	const handleClick = async () => {
+		switch (currentUserFollowStatus) {
+			case APPROVED: {
+				if (profile.isPrivate) {
+					openConfirmUnfollowDialog = true;
+					break;
+				}
+
+				await handleUnfollow();
+				break;
+			}
+			case PENDING: {
+				await handleCancelFollowRequest();
+				break;
+			}
+			default: {
+				await handleFollow();
+			}
+		}
 	};
 </script>
 
 {#if !isSelf}
 	<LoadingButton
-		variant={followStatus ? 'default' : 'secondary'}
+		variant={currentUserFollowStatus ? 'default' : 'secondary'}
 		onclick={handleClick}
 		loading={followLoading}
-		keepEnabledWhileLoading
 	>
 		{#snippet icon()}
-			{#if followStatus}
+			{#if currentUserFollowStatus}
 				<UserMinus />
 			{:else}
 				<UserPlus />
@@ -86,9 +128,9 @@
 		{/snippet}
 
 		<p>
-			{#if followStatus === FollowStatus.APPROVED}
+			{#if currentUserFollowStatus === APPROVED}
 				Unfollow
-			{:else if followStatus === FollowStatus.PENDING}
+			{:else if currentUserFollowStatus === PENDING}
 				Cancel Request
 			{:else if profile.isPrivate}
 				Send Request
@@ -99,8 +141,4 @@
 	</LoadingButton>
 {/if}
 
-<ConfirmUnfollowDialog
-	bind:open={openConfirmUnfollowDialog}
-	onconfirm={handleFollowToggle}
-	{profile}
-/>
+<ConfirmUnfollowDialog bind:open={openConfirmUnfollowDialog} onconfirm={handleUnfollow} {profile} />

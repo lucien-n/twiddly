@@ -12,7 +12,7 @@ export interface Profile {
 	displayName: string;
 	followingCount: number;
 	followersCount: number;
-	followStatus: FollowStatus | undefined;
+	currentUserFollowStatus: FollowStatus | undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +33,7 @@ export const formatProfile = (p: any, currentUserId?: string): Profile => ({
 	isPrivate: Boolean(p.privacySettings?.private),
 	followingCount: p.followingCount,
 	followersCount: p.followersCount,
-	followStatus: p.followers
+	currentUserFollowStatus: p.followers
 		? (p as { followers: Follow[] }).followers.find(
 				({ followerId }) => followerId === currentUserId
 			)?.status

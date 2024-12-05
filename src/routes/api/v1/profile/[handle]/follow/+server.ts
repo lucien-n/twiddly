@@ -1,13 +1,12 @@
 import { dev } from '$app/environment';
+import { updateFollowRequestSchema, type FollowAction } from '$lib/schemas/follow/update-request';
 import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
-import { ProfileCode } from '$lib/utils/profile-code';
 import { AuthCode } from '$lib/utils/auth-code';
+import { ProfileCode } from '$lib/utils/profile-code';
 import { FollowStatus } from '@prisma/client';
-import { error } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { updateFollowRequestSchema, type FollowAction } from '$lib/schemas/follow/update-request';
-import { FollowCode } from '$lib/utils/follow-code';
 import { getDecrementFollowCountsActions, getIncrementFollowCountsActions } from './helpers';
 
 export const POST: RequestHandler = async (event) => {
@@ -34,10 +33,9 @@ export const POST: RequestHandler = async (event) => {
 
 		const followerId = event.locals.session.userId;
 		const followingId = profile.id;
-
 		const isFollowingPrivate = !!profile.privacySettings?.private;
-		const status = isFollowingPrivate ? FollowStatus.PENDING : FollowStatus.APPROVED;
 
+		const status = isFollowingPrivate ? FollowStatus.PENDING : FollowStatus.APPROVED;
 		await prisma.$transaction([
 			prisma.follow.create({
 				data: {
@@ -51,7 +49,7 @@ export const POST: RequestHandler = async (event) => {
 				: [])
 		]);
 
-		return new Response();
+		return json({ data: status });
 	} catch (e) {
 		if (dev) {
 			console.error(e);
@@ -98,7 +96,7 @@ export const DELETE: RequestHandler = async (event) => {
 			...getDecrementFollowCountsActions(followerId, followingId)
 		]);
 
-		return new Response();
+		return json({ data: undefined });
 	} catch (e) {
 		if (dev) {
 			console.error(e);
@@ -118,77 +116,77 @@ export const PUT: RequestHandler = async (event) => {
 		return error(401, AuthCode.AuthRequired);
 	}
 
-	if (!event.request.bodyUsed) {
-		return error(422, 'Missing body');
-	}
-
 	let action: FollowAction;
+	const { handle } = event.params;
 	try {
 		const body = await event.request.json();
-		const result = updateFollowRequestSchema.parse(body);
-		action = result.action;
+		const { success, data } = updateFollowRequestSchema.safeParse(body);
+
+		if (!success || !data) {
+			throw new Error();
+		}
+
+		action = data.action;
 	} catch {
 		return error(422, 'Invalid body');
 	}
 
-	const { handle } = event.params;
+	const profile = await prisma.profile.findUnique({
+		where: { handle },
+		select: { id: true }
+	});
+	if (!profile) {
+		return error(404, `Profile @${handle} not found`);
+	}
+
 	try {
-		const profile = await prisma.profile.findFirst({
-			where: { handle, user: { deletedAt: null } },
-			select: {
-				id: true
-			}
-		});
-		if (!profile) {
-			throw ProfileCode.NotFound;
-		}
-
-		const followerId = event.locals.session.userId;
-		const followingId = profile.id;
-		const followerId_followingId = {
-			followerId,
-			followingId
-		};
-		const follow = await prisma.follow.findUnique({
-			where: { followerId_followingId }
-		});
-		if (!follow) {
-			throw FollowCode.RequestNotFound;
-		}
-
 		switch (action) {
-			case 'CANCEL': {
-				await prisma.follow.delete({ where: { followerId_followingId } });
-				break;
-			}
 			case 'APPROVE': {
-				await prisma.$transaction([
-					prisma.follow.update({
-						data: { status: FollowStatus.APPROVED },
-						where: { followerId_followingId }
-					}),
-					...getIncrementFollowCountsActions(followerId, followingId)
-				]);
-				break;
+				await prisma.follow.update({
+					data: { status: FollowStatus.APPROVED },
+					where: {
+						followerId_followingId: {
+							followerId: profile.id,
+							followingId: event.locals.session.userId
+						},
+						status: FollowStatus.PENDING
+					}
+				});
+
+				return json({ data: FollowStatus.APPROVED });
+			}
+			case 'REJECT': {
+				await prisma.follow.delete({
+					where: {
+						followerId_followingId: {
+							followerId: profile.id,
+							followingId: event.locals.session.userId
+						},
+						status: FollowStatus.PENDING
+					}
+				});
+
+				return json({ data: undefined });
+			}
+			case 'CANCEL': {
+				await prisma.follow.delete({
+					where: {
+						followerId_followingId: {
+							followerId: event.locals.session.userId,
+							followingId: profile.id
+						},
+						status: FollowStatus.PENDING
+					}
+				});
+
+				return json({ data: undefined });
 			}
 		}
-
-		return new Response();
 	} catch (e) {
 		if (dev) {
 			console.error(e);
 		}
 
-		switch (e) {
-			case ProfileCode.NotFound:
-				return error(404, `Profile @${handle} not found`);
-			case FollowCode.RequestNotFound:
-				return error(404, 'Could not find follow request');
-			default:
-				return error(
-					500,
-					`Could not ${action === 'APPROVE' ? 'approve' : 'reject'} follow request`
-				);
-		}
+		return error(500, 'An error occured');
 	}
 };
