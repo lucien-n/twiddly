@@ -20,8 +20,8 @@ export const load: PageServerLoad = async (event) => {
 	const currentUserId = event.locals.session?.userId;
 
 	const twiddlesPromise = isReadableByCurrentUser(profile, currentUserId)
-		? []
-		: getLikedTwiddles(profile.id, currentUserId);
+		? getLikedTwiddles(profile.id, currentUserId)
+		: [];
 
 	return {
 		twiddlesPromise
