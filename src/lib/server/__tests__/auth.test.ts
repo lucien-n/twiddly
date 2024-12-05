@@ -31,7 +31,7 @@ import {
 	verifyPassword,
 	verifyVerificationCode
 } from '$lib/server/auth';
-import { AuthError, AuthCode } from '@/lib/utils/auth-code';
+import { AuthError, AuthCode } from '$lib/utils/auth-code';
 import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
 import { baseProfileFixtureA } from '$tests/fixtures/profile';
 import { baseSessionFixtureA } from '$tests/fixtures/session';

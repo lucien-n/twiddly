@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { AuthError, AuthCode } from '@/lib/utils/auth-code';
+import { AuthError, AuthCode } from '$lib/utils/auth-code';
 import { hash, verify } from '@node-rs/argon2';
 import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';

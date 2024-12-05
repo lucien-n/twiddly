@@ -1,6 +1,6 @@
 import type { Twiddle } from '$lib/models';
 import { route } from '$lib/ROUTES';
-import { AuthCode } from '@/lib/utils/auth-code';
+import { AuthCode } from '$lib/utils/auth-code';
 import { fetcher } from '$lib/utils/fetcher';
 import { getContext, setContext } from 'svelte';
 import { toast } from 'svelte-sonner';

@@ -1,5 +1,5 @@
 import { prisma } from '$lib/server/prisma';
-import { AuthCode } from '@/lib/utils/auth-code';
+import { AuthCode } from '$lib/utils/auth-code';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { isVerified } from '$lib/server/auth';

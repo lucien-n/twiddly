@@ -1,6 +1,6 @@
 import { refreshSession } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
-import { formatProfile } from '@/lib/models';
+import { formatProfile } from '$lib/models';
 import type { Handle } from '@sveltejs/kit';
 
 export const handleAuth: Handle = async ({ resolve, event }) => {

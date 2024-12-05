@@ -15,7 +15,7 @@ import {
 import { sendOTPVerificationEmail } from '$lib/server/email';
 import { lucia } from '$lib/server/lucia';
 import { prisma } from '$lib/server/prisma';
-import { AuthError, AuthCode } from '@/lib/utils/auth-code';
+import { AuthError, AuthCode } from '$lib/utils/auth-code';
 import { error, fail, redirect, type Action } from '@sveltejs/kit';
 import { superValidate, setError } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
