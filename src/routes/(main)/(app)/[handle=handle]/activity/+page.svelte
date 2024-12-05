@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { TwiddleList } from '#/twiddle';
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 
 	const { data } = $props();
@@ -7,7 +8,7 @@
 
 <TwiddleList twiddles={data.twiddlesPromise}>
 	{#snippet empty({ props })}
-		{@const handle = $page.params.handle ?? 'Unknown'}
+		{@const handle = (browser ? $page.params.handle : undefined) ?? 'Unknown'}
 
 		<h1 {...props}>
 			{#if data.profile.isPrivate}

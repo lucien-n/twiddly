@@ -1,5 +1,6 @@
 import { formatTwiddles, getTwiddleSelect, getTwiddleWhere } from '$lib/models';
 import { prisma } from '$lib/server/prisma';
+import { isReadableByCurrentUser } from '@/lib/server/twiddle.js';
 
 const getTwiddles = async (profileId: string, currentUserId?: string) => {
 	const twiddles = await prisma.twiddle.findMany({
@@ -16,11 +17,11 @@ const getTwiddles = async (profileId: string, currentUserId?: string) => {
 
 export const load = async (event) => {
 	const { profile } = await event.parent();
+	const currentUserId = event.locals.session?.userId;
 
-	const twiddlesPromise =
-		profile.isPrivate && profile.handle !== event.locals.profile.handle
-			? []
-			: getTwiddles(profile?.id, event.locals.session?.userId);
+	const twiddlesPromise = isReadableByCurrentUser(profile, currentUserId)
+		? []
+		: getTwiddles(profile.id, currentUserId);
 
 	return {
 		twiddlesPromise
