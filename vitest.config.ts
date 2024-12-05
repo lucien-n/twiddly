@@ -9,7 +9,7 @@ export default defineConfig({
 		exclude: ['src/lib/ROUTES.ts'],
 		coverage: {
 			all: false,
-			exclude: ['src/lib/ROUTES.ts', 'tests/']
+			exclude: ['src/lib/ROUTES.ts', 'tests/', '**/__tests__', '**/*.test.ts']
 		},
 		globalSetup: './vitest.global-setup.ts',
 		globals: true
