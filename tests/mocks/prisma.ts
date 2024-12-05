@@ -4,6 +4,7 @@ export const mTransaction = vi.fn();
 export const mUserFindFirst = vi.fn();
 export const mUserCreate = vi.fn();
 export const mProfileFindFirst = vi.fn();
+export const mProfileFindUnique = vi.fn();
 export const mProfileUpdate = vi.fn();
 export const mEmailVerificationCodeDeleteMany = vi.fn();
 export const mEmailVerificationCodeCreate = vi.fn();
@@ -24,6 +25,7 @@ vi.mock('$lib/server/prisma', () => ({
 		},
 		profile: {
 			findFirst: mProfileFindFirst,
+			findUnique: mProfileFindUnique,
 			update: mProfileUpdate
 		},
 		emailVerificationCode: {

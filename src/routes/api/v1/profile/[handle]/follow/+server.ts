@@ -132,7 +132,7 @@ export const PUT: RequestHandler = async (event) => {
 	}
 
 	const profile = await prisma.profile.findUnique({
-		where: { handle },
+		where: { handle, user: { deletedAt: null } },
 		select: { id: true }
 	});
 	if (!profile) {
@@ -142,16 +142,22 @@ export const PUT: RequestHandler = async (event) => {
 	try {
 		switch (action) {
 			case 'APPROVE': {
-				await prisma.follow.update({
-					data: { status: FollowStatus.APPROVED },
-					where: {
-						followerId_followingId: {
-							followerId: profile.id,
-							followingId: event.locals.session.userId
-						},
-						status: FollowStatus.PENDING
-					}
-				});
+				const followerId = profile.id;
+				const followingId = event.locals.session.userId;
+
+				await prisma.$transaction([
+					prisma.follow.update({
+						data: { status: FollowStatus.APPROVED },
+						where: {
+							followerId_followingId: {
+								followerId,
+								followingId
+							},
+							status: FollowStatus.PENDING
+						}
+					}),
+					...getIncrementFollowCountsActions(followerId, followingId)
+				]);
 
 				return json({ data: FollowStatus.APPROVED });
 			}

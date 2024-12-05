@@ -1,3 +1,5 @@
+import type { FollowAction } from '$lib/schemas/follow/update-request';
+import { AuthCode } from '$lib/utils/auth-code';
 import { relationalFollowFixtureA } from '$tests/fixtures/follow';
 import { relationalProfileFixtureA, relationalProfileFixtureB } from '$tests/fixtures/profile';
 import {
@@ -6,21 +8,23 @@ import {
 	mFollowFindUnique,
 	mFollowUpdate,
 	mProfileFindFirst,
-	mProfileUpdate
+	mProfileFindUnique,
+	mProfileUpdate,
+	mTransaction
 } from '$tests/mocks/prisma';
-import { AuthCode } from '@/lib/utils/auth-code';
 import { FollowStatus } from '@prisma/client';
+import { json } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
 import { DELETE, POST, PUT } from './+server';
 
-const mFollower = relationalProfileFixtureA;
-const mFollowing = relationalProfileFixtureB;
+const mUserA = relationalProfileFixtureA;
+const mUserB = relationalProfileFixtureB;
 
 const mBaseLocals = {
-	session: { userId: mFollower.id },
+	session: { userId: mUserA.id },
 	user: { emailVerified: true }
 } as RequestEvent['locals'];
-const mBaseParams = { handle: mFollowing.handle } as RequestEvent['params'];
+const mBaseParams = { handle: mUserB.handle } as RequestEvent['params'];
 const mBaseEvent = {
 	locals: mBaseLocals,
 	params: mBaseParams
@@ -32,11 +36,11 @@ describe('POST', () => {
 	});
 
 	it('should follow', async () => {
-		mProfileFindFirst.mockResolvedValue(mFollowing);
+		mProfileFindFirst.mockResolvedValue(mUserB);
 
 		const result = await POST(mBaseEvent);
 
-		expect(result).toEqual(new Response());
+		expect(result).toMatchObject(json({ data: FollowStatus.APPROVED }));
 		expect(mProfileFindFirst).toHaveBeenCalledWith({
 			select: {
 				id: true,
@@ -47,7 +51,7 @@ describe('POST', () => {
 				}
 			},
 			where: {
-				handle: mFollowing.handle,
+				handle: mUserB.handle,
 				user: {
 					deletedAt: null
 				}
@@ -56,8 +60,8 @@ describe('POST', () => {
 		expect(mFollowCreate).toHaveBeenCalledTimes(1);
 		expect(mFollowCreate).toHaveBeenCalledWith({
 			data: {
-				followerId: mFollower.id,
-				followingId: mFollowing.id,
+				followerId: mUserA.id,
+				followingId: mUserB.id,
 				status: FollowStatus.APPROVED
 			}
 		});
@@ -72,7 +76,7 @@ describe('POST', () => {
 				id: true
 			},
 			where: {
-				id: mFollower.id
+				id: mUserA.id
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenNthCalledWith(2, {
@@ -85,7 +89,7 @@ describe('POST', () => {
 				id: true
 			},
 			where: {
-				id: mFollowing.id
+				id: mUserB.id
 			}
 		});
 	});
@@ -107,17 +111,17 @@ describe('POST', () => {
 		await expect(POST(mBaseEvent)).rejects.toEqual({
 			status: 404,
 			body: {
-				message: `Profile @${mFollowing.handle} not found`
+				message: `Profile @${mUserB.handle} not found`
 			}
 		});
 	});
 
 	it('should create a follow with a status of pending if profile is private', async () => {
-		mProfileFindFirst.mockResolvedValue({ ...mFollowing, privacySettings: { private: true } });
+		mProfileFindFirst.mockResolvedValue({ ...mUserB, privacySettings: { private: true } });
 
 		const result = await POST(mBaseEvent);
 
-		expect(result).toEqual(new Response());
+		expect(result).toMatchObject(json({ data: FollowStatus.PENDING }));
 		expect(mProfileFindFirst).toHaveBeenCalledWith({
 			select: {
 				id: true,
@@ -128,7 +132,7 @@ describe('POST', () => {
 				}
 			},
 			where: {
-				handle: mFollowing.handle,
+				handle: mUserB.handle,
 				user: {
 					deletedAt: null
 				}
@@ -137,8 +141,8 @@ describe('POST', () => {
 		expect(mFollowCreate).toHaveBeenCalledTimes(1);
 		expect(mFollowCreate).toHaveBeenCalledWith({
 			data: {
-				followerId: mFollower.id,
-				followingId: mFollowing.id,
+				followerId: mUserA.id,
+				followingId: mUserB.id,
 				status: FollowStatus.PENDING
 			}
 		});
@@ -151,7 +155,7 @@ describe('POST', () => {
 		await expect(POST(mBaseEvent)).rejects.toEqual({
 			status: 500,
 			body: {
-				message: `Could not follow profile @${mFollowing.handle}`
+				message: `Could not follow profile @${mUserB.handle}`
 			}
 		});
 	});
@@ -163,21 +167,21 @@ describe('DELETE', () => {
 	});
 
 	it('should unfollow', async () => {
-		mProfileFindFirst.mockResolvedValue(mFollowing);
+		mProfileFindFirst.mockResolvedValue(mUserB);
 
 		const result = await DELETE(mBaseEvent);
 
-		expect(result).toEqual(new Response());
+		expect(result).toMatchObject(json({ data: undefined }));
 		expect(mProfileFindFirst).toHaveBeenCalledWith({
 			select: {
 				id: true
 			},
 			where: {
-				handle: mFollowing.handle,
+				handle: mUserB.handle,
 				user: { deletedAt: null },
 				followers: {
 					some: {
-						followerId: mFollower.id
+						followerId: mUserA.id
 					}
 				}
 			}
@@ -185,7 +189,7 @@ describe('DELETE', () => {
 		expect(mFollowDelete).toHaveBeenCalledTimes(1);
 		expect(mFollowDelete).toHaveBeenCalledWith({
 			where: {
-				followerId_followingId: { followerId: mFollower.id, followingId: mFollowing.id }
+				followerId_followingId: { followerId: mUserA.id, followingId: mUserB.id }
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenCalledTimes(2);
@@ -199,7 +203,7 @@ describe('DELETE', () => {
 				id: true
 			},
 			where: {
-				id: mFollower.id
+				id: mUserA.id
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenNthCalledWith(2, {
@@ -212,7 +216,7 @@ describe('DELETE', () => {
 				id: true
 			},
 			where: {
-				id: mFollowing.id
+				id: mUserB.id
 			}
 		});
 	});
@@ -234,7 +238,7 @@ describe('DELETE', () => {
 		await expect(DELETE(mBaseEvent)).rejects.toEqual({
 			status: 404,
 			body: {
-				message: `Profile @${mFollowing.handle} neither found or followed`
+				message: `Profile @${mUserB.handle} neither found or followed`
 			}
 		});
 	});
@@ -245,63 +249,45 @@ describe('DELETE', () => {
 		await expect(DELETE(mBaseEvent)).rejects.toEqual({
 			status: 500,
 			body: {
-				message: `Could not unfollow profile @${mFollowing.handle}`
+				message: `Could not unfollow profile @${mUserB.handle}`
 			}
 		});
 	});
 });
 
 describe('PUT', () => {
-	const getEvent = ({
-		json,
-		bodyUsed
-	}: {
-		json?: () => Promise<{ status: FollowStatus | string }>;
-		bodyUsed?: boolean;
-	} = {}): RequestEvent =>
+	const getEvent = (action: FollowAction = 'APPROVE'): RequestEvent =>
 		({
 			...mBaseEvent,
+			params: {
+				handle: mUserB.handle
+			},
 			request: {
-				json: json ?? (async () => ({ status: FollowStatus.APPROVED })),
-				bodyUsed: bodyUsed === undefined ? true : bodyUsed
+				json: () => ({ action })
 			}
 		}) as unknown as RequestEvent;
 
 	beforeEach(async () => {
 		vi.resetAllMocks();
 
-		mProfileFindFirst.mockResolvedValue(mFollowing);
+		mProfileFindUnique.mockResolvedValue(mUserB);
 		mFollowFindUnique.mockResolvedValue(relationalFollowFixtureA);
 	});
 
-	it('should accept pending follow', async () => {
-		const mEvent = getEvent({
-			json: async () => ({
-				status: FollowStatus.APPROVED
-			}),
-			bodyUsed: true
-		});
+	it('should accept pending follow request', async () => {
+		const mEvent = getEvent('APPROVE');
 
 		const result = await PUT(mEvent);
 
-		expect(result).toEqual(new Response());
-		expect(mProfileFindFirst).toHaveBeenCalledWith({
+		expect(result).toMatchObject(json({ data: FollowStatus.APPROVED }));
+		expect(mProfileFindUnique).toHaveBeenCalledWith({
 			select: {
 				id: true
 			},
 			where: {
-				handle: mFollowing.handle,
+				handle: mUserB.handle,
 				user: {
 					deletedAt: null
-				}
-			}
-		});
-		expect(mFollowFindUnique).toHaveBeenCalledTimes(1);
-		expect(mFollowFindUnique).toHaveBeenCalledWith({
-			where: {
-				followerId_followingId: {
-					followerId: mFollower.id,
-					followingId: mFollowing.id
 				}
 			}
 		});
@@ -312,9 +298,10 @@ describe('PUT', () => {
 			},
 			where: {
 				followerId_followingId: {
-					followerId: mFollower.id,
-					followingId: mFollowing.id
-				}
+					followerId: mUserB.id,
+					followingId: mUserA.id
+				},
+				status: FollowStatus.PENDING
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenCalledTimes(2);
@@ -328,7 +315,7 @@ describe('PUT', () => {
 				id: true
 			},
 			where: {
-				id: mFollower.id
+				id: mUserB.id
 			}
 		});
 		expect(mProfileUpdate).toHaveBeenNthCalledWith(2, {
@@ -341,39 +328,25 @@ describe('PUT', () => {
 				id: true
 			},
 			where: {
-				id: mFollowing.id
+				id: mUserA.id
 			}
 		});
 	});
 
-	it('should reject pending follow', async () => {
-		const mEvent = getEvent({
-			json: async () => ({
-				status: FollowStatus.REJECTED
-			}),
-			bodyUsed: true
-		});
+	it('should reject pending follow request', async () => {
+		const mEvent = getEvent('REJECT');
 
 		const result = await PUT(mEvent);
 
-		expect(result).toEqual(new Response());
-		expect(mProfileFindFirst).toHaveBeenCalledWith({
+		expect(result).toMatchObject(json({ data: undefined }));
+		expect(mProfileFindUnique).toHaveBeenCalledWith({
 			select: {
 				id: true
 			},
 			where: {
-				handle: mFollowing.handle,
+				handle: mUserB.handle,
 				user: {
 					deletedAt: null
-				}
-			}
-		});
-		expect(mFollowFindUnique).toHaveBeenCalledTimes(1);
-		expect(mFollowFindUnique).toHaveBeenCalledWith({
-			where: {
-				followerId_followingId: {
-					followerId: mFollower.id,
-					followingId: mFollowing.id
 				}
 			}
 		});
@@ -381,9 +354,39 @@ describe('PUT', () => {
 		expect(mFollowDelete).toHaveBeenCalledWith({
 			where: {
 				followerId_followingId: {
-					followerId: mFollower.id,
-					followingId: mFollowing.id
+					followerId: mUserB.id,
+					followingId: mUserA.id
+				},
+				status: FollowStatus.PENDING
+			}
+		});
+	});
+
+	it('should camcel pending follow request', async () => {
+		const mEvent = getEvent('CANCEL');
+
+		const result = await PUT(mEvent);
+
+		expect(result).toMatchObject(json({ data: undefined }));
+		expect(mProfileFindUnique).toHaveBeenCalledWith({
+			select: {
+				id: true
+			},
+			where: {
+				handle: mUserB.handle,
+				user: {
+					deletedAt: null
 				}
+			}
+		});
+		expect(mFollowDelete).toHaveBeenCalledTimes(1);
+		expect(mFollowDelete).toHaveBeenCalledWith({
+			where: {
+				followerId_followingId: {
+					followerId: mUserA.id,
+					followingId: mUserB.id
+				},
+				status: FollowStatus.PENDING
 			}
 		});
 	});
@@ -403,28 +406,19 @@ describe('PUT', () => {
 	});
 
 	it('should throw a 404 profile not found error if profile is not found', async () => {
-		mProfileFindFirst.mockResolvedValue(null);
+		mProfileFindUnique.mockResolvedValue(null);
 
 		await expect(PUT(getEvent())).rejects.toEqual({
 			status: 404,
 			body: {
-				message: `Profile @${mFollowing.handle} not found`
-			}
-		});
-	});
-
-	it('should throw a 422 error if no body is empty', async () => {
-		await expect(PUT(getEvent({ bodyUsed: false }))).rejects.toEqual({
-			status: 422,
-			body: {
-				message: 'Missing body'
+				message: `Profile @${mUserB.handle} not found`
 			}
 		});
 	});
 
 	it('should throw a 422 error if the body is invalid', async () => {
 		await expect(
-			PUT(getEvent({ json: async () => ({ status: 'invalid-status' }), bodyUsed: true }))
+			PUT({ ...mBaseEvent, request: { json: async () => ({ action: 'INVALID' }) } } as RequestEvent)
 		).rejects.toEqual({
 			status: 422,
 			body: {
@@ -433,37 +427,13 @@ describe('PUT', () => {
 		});
 	});
 
-	it('should throw a 404 error if the follow request is not found', async () => {
-		mFollowFindUnique.mockResolvedValue(null);
+	it('should throw a generic 500 error if an unknown error occurs', async () => {
+		mTransaction.mockRejectedValue(new Error('some error'));
 
-		await expect(PUT(getEvent())).rejects.toEqual({
-			status: 404,
-			body: {
-				message: 'Could not find follow request'
-			}
-		});
-	});
-
-	it('should throw a generic 500 error if an unknown error occurs when approving', async () => {
-		mProfileFindFirst.mockRejectedValue({});
-
-		await expect(PUT(getEvent())).rejects.toEqual({
+		await expect(PUT(getEvent('APPROVE'))).rejects.toEqual({
 			status: 500,
 			body: {
-				message: 'Could not approve follow request'
-			}
-		});
-	});
-
-	it('should throw a generic 500 error if an unknown error occurs when rejecting', async () => {
-		mProfileFindFirst.mockRejectedValue({});
-
-		await expect(
-			PUT(getEvent({ json: async () => ({ status: FollowStatus.REJECTED }) }))
-		).rejects.toEqual({
-			status: 500,
-			body: {
-				message: 'Could not reject follow request'
+				message: 'An error occured'
 			}
 		});
 	});
