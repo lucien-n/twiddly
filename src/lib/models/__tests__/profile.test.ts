@@ -1,7 +1,7 @@
 import { baseUserFixtureB } from '$tests/fixtures/user';
 import { AvatarBackgroundColor, FollowStatus, Role, ThemeColor, ThemeMode } from '@prisma/client';
-import { getAvatarBgColor, getProfileAvatar } from '../utils/avatar';
-import { formatProfile, getProfileSelect } from './profile';
+import { getAvatarBgColor, getProfileAvatar } from '../../utils/avatar';
+import { formatProfile, getProfileSelect } from '../profile';
 
 describe('formatProfile', () => {
 	const mCurrentUserId = baseUserFixtureB.id;
