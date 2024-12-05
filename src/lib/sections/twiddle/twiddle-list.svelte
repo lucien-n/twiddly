@@ -1,23 +1,41 @@
 <script lang="ts">
 	import type { Twiddle } from '$lib/models';
+	import type { Snippet } from 'svelte';
 	import { TwiddleCard, TwiddleCardSkeleton, TwiddleContext } from '.';
+
+	interface EmptySnippetProps {
+		props: { class: string };
+	}
 
 	interface Props {
 		twiddles: Twiddle[] | Promise<Twiddle[]>;
+		empty?: Snippet<[EmptySnippetProps]>;
 	}
-	const { twiddles }: Props = $props();
+	const { twiddles, empty }: Props = $props();
+
+	const emptySnippetProps: EmptySnippetProps = {
+		props: {
+			class: 'text-center text-3xl font-bold'
+		}
+	};
 </script>
 
 {#snippet twiddlesList(data: Twiddle[])}
-	{#each data as twiddle (twiddle.data.id)}
-		<TwiddleContext init={twiddle}>
-			{#snippet children(twiddleState)}
-				{#if !twiddleState.deleted}
-					<TwiddleCard twiddle={twiddleState} />
-				{/if}
-			{/snippet}
-		</TwiddleContext>
-	{/each}
+	{#if data.length}
+		{#each data as twiddle (twiddle.data.id)}
+			<TwiddleContext init={twiddle}>
+				{#snippet children(twiddleState)}
+					{#if !twiddleState.deleted}
+						<TwiddleCard twiddle={twiddleState} />
+					{/if}
+				{/snippet}
+			</TwiddleContext>
+		{/each}
+	{:else if empty}
+		{@render empty(emptySnippetProps)}
+	{:else}
+		<h1 {...emptySnippetProps}>No twiddles</h1>
+	{/if}
 {/snippet}
 
 {#if twiddles instanceof Promise}

@@ -15,10 +15,14 @@ const getTwiddles = async (profileId: string, currentUserId?: string) => {
 };
 
 export const load = async (event) => {
-	const parent = await event.parent();
-	const twiddles = await getTwiddles(parent.profile?.id, event.locals.session?.userId);
+	const { profile } = await event.parent();
+
+	const twiddlesPromise =
+		profile.isPrivate && profile.handle !== event.locals.profile.handle
+			? []
+			: getTwiddles(profile?.id, event.locals.session?.userId);
 
 	return {
-		twiddles
+		twiddlesPromise
 	};
 };

@@ -1,15 +1,20 @@
 <script lang="ts">
 	import { TwiddleList } from '#/twiddle';
-	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 
 	const { data } = $props();
 </script>
 
-{#if data.twiddles.length}
-	<TwiddleList twiddles={data.twiddles} />
-{:else if browser}
-	<h1 class="mx-auto my-auto self-center text-3xl font-bold">
-		{$page.params.handle ?? 'Unknown'} hasn't twiddled yet
-	</h1>
-{/if}
+<TwiddleList twiddles={data.twiddlesPromise}>
+	{#snippet empty({ props })}
+		{@const handle = $page.params.handle ?? 'Unknown'}
+
+		<h1 {...props}>
+			{#if data.profile.isPrivate}
+				{handle}'s profile is private
+			{:else}
+				{handle} hasn't twiddled yet
+			{/if}
+		</h1>
+	{/snippet}
+</TwiddleList>
