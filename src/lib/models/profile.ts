@@ -1,5 +1,5 @@
 import { getProfileAvatar } from '$lib/utils/avatar';
-import { AvatarBackgroundColor, type Follow, type Role } from '@prisma/client';
+import { AvatarBackgroundColor, FollowStatus, type Follow, type Role } from '@prisma/client';
 
 export interface Profile {
 	id: string;
@@ -12,7 +12,7 @@ export interface Profile {
 	displayName: string;
 	followingCount: number;
 	followersCount: number;
-	isFollowedByCurrentUser: boolean;
+	followStatus: FollowStatus | undefined;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,11 +33,11 @@ export const formatProfile = (p: any, currentUserId?: string): Profile => ({
 	isPrivate: Boolean(p.privacySettings?.private),
 	followingCount: p.followingCount,
 	followersCount: p.followersCount,
-	isFollowedByCurrentUser: p.followers
-		? (p as { followers: Follow[] }).followers.some(
+	followStatus: p.followers
+		? (p as { followers: Follow[] }).followers.find(
 				({ followerId }) => followerId === currentUserId
-			)
-		: false
+			)?.status
+		: undefined
 });
 
 export const getProfileSelect = (currentUserId?: string) => ({

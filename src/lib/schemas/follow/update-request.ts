@@ -1,6 +1,8 @@
-import { FollowStatus } from '@prisma/client';
 import { z } from 'zod';
 
+const followAction = ['APPROVE', 'CANCEL'] as const;
+export type FollowAction = (typeof followAction)[number];
+
 export const updateFollowRequestSchema = z.object({
-	status: z.nativeEnum(FollowStatus)
+	action: z.enum(followAction)
 });

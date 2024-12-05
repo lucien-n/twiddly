@@ -6,7 +6,7 @@ import { AuthCode } from '$lib/utils/auth-code';
 import { FollowStatus } from '@prisma/client';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { updateFollowRequestSchema } from '$lib/schemas/follow/update-request';
+import { updateFollowRequestSchema, type FollowAction } from '$lib/schemas/follow/update-request';
 import { FollowCode } from '$lib/utils/follow-code';
 import { getDecrementFollowCountsActions, getIncrementFollowCountsActions } from './helpers';
 
@@ -122,11 +122,11 @@ export const PUT: RequestHandler = async (event) => {
 		return error(422, 'Missing body');
 	}
 
-	let newStatus: FollowStatus;
+	let action: FollowAction;
 	try {
 		const body = await event.request.json();
 		const result = updateFollowRequestSchema.parse(body);
-		newStatus = result.status;
+		action = result.action;
 	} catch {
 		return error(422, 'Invalid body');
 	}
@@ -156,15 +156,15 @@ export const PUT: RequestHandler = async (event) => {
 			throw FollowCode.RequestNotFound;
 		}
 
-		switch (newStatus) {
-			case FollowStatus.REJECTED: {
+		switch (action) {
+			case 'CANCEL': {
 				await prisma.follow.delete({ where: { followerId_followingId } });
 				break;
 			}
-			case FollowStatus.APPROVED: {
+			case 'APPROVE': {
 				await prisma.$transaction([
 					prisma.follow.update({
-						data: { status: newStatus },
+						data: { status: FollowStatus.APPROVED },
 						where: { followerId_followingId }
 					}),
 					...getIncrementFollowCountsActions(followerId, followingId)
@@ -187,7 +187,7 @@ export const PUT: RequestHandler = async (event) => {
 			default:
 				return error(
 					500,
-					`Could not ${newStatus === FollowStatus.APPROVED ? 'approve' : 'reject'} follow request`
+					`Could not ${action === 'APPROVE' ? 'approve' : 'reject'} follow request`
 				);
 		}
 	}
