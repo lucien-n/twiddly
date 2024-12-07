@@ -33,5 +33,6 @@ export const HANDLES_BLACKLIST: string[] = [
 	'verify',
 	'actions',
 	'api',
-	'settings'
+	'settings',
+	'following'
 ];

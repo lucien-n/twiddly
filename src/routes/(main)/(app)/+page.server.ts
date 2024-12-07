@@ -1,11 +1,22 @@
 import { formatTwiddles, getTwiddleSelect, getTwiddleWhere } from '$lib/models';
 import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
 import { prisma } from '$lib/server/prisma';
+import { isVerified } from '@/lib/server/auth';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
+import { getTabFromParam, type HomeTab } from './types';
 
-const getTwiddles = async (currentUserId?: string) => {
+const getTwiddles = async (tab: HomeTab, currentUserId?: string) => {
+	const where =
+		tab === 'discover'
+			? { OR: [{ author: { privacySettings: { private: false } } }, { authorId: currentUserId }] }
+			: {
+					author: {
+						followers: { some: { followerId: currentUserId } }
+					}
+				};
+
 	const twiddles = await prisma.twiddle.findMany({
 		orderBy: { createdAt: 'desc' },
 		select: {
@@ -14,7 +25,7 @@ const getTwiddles = async (currentUserId?: string) => {
 		},
 		where: {
 			...getTwiddleWhere(),
-			OR: [{ author: { privacySettings: { private: false } } }, { authorId: currentUserId }]
+			...where
 		},
 		take: 10
 	});
@@ -23,7 +34,9 @@ const getTwiddles = async (currentUserId?: string) => {
 };
 
 export const load: PageServerLoad = async (event) => {
-	const twiddlesPromise = getTwiddles(event.locals.session?.userId);
+	const tab = isVerified(event) ? getTabFromParam(event.url.searchParams.get('tab')) : 'discover';
+
+	const twiddlesPromise = getTwiddles(tab, event.locals.session?.userId);
 	const setTwiddleForm = await superValidate(zod(setTwiddleSchema));
 
 	return {

@@ -15,7 +15,18 @@ const prismaClientDirectory = path.normalize(
 const prismaIndexBrowserPath = path.join(prismaClientDirectory, 'index-browser.js');
 
 export default defineConfig({
-	plugins: [kitRoutes<KIT_ROUTES>(), sveltekit()],
+	plugins: [
+		kitRoutes<KIT_ROUTES>({
+			PAGES: {
+				'/': {
+					explicit_search_params: {
+						tab: { type: '"discover" | "following"' }
+					}
+				}
+			}
+		}),
+		sveltekit()
+	],
 	resolve: {
 		alias: {
 			'.prisma/client/index-browser': prismaIndexBrowserPath
