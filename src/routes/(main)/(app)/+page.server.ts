@@ -15,20 +15,19 @@ const getTwiddles = async (currentUserId?: string) => {
 		where: {
 			...getTwiddleWhere(),
 			OR: [{ author: { privacySettings: { private: false } } }, { authorId: currentUserId }]
-		}
+		},
+		take: 10
 	});
 
 	return formatTwiddles(twiddles, currentUserId);
 };
 
 export const load: PageServerLoad = async (event) => {
-	const [twiddles, setTwiddleForm] = await Promise.all([
-		getTwiddles(event.locals.session?.userId),
-		superValidate(zod(setTwiddleSchema))
-	]);
+	const twiddlesPromise = getTwiddles(event.locals.session?.userId);
+	const setTwiddleForm = await superValidate(zod(setTwiddleSchema));
 
 	return {
-		twiddles,
+		twiddlesPromise,
 		setTwiddleForm
 	};
 };
