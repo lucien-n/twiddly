@@ -9,7 +9,9 @@
  * PAGES
  */
 const PAGES = {
-  "/": `/`,
+  "/": (params?: { tab?: ("discover" | "following") }) => {
+    return `/${appendSp({ tab: params?.tab })}`
+  },
   "/sign-in": `/sign-in`,
   "/sign-up": `/sign-up`,
   "/verify": `/verify`,
@@ -189,5 +191,5 @@ export type KIT_ROUTES = {
   SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemap.xml': never, 'GET /api/v1/admin/users/[id]/restrict': 'id', 'GET /api/v1/admin/users/[id]/unrestrict': 'id', 'GET /api/v1/deleteAccounts': never, 'POST /api/v1/profile/[handle]/follow': 'handle', 'DELETE /api/v1/profile/[handle]/follow': 'handle', 'PUT /api/v1/profile/[handle]/follow': 'handle', 'GET /api/v1/retrievePersonalInfo': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
   ACTIONS: { 'setSiteSettings /admin/settings': never, 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
-  Params: { handle: never, twiddleId: never, id: never }
+  Params: { tab: never, handle: never, twiddleId: never, id: never }
 }
