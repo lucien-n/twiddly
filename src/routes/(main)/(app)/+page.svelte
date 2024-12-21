@@ -5,11 +5,11 @@
 	import type { TabProps } from '&/tabs/index.js';
 	import { Tabs } from '&/tabs';
 	import { getTabFromParam, type HomeTab } from './types';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	const { data } = $props();
 
-	let currentTab: HomeTab = $state(getTabFromParam($page.url.searchParams.get('tab')));
+	let currentTab: HomeTab = $state(getTabFromParam(page.url.searchParams.get('tab')));
 	const tabs: TabProps<HomeTab>[] = $derived([
 		{
 			label: 'Discover',

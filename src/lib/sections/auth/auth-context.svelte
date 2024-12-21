@@ -4,7 +4,7 @@
 	import { SignOutDialog } from '.';
 	import { getModeWatcherThemeMode, getModeWatcherThemeColor } from '$lib/utils/theme';
 	import { mode, setMode, setTheme, theme } from 'mode-watcher';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 
 	interface Props {
@@ -22,7 +22,7 @@
 
 	$effect(() => {
 		const userMode = getModeWatcherThemeMode(init.profile?.interfaceSettings?.themeMode);
-		if ($mode === userMode || (browser && $page.url.pathname.startsWith('/settings/interface'))) {
+		if ($mode === userMode || (browser && page.url.pathname.startsWith('/settings/interface'))) {
 			return;
 		}
 
@@ -31,7 +31,7 @@
 
 	$effect(() => {
 		const userColor = getModeWatcherThemeColor(init.profile?.interfaceSettings?.themeColor);
-		if ($theme === userColor || (browser && $page.url.pathname.startsWith('/settings/interface'))) {
+		if ($theme === userColor || (browser && page.url.pathname.startsWith('/settings/interface'))) {
 			return;
 		}
 

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { PUBLIC_ORIGIN } from '$env/static/public';
 
-	const infos = $derived($page.data.infos);
+	const infos = $derived(page.data.infos);
 
 	const siteName = 'Twiddly';
 	const description = $derived(infos?.description ?? 'Twiddly - Share and connect with your peers');
@@ -17,5 +17,5 @@
 	<meta property="og:title" content={infos?.title ?? siteName} />
 	<meta property="og:image" content={infos?.image ?? `${PUBLIC_ORIGIN}/favicon.png`} />
 	<meta property="og:image:type" content={infos?.imageType ?? 'image/png'} />
-	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:url" content={page.url.href} />
 </svelte:head>

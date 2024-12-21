@@ -1,7 +1,8 @@
+<!-- @migration task: review uses of `navigating` -->
 <script lang="ts">
 	import { getAuthState } from '#/auth';
 	import { browser } from '$app/environment';
-	import { navigating, page } from '$app/stores';
+	import { navigating, page } from '$app/state';
 	import { route } from '$lib/ROUTES';
 	import * as Sidebar from '&/ui/sidebar';
 	import { cn } from '&/utils';
@@ -73,7 +74,7 @@
 {#snippet navItem(item: NavItemProps)}
 	{#if !item.hidden}
 		{@const isCurrent =
-			browser && typeof item.action === 'string' && $page.url.pathname === item.action}
+			browser && typeof item.action === 'string' && page.url.pathname === item.action}
 		<Sidebar.MenuItem>
 			<Sidebar.MenuButton
 				data-isCurrent={isCurrent}
@@ -110,7 +111,7 @@
 							<img
 								src="/twiddly.svg"
 								alt="Twiddly logo"
-								class={cn('p-1', browser && $navigating && 'animate-pulse')}
+								class={cn('p-1', browser && navigating && 'animate-pulse')}
 							/>
 						</div>
 						<div class="grid flex-1 text-left text-sm leading-tight">

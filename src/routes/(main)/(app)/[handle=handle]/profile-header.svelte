@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getAuthState } from '#/auth';
 	import { FollowButton, ProfileAvatar, SetProfileDialog } from '#/profile';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { Profile } from '$lib/models';
 	import { route } from '$lib/ROUTES';
 	import type { SetProfileSchema } from '$lib/schemas/profile/set-profile';
@@ -43,7 +43,7 @@
 
 	$effect(() => {
 		const possibleTabs: ProfileTab[] = ['activity', 'liked'];
-		const currentPage = $page.url.href.split('/').pop()?.toLowerCase() as ProfileTab;
+		const currentPage = page.url.href.split('/').pop()?.toLowerCase() as ProfileTab;
 
 		if (!currentPage || !possibleTabs.includes(currentPage)) {
 			currentTab = 'activity';

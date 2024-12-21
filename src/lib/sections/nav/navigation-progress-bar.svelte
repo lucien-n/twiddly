@@ -1,10 +1,11 @@
+<!-- @migration task: review uses of `navigating` -->
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { navigating } from '$app/stores';
+	import { navigating } from '$app/state';
 	import { fly } from 'svelte/transition';
 </script>
 
-{#if browser && $navigating}
+{#if browser && navigating}
 	<div class="absolute z-[9] w-full" transition:fly={{ y: -100, duration: 100 }}>
 		<div class="h-1.5 w-full overflow-hidden bg-secondary">
 			<div class="progress left-right h-full w-full bg-primary"></div>
