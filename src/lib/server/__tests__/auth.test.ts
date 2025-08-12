@@ -1,4 +1,8 @@
-import { mGetMaintenanceMode } from '$tests/mocks/utils';
+import { AuthCode, AuthError } from '$lib/utils/auth-code';
+import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
+import { baseProfileFixtureA } from '$tests/fixtures/profile';
+import { baseSessionFixtureA } from '$tests/fixtures/session';
+import { baseUserFixtureA, baseUserFixtureB } from '$tests/fixtures/user';
 import { mSendOTPVerificationEmail } from '$tests/mocks/email';
 import {
 	mCreateBlankSessionCookie,
@@ -18,6 +22,7 @@ import {
 	mUserCreate,
 	mUserFindFirst
 } from '$tests/mocks/prisma';
+import { mGetMaintenanceMode } from '$tests/mocks/utils';
 import {
 	checkHandle,
 	hashPassword,
@@ -30,14 +35,9 @@ import {
 	signUpWithEmailAndPassword,
 	verifyPassword,
 	verifyVerificationCode
-} from '$lib/server/auth';
-import { AuthError, AuthCode } from '$lib/utils/auth-code';
-import { relationalEmailVerificationCodeFixtureA } from '$tests/fixtures/emailVerificationCode';
-import { baseProfileFixtureA } from '$tests/fixtures/profile';
-import { baseSessionFixtureA } from '$tests/fixtures/session';
-import { baseUserFixtureA, baseUserFixtureB } from '$tests/fixtures/user';
-import type { RequestEvent } from '@sveltejs/kit';
+} from '@/lib/server/auth.old';
 import { MaintenanceMode, Role } from '@prisma/client';
+import type { RequestEvent } from '@sveltejs/kit';
 
 const mPassword = 'password';
 const mHashedPassword =

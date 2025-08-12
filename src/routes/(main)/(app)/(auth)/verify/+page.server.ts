@@ -1,6 +1,6 @@
 import { route } from '$lib/ROUTES';
 import { otpSchema } from '$lib/schemas/auth/otp';
-import { isVerified } from '$lib/server/auth';
+import { isVerified } from '@/lib/server/auth.old';
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

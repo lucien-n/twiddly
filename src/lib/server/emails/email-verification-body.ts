@@ -1,5 +1,5 @@
 import { PUBLIC_ORIGIN } from '$env/static/public';
-import { emailVerificationCodeExpiryMinutes } from '../auth';
+import { emailVerificationCodeExpiryMinutes } from '../auth.old';
 import type { EmailTo } from '../email';
 
 // todo: privacy policy page

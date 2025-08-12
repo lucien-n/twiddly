@@ -1,6 +1,6 @@
 import { route } from '$lib/ROUTES';
 import { signUpSchema } from '$lib/schemas/auth/sign-up';
-import { isAuthenticated } from '$lib/server/auth';
+import { isAuthenticated } from '@/lib/server/auth.old';
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

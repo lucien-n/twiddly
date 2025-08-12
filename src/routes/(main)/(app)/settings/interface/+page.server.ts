@@ -1,11 +1,11 @@
 import { route } from '$lib/ROUTES';
 import { setInterfaceSettingsSchema } from '$lib/schemas/settings/set-settings';
 import { prisma } from '$lib/server/prisma';
+import { isVerified } from '@/lib/server/auth.old';
 import { redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { isVerified } from '$lib/server/auth';
 
 export const load: PageServerLoad = async (event) => {
 	// ? this is redundant since we redirect to auth routes if the user isn't signed in but it assures type safety

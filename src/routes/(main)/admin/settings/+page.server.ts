@@ -1,12 +1,12 @@
+import { dev } from '$app/environment';
 import { adminSetSiteSettingsSchema } from '$lib/schemas/admin/set-site-settings';
-import { isAdmin } from '$lib/server/auth';
+import { prisma } from '$lib/server/prisma';
+import { setSiteSettings } from '@/hooks/site-settings.svelte';
+import { isAdmin } from '@/lib/server/auth.old';
 import { error, type Actions } from '@sveltejs/kit';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/prisma';
-import { dev } from '$app/environment';
-import { setSiteSettings } from '@/hooks/site-settings.svelte';
 
 export const load: PageServerLoad = async (event) => {
 	const setSiteSettingsForm = await superValidate(

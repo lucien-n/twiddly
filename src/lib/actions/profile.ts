@@ -1,15 +1,15 @@
 import { dev } from '$app/environment';
 import { setProfileSchema, type SetProfileInput } from '$lib/schemas/profile/set-profile';
-import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
+import { isVerified } from '@/lib/server/auth.old';
 import { error, fail, type Action } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 export const setProfile: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);
 
-	const form = await superValidate(event, zod(setProfileSchema));
+	const form = await superValidate(event, zod4(setProfileSchema));
 	if (!form.valid) {
 		return fail(400, { setProfileForm: form });
 	}

@@ -1,19 +1,19 @@
 import { dev } from '$app/environment';
 import { route } from '$lib/ROUTES';
 import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
-import { isAdmin, isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { getSanitizedContentLength, sanitizeTwiddleContent } from '$lib/utils/helpers';
+import { isAdmin, isVerified } from '@/lib/server/auth.old';
 import { error, fail, isRedirect, redirect, type Action } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import { setError, superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { MAX_CONTENT_LENGTH } from '../schemas/twiddle/fields';
 
 export const setTwiddle: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);
 
-	const setTwiddleForm = await superValidate(event, zod(setTwiddleSchema));
+	const setTwiddleForm = await superValidate(event, zod4(setTwiddleSchema));
 	if (!setTwiddleForm.valid) {
 		return fail(400, { setTwiddleForm });
 	}

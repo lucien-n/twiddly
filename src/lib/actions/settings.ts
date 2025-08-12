@@ -3,16 +3,16 @@ import {
 	setInterfaceSettingsSchema,
 	setPrivacySettingsSchema
 } from '$lib/schemas/settings/set-settings';
-import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
+import { isVerified } from '@/lib/server/auth.old';
 import { error, fail, type Action } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 
 export const setInterfaceSettings: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);
 
-	const form = await superValidate(event, zod(setInterfaceSettingsSchema));
+	const form = await superValidate(event, zod4(setInterfaceSettingsSchema));
 	if (!form.valid) {
 		return fail(400, {
 			setSettingsForm: form
@@ -43,7 +43,7 @@ export const setInterfaceSettings: Action = async (event) => {
 export const setPrivacySettings: Action = async (event) => {
 	if (!isVerified(event)) return fail(401);
 
-	const form = await superValidate(event, zod(setPrivacySettingsSchema));
+	const form = await superValidate(event, zod4(setPrivacySettingsSchema));
 	if (!form.valid) {
 		return fail(400, {
 			setSettingsForm: form

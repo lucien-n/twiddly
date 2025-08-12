@@ -1,24 +1,17 @@
-import { refreshSession } from '$lib/server/auth';
-import { prisma } from '$lib/server/prisma';
-import { formatProfile } from '$lib/models';
+import { building } from '$app/environment';
+import { auth } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
+import { svelteKitHandler } from 'better-auth/svelte-kit';
 
 export const handleAuth: Handle = async ({ resolve, event }) => {
-	const { user, session } = await refreshSession(event);
-
-	event.locals.user = user;
-	event.locals.session = session;
+	const session = await auth.api.getSession({
+		headers: event.request.headers
+	});
 
 	if (session) {
-		const profileData = await prisma.profile.findFirst({
-			where: { id: session.userId },
-			include: { interfaceSettings: true, privacySettings: true }
-		});
-
-		event.locals.profile = profileData ? { ...profileData, ...formatProfile(profileData) } : null;
-	} else {
-		event.locals.profile = null;
+		event.locals.session = session.session;
+		event.locals.user = session.user;
 	}
 
-	return resolve(event);
+	return svelteKitHandler({ event, resolve, auth, building });
 };

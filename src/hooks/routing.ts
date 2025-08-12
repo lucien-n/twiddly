@@ -1,6 +1,6 @@
 import { route } from '$lib/ROUTES';
-import { isVerified } from '$lib/server/auth';
 import { getMaintenanceMode, handlerRedirect } from '$lib/server/utils';
+import { isVerified } from '@/lib/server/auth.old';
 import { MaintenanceMode, Role } from '@prisma/client';
 import { error, type Handle, type RequestEvent } from '@sveltejs/kit';
 

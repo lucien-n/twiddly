@@ -1,7 +1,7 @@
 import { formatTwiddles, getTwiddleSelect, getTwiddleWhere } from '$lib/models';
 import { setTwiddleSchema } from '$lib/schemas/twiddle/set-twiddle';
 import { prisma } from '$lib/server/prisma';
-import { isVerified } from '@/lib/server/auth';
+import { isVerified } from '@/lib/server/auth.old';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';

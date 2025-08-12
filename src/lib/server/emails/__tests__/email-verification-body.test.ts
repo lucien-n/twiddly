@@ -1,5 +1,5 @@
+import { emailVerificationCodeExpiryMinutes } from '../../auth.old';
 import emailVerificationBody from '../email-verification-body';
-import { emailVerificationCodeExpiryMinutes } from '../../auth';
 
 vi.mock('$env/static/public', () => ({
 	PUBLIC_ORIGIN: 'http://localhost'

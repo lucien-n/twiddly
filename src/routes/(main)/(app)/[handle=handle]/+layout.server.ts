@@ -1,7 +1,7 @@
 import { formatProfile, getProfileSelect } from '$lib/models';
 import { setProfileSchema } from '$lib/schemas/profile/set-profile';
-import { isAdmin } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
+import { isAdmin } from '@/lib/server/auth.old';
 import { error } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';

@@ -1,7 +1,7 @@
-import { refreshSession } from '$lib/server/auth';
 import { relationalProfileFixtureA } from '$tests/fixtures/profile';
 import { baseUserFixtureA } from '$tests/fixtures/user';
 import { mProfileFindFirst } from '$tests/mocks/prisma';
+import { refreshSession } from '@/lib/server/auth.old';
 import type { RequestEvent } from '@sveltejs/kit';
 import { handleAuth } from '../auth';
 

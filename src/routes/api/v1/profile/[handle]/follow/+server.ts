@@ -1,9 +1,9 @@
 import { dev } from '$app/environment';
 import { updateFollowRequestSchema, type FollowAction } from '$lib/schemas/follow/update-request';
-import { isVerified } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { AuthCode } from '$lib/utils/auth-code';
 import { ProfileCode } from '$lib/utils/profile-code';
+import { isVerified } from '@/lib/server/auth.old';
 import { FollowStatus } from '@prisma/client';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
