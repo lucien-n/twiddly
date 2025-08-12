@@ -1,5 +1,6 @@
 import type { KIT_ROUTES } from '$lib/ROUTES';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { createRequire } from 'module';
 import path from 'path';
 import { defineConfig } from 'vite';
@@ -25,6 +26,7 @@ export default defineConfig({
 				}
 			}
 		}),
+		tailwindcss(),
 		sveltekit()
 	],
 	resolve: {

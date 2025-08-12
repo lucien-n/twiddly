@@ -1,16 +1,15 @@
 import { Role } from '@prisma/client';
-import type { Session, User } from 'lucia';
 import { getContext, setContext } from 'svelte';
 
 export interface SetAuthState {
-	user: User | null;
-	session: Session | null;
+	user: {} | null;
+	session: {} | null;
 	profile: ProfileWithSettings | null;
 }
 
 export class AuthState {
-	user: User | null = $state(null);
-	session: Session | null = $state(null);
+	user: {} | null = $state(null);
+	session: {} | null = $state(null);
 	profile: ProfileWithSettings | null = $state(null);
 	isAdmin: boolean = $derived(this.profile?.role === Role.ADMIN);
 

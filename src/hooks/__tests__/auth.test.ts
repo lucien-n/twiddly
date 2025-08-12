@@ -3,7 +3,6 @@ import { relationalProfileFixtureA } from '$tests/fixtures/profile';
 import { baseUserFixtureA } from '$tests/fixtures/user';
 import { mProfileFindFirst } from '$tests/mocks/prisma';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { Session, User } from 'lucia';
 import { handleAuth } from '../auth';
 
 beforeEach(() => {
@@ -61,7 +60,7 @@ describe('handleAuth', () => {
 	});
 
 	it("should resolve with null profile is current user's profile is not found", async () => {
-		mRefreshSession.mockResolvedValue({ user: {} as User, session: {} as Session });
+		mRefreshSession.mockResolvedValue({ user: {}, session: {} });
 		mProfileFindFirst.mockResolvedValue(null);
 
 		await handleAuth({

@@ -12,7 +12,7 @@ export const passwordField = z
 	.max(96, { message: 'Password must be at most 96 characters long' })
 	.regex(new RegExp(/^(?=.*[a-zA-Z])(?=.*\d).+$/));
 
-export const emailField = z.string().email({ message: 'Invalid email address' });
+export const emailField = z.email({ message: 'Invalid email address' });
 
 export const handleField = z
 	.string()

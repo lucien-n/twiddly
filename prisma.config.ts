@@ -4,7 +4,7 @@ import type { PrismaConfig } from 'prisma';
 import 'dotenv/config';
 
 export default {
-	schema: path.join('prisma', 'schema', 'schema.prisma'),
+	schema: path.join('prisma', 'schema'),
 	migrations: {
 		path: path.join('prisma', 'migrations')
 	},

@@ -1,16 +1,17 @@
 import { dev } from '$app/environment';
-import { AuthError, AuthCode } from '$lib/utils/auth-code';
+import { AuthCode, AuthError } from '$lib/utils/auth-code';
 import { hash, verify } from '@node-rs/argon2';
 import { MaintenanceMode, Role, type Profile, type User } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { User as LuciaUser } from 'lucia';
-import { generateIdFromEntropySize, type Session } from 'lucia';
+import { nanoid } from 'nanoid';
 import { TimeSpan, createDate, isWithinExpirationDate } from 'oslo';
 import { alphabet, generateRandomString } from 'oslo/crypto';
 import { sendOTPVerificationEmail } from './email';
-import { lucia } from './lucia';
 import { prisma } from './prisma';
 import { getMaintenanceMode } from './utils';
+
+interface LuciaUser {}
+interface Session {}
 
 export const hashOptions = {
 	memoryCost: 19456,
@@ -44,7 +45,8 @@ export const signUpWithEmailAndPassword = async (
 	if (existingUserEmail) throw new AuthError(AuthCode.EmailAlreadyInUse);
 
 	const hashedPassword = await hashPassword(password);
-	const id = generateIdFromEntropySize(10);
+	// const id = generateIdFromEntropySize(10);
+	const id = nanoid();
 	const user = await prisma.user.create({
 		data: {
 			id,
@@ -120,42 +122,11 @@ export const signInWithEmailAndPassword = async (
 export const refreshSession = async (
 	event: RequestEvent
 ): Promise<{ user: LuciaUser | null; session: Session | null }> => {
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	if (!sessionId) {
-		return {
-			user: null,
-			session: null
-		};
-	}
-
-	const { session, user } = await lucia.validateSession(sessionId);
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-
-	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
-		});
-	}
-
-	return { user, session };
+	return { user: null, session: null };
 };
 
 export const createSession = async (userId: string, event: RequestEvent) => {
-	const session = await lucia.createSession(userId, {});
-	const sessionCookie = lucia.createSessionCookie(session.id);
-
-	event.cookies.set(sessionCookie.name, sessionCookie.value, {
-		path: '.',
-		...sessionCookie.attributes
-	});
+	return;
 };
 
 export const generateEmailVerificationCode = async (
