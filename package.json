@@ -14,7 +14,8 @@
 		"db:gen": "prisma generate && prisma db push --accept-data-loss && prisma db seed",
 		"test": "vitest --coverage",
 		"postinstall": "prisma generate",
-		"afterbuild": "prisma generate && prisma db push && tsx prisma/seed-prod.ts"
+		"afterbuild": "prisma generate && prisma db push && tsx prisma/seed-prod.ts",
+		"db:seed": "tsx prisma/seed.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^6.1.0",
@@ -65,8 +66,5 @@
 		"nanoid": "^5.1.5",
 		"node-mailjet": "^6.0.9",
 		"oslo": "^1.2.1"
-	},
-	"prisma": {
-		"seed": "tsx prisma/seed.ts"
 	}
 }
