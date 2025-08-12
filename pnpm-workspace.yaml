@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@sveltejs/kit'
+  - '@vercel/speed-insights'
+  - esbuild
+  - prisma
