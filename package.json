@@ -11,11 +11,13 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
+		"db:start": "docker compose up -d db",
+		"db:stop": "docker compose down",
 		"db:gen": "prisma generate && prisma db push --accept-data-loss && prisma db seed",
+		"db:seed": "tsx prisma/seed.ts",
 		"test": "vitest --coverage",
 		"postinstall": "prisma generate",
-		"afterbuild": "prisma generate && prisma db push && tsx prisma/seed-prod.ts",
-		"db:seed": "tsx prisma/seed.ts"
+		"afterbuild": "prisma generate && prisma db push && tsx prisma/seed-prod.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^6.1.0",
@@ -24,7 +26,6 @@
 		"@types/eslint": "^9.6.1",
 		"@types/node": "^24.2.1",
 		"@vitest/coverage-v8": "3.2.4",
-		"autoprefixer": "^10.4.21",
 		"bits-ui": "2.9.2",
 		"clsx": "^2.1.1",
 		"eslint": "^9.33.0",

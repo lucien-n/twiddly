@@ -10,7 +10,8 @@
 		"components": "&/ui",
 		"utils": "&/utils",
 		"ui": "&/ui",
-		"hooks": "$lib/hooks"
+		"hooks": "$lib/hooks",
+		"lib": "$lib"
 	},
 	"typescript": true,
 	"registry": "https://next.shadcn-svelte.com/registry"

@@ -9,18 +9,20 @@
  * PAGES
  */
 const PAGES = {
-  "/": `/`,
+  "/": (params?: { tab?: ("discover" | "following") }) => {
+    return `/${appendSp({ 'tab': params?.['tab'] })}`
+  },
   "/sign-in": `/sign-in`,
   "/sign-up": `/sign-up`,
   "/verify": `/verify`,
-  "/[handle=handle]/[twiddleId]": (params: { handle: (Parameters<typeof import('../params/handle.ts').match>[0]), twiddleId: (string | number) }) => {
-    return `/${params.handle}/${params.twiddleId}`
+  "/[handle=handle]/[twiddleId]": (params: { handle: (ExtractParamType<typeof import('../params/handle.ts').match>), twiddleId: (string | number) }) => {
+    return `/${params['handle']}/${params['twiddleId']}`
   },
-  "/[handle=handle]/activity": (params: { handle: (Parameters<typeof import('../params/handle.ts').match>[0]) }) => {
-    return `/${params.handle}/activity`
+  "/[handle=handle]/activity": (params: { handle: (ExtractParamType<typeof import('../params/handle.ts').match>) }) => {
+    return `/${params['handle']}/activity`
   },
-  "/[handle=handle]/liked": (params: { handle: (Parameters<typeof import('../params/handle.ts').match>[0]) }) => {
-    return `/${params.handle}/liked`
+  "/[handle=handle]/liked": (params: { handle: (ExtractParamType<typeof import('../params/handle.ts').match>) }) => {
+    return `/${params['handle']}/liked`
   },
   "/settings": `/settings`,
   "/settings/interface": `/settings/interface`,
@@ -37,30 +39,30 @@ const SERVERS = {
   "GET /robots.txt": `/robots.txt`,
   "GET /sitemap.xml": `/sitemap.xml`,
   "GET /api/v1/admin/users/[id]/restrict": (params: { id: (string | number) }) => {
-    return `/api/v1/admin/users/${params.id}/restrict`
+    return `/api/v1/admin/users/${params['id']}/restrict`
   },
   "GET /api/v1/admin/users/[id]/unrestrict": (params: { id: (string | number) }) => {
-    return `/api/v1/admin/users/${params.id}/unrestrict`
+    return `/api/v1/admin/users/${params['id']}/unrestrict`
   },
   "GET /api/v1/deleteAccounts": `/api/v1/deleteAccounts`,
   "POST /api/v1/profile/[handle]/follow": (params: { handle: (string | number) }) => {
-    return `/api/v1/profile/${params.handle}/follow`
+    return `/api/v1/profile/${params['handle']}/follow`
   },
   "DELETE /api/v1/profile/[handle]/follow": (params: { handle: (string | number) }) => {
-    return `/api/v1/profile/${params.handle}/follow`
+    return `/api/v1/profile/${params['handle']}/follow`
   },
   "PUT /api/v1/profile/[handle]/follow": (params: { handle: (string | number) }) => {
-    return `/api/v1/profile/${params.handle}/follow`
+    return `/api/v1/profile/${params['handle']}/follow`
   },
   "GET /api/v1/retrievePersonalInfo": `/api/v1/retrievePersonalInfo`,
   "POST /api/v1/twiddle/[id]/delete": (params: { id: (string | number) }) => {
-    return `/api/v1/twiddle/${params.id}/delete`
+    return `/api/v1/twiddle/${params['id']}/delete`
   },
   "POST /api/v1/twiddle/[id]/like": (params: { id: (string | number) }) => {
-    return `/api/v1/twiddle/${params.id}/like`
+    return `/api/v1/twiddle/${params['id']}/like`
   },
   "POST /api/v1/twiddle/[id]/unlike": (params: { id: (string | number) }) => {
-    return `/api/v1/twiddle/${params.id}/unlike`
+    return `/api/v1/twiddle/${params['id']}/unlike`
   }
 }
 
@@ -88,12 +90,15 @@ const LINKS = {
   
 }
 
-type ParamValue = string | number | undefined
+type ParamValue = string | number | boolean | null | undefined
 
 /**
  * Append search params to a string
  */
-export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix: '?' | '&' = '?') => {
+export const appendSp = (
+  sp?: Record<string, ParamValue | ParamValue[]>,
+  prefix: '?' | '&' = '?',
+) => {
   if (sp === undefined) return ''
 
   const params = new URLSearchParams()
@@ -103,7 +108,12 @@ export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix:
     }
   }
 
+  let anchor = ''
   for (const [name, val] of Object.entries(sp)) {
+    if (name === '__KIT_ROUTES_ANCHOR__' && val !== undefined) {
+      anchor = `#${val}`
+      continue
+    }
     if (Array.isArray(val)) {
       for (const v of val) {
         append(name, v)
@@ -114,8 +124,8 @@ export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix:
   }
 
   const formatted = params.toString()
-  if (formatted) {
-    return `${prefix}${formatted}`
+  if (formatted || anchor) {
+    return `${prefix}${formatted}${anchor}`.replace('?#', '#')
   }
   return ''
 }
@@ -137,7 +147,7 @@ export const currentSp = () => {
   return record
 }
 
-// route function helpers
+/* type helpers for route function */
 type NonFunctionKeys<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
 type FunctionKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T]
 type FunctionParams<T> = T extends (...args: infer P) => any ? P : never
@@ -169,12 +179,16 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
   }
 }
 
+/* type helpers param & predicate */
+type ExtractFnPredicate<T> = T extends (param: any) => param is infer U ? U : never;
+type ExtractParamType<T extends (param: any) => any> = ExtractFnPredicate<T> extends never ? Parameters<T>[0] : ExtractFnPredicate<T>
+
 /**
 * Add this type as a generic of the vite plugin `kitRoutes<KIT_ROUTES>`.
 *
 * Full example:
 * ```ts
-* import type { KIT_ROUTES } from './ROUTES'
+* import type { KIT_ROUTES } from '$lib/ROUTES'
 * import { kitRoutes } from 'vite-plugin-kit-routes'
 *
 * kitRoutes<KIT_ROUTES>({
@@ -189,5 +203,5 @@ export type KIT_ROUTES = {
   SERVERS: { 'GET /.well-known/security.txt': never, 'GET /robots.txt': never, 'GET /sitemap.xml': never, 'GET /api/v1/admin/users/[id]/restrict': 'id', 'GET /api/v1/admin/users/[id]/unrestrict': 'id', 'GET /api/v1/deleteAccounts': never, 'POST /api/v1/profile/[handle]/follow': 'handle', 'DELETE /api/v1/profile/[handle]/follow': 'handle', 'PUT /api/v1/profile/[handle]/follow': 'handle', 'GET /api/v1/retrievePersonalInfo': never, 'POST /api/v1/twiddle/[id]/delete': 'id', 'POST /api/v1/twiddle/[id]/like': 'id', 'POST /api/v1/twiddle/[id]/unlike': 'id' }
   ACTIONS: { 'setSiteSettings /admin/settings': never, 'signIn /actions/v1/auth': never, 'signUp /actions/v1/auth': never, 'signOut /actions/v1/auth': never, 'otpVerification /actions/v1/auth': never, 'sendOtpEmail /actions/v1/auth': never, 'deleteAccount /actions/v1/auth': never, 'setProfile /actions/v1/profile': never, 'setPrivacySettings /actions/v1/settings': never, 'setInterfaceSettings /actions/v1/settings': never, 'setTwiddle /actions/v1/twiddle': never }
   LINKS: Record<string, never>
-  Params: { handle: never, twiddleId: never, id: never }
+  Params: { 'tab': never, 'handle': never, 'twiddleId': never, 'id': never }
 }
